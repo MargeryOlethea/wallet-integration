@@ -5,6 +5,8 @@ import { IoWallet } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import WalletModal from "./WalletModal";
 import { useState } from "react";
+import { useWallet } from "@/providers/WalletProvider";
+import Image from "next/image";
 
 function Header() {
   // navigations
@@ -17,6 +19,9 @@ function Header() {
 
   // modal
   const [isOpen, setOpenModal] = useState(false);
+
+  // wallet info
+  const { wallet, userAddress } = useWallet();
 
   return (
     <>
@@ -45,9 +50,37 @@ function Header() {
 
         {/* wallet connect */}
         <div className="relative">
-          <Button className="flex gap-2" onClick={() => setOpenModal(!isOpen)}>
-            <IoWallet size="18" /> Connect
-          </Button>
+          {wallet ? (
+            <Button
+              className="flex gap-2"
+              onClick={() => setOpenModal(!isOpen)}
+            >
+              {wallet == "keplr" ? (
+                <Image
+                  src="/keplr_icon.png"
+                  alt="keplr icon"
+                  height={20}
+                  width={20}
+                />
+              ) : (
+                <Image
+                  src="/leap_icon.png"
+                  alt="leap icon"
+                  height={20}
+                  width={20}
+                  className="rounded-sm"
+                />
+              )}
+              {userAddress!.slice(0, 6)}...
+            </Button>
+          ) : (
+            <Button
+              className="flex gap-2"
+              onClick={() => setOpenModal(!isOpen)}
+            >
+              <IoWallet size="18" /> Connect
+            </Button>
+          )}
 
           {isOpen && <WalletModal />}
         </div>

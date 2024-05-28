@@ -9,6 +9,7 @@ import {
 
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useWallet } from "@/providers/WalletProvider";
 
 declare global {
   interface Window extends KeplrWindow {
@@ -23,12 +24,19 @@ function WalletModal({}: {}) {
     chain_id: "theta-testnet-001",
   };
 
-  const [network, setNetwork] = useState(cosmoshubTestnetData);
+  // const [network, setNetwork] = useState(cosmoshubTestnetData);
 
-  // connecting to wallet
-  const [wallet, setWallet] = useState<null | string>(null); // ["keplr", "leap"]
-  const [userAddress, setUserAddress] = useState<null | string>(null);
-  const [userbalance, setUserBalance] = useState<null | string>(null);
+  // // connecting to wallet
+  // const [wallet, setWallet] = useState<null | string>(null); // ["keplr", "leap"]
+  // const [userAddress, setUserAddress] = useState<null | string>(null);
+  const {
+    wallet,
+    setWallet,
+    userAddress,
+    setUserAddress,
+    network,
+    setNetwork,
+  } = useWallet();
 
   // connecting to keplr
   async function connectToKeplr() {
@@ -51,7 +59,7 @@ function WalletModal({}: {}) {
     try {
       const { leap } = window;
       if (!leap) {
-        toast.error("You need to install or unlock Keplr");
+        toast.error("You need to install or unlock Leap");
       } else {
         await window.leap!.enable(network.chain_id);
       }
@@ -62,8 +70,6 @@ function WalletModal({}: {}) {
     }
   }
 
-  console.log(network, "ini networknya");
-
   useEffect(() => {
     // offline signer
     let offlineSigner: OfflineAminoSigner & OfflineDirectSigner;
@@ -71,7 +77,7 @@ function WalletModal({}: {}) {
       offlineSigner = window.getOfflineSigner!(network.chain_id);
     }
     if (wallet === "leap") {
-      offlineSigner = window.leap!.getOfflineSignerAuto!(network.chain_id);
+      offlineSigner = window.leap!.getOfflineSigner!(network.chain_id);
     }
 
     const getAccount = async () => {
@@ -88,40 +94,44 @@ function WalletModal({}: {}) {
         <SelectNetwork network={network} setNetwork={setNetwork} />
 
         <p>HELLO: {userAddress}</p>
-        {/* select wallet */}
-        <div className="flex mt-3 gap-3">
-          <div
-            className=" w-[7em] rounded-xl flex flex-col items-center justify-center group"
-            onClick={connectToKeplr}
-          >
-            <Image
-              src="/keplr_icon.png"
-              alt="Keplr"
-              width={100}
-              height={80}
-              className="group-hover:shadow-md rounded-3xl group-hover:scale-105"
-            />
-            <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
-              Keplr
-            </p>
-          </div>
+        <p> WALLET: {wallet}</p>
 
-          <div
-            className=" w-[7em] rounded-xl flex-col flex items-center justify-center group"
-            onClick={connectToLeap}
-          >
-            <Image
-              src="/leap_icon.png"
-              alt="Leap"
-              width={100}
-              height={100}
-              className="group-hover:shadow-md rounded-3xl group-hover:scale-105"
-            />
-            <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
-              Leap
-            </p>
+        {wallet === null && (
+          // select wallet
+          <div className="flex mt-3 gap-3">
+            <div
+              className=" w-[7em] rounded-xl flex flex-col items-center justify-center group"
+              onClick={connectToKeplr}
+            >
+              <Image
+                src="/keplr_icon.png"
+                alt="Keplr"
+                width={100}
+                height={80}
+                className="group-hover:shadow-md rounded-3xl group-hover:scale-105"
+              />
+              <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
+                Keplr
+              </p>
+            </div>
+
+            <div
+              className=" w-[7em] rounded-xl flex-col flex items-center justify-center group"
+              onClick={connectToLeap}
+            >
+              <Image
+                src="/leap_icon.png"
+                alt="Leap"
+                width={100}
+                height={100}
+                className="group-hover:shadow-md rounded-3xl group-hover:scale-105"
+              />
+              <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
+                Leap
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
