@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 function Staking() {
-  return <>ini staking</>;
+  return (
+    <>
+      ini staking
+      <button onClick={() => toast.success("yey!")}>Ea</button>
+    </>
+  );
 }
 
 export default Staking;

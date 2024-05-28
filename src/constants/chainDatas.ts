@@ -1,15 +1,25 @@
-interface chainData {
-  name: string;
-  rpcUrl: string;
-}
-export const chainDatas: chainData[] = [
+import { ChainData } from "@/types/chain.types";
+
+export const chainDatas: ChainData[] = [
   {
     name: "Cosmoshub Testnet",
-    rpcUrl: "https://rpc.sentry-01.theta-testnet.polypore.xyz",
+    data: {
+      rpcUrl: "https://rpc.sentry-01.theta-testnet.polypore.xyz",
+      chain_id: "theta-testnet-001",
+    },
   },
-  { name: "Osmosis Testnet", rpcUrl: "https://rpc.osmotest5.osmosis.zone/" },
+  {
+    name: "Osmosis Testnet",
+    data: {
+      rpcUrl: "https://rpc.osmotest5.osmosis.zone/",
+      chain_id: "osmo-test-5",
+    },
+  },
   {
     name: "Dymension Testnet",
-    rpcUrl: "https://froopyland-public.rpc.silknodes.io/",
+    data: {
+      rpcUrl: "https://froopyland-public.rpc.silknodes.io/",
+      chain_id: "froopyland_100-1",
+    },
   },
 ];

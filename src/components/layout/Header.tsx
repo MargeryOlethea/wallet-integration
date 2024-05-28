@@ -49,7 +49,7 @@ function Header() {
             <IoWallet size="18" /> Connect
           </Button>
 
-          {isOpen && <WalletModal setOpenModal={setOpenModal} />}
+          {isOpen && <WalletModal />}
         </div>
       </nav>
     </>

@@ -1,18 +1,54 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import SelectNetwork from "./SelectNetwork";
 import { chainDatas } from "@/constants/chainDatas";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Window as KeplrWindow } from "@keplr-wallet/types";
 
-function WalletModal({
-  setOpenModal,
-}: {
-  setOpenModal: Dispatch<SetStateAction<boolean>>;
-}) {
+import Image from "next/image";
+import toast from "react-hot-toast";
+
+declare global {
+  interface Window extends KeplrWindow {
+    leap: any;
+  }
+}
+
+function WalletModal({}: {}) {
   // select network
-  const cosmoshubTestnetRpcUrl = chainDatas.find(
-    (chain) => chain.name === "Cosmoshub Testnet",
-  )?.rpcUrl;
-  const [network, setNetwork] = useState(cosmoshubTestnetRpcUrl || "");
+  const cosmoshubTestnetData = {
+    rpcUrl: "https://rpc.sentry-01.theta-testnet.polypore.xyz",
+    chain_id: "theta-testnet-001",
+  };
+
+  const [network, setNetwork] = useState(cosmoshubTestnetData);
+
+  // connecting to keplr
+  async function connectToKeplr() {
+    try {
+      const { keplr } = window;
+      if (!keplr) {
+        toast.error("You need to install or unlock Keplr");
+      } else {
+        await window.keplr!.enable(network.chain_id);
+      }
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message);
+    }
+  }
+
+  // connecting to leap
+  async function connectToLeap() {
+    try {
+      const { leap } = window;
+      if (!leap) {
+        toast.error("You need to install or unlock Keplr");
+      } else {
+        await window.leap!.enable(network.chain_id);
+      }
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message);
+    }
+  }
+
   return (
     <>
       <div className="z-10 absolute shadow-lg border-slate-100 border my-2 rounded-xl flex-col flex-1 gap-5 p-5 justify-end right-0">
@@ -20,15 +56,38 @@ function WalletModal({
         <SelectNetwork network={network} setNetwork={setNetwork} />
 
         {/* select wallet */}
-        <div className="flex mt-5 gap-5">
-          <div className="h-[6em] w-[6em] bg-secondary rounded-md flex-col items-center">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>Keplr</AvatarFallback>
-            </Avatar>
-            <p className="text-xs text-center">Keplr</p>
+        <div className="flex mt-3 gap-3">
+          <div
+            className=" w-[7em] rounded-xl flex flex-col items-center justify-center group"
+            onClick={connectToKeplr}
+          >
+            <Image
+              src="/keplr_icon.png"
+              alt="Keplr"
+              width={100}
+              height={80}
+              className="group-hover:shadow-md rounded-3xl group-hover:scale-105"
+            />
+            <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
+              Keplr
+            </p>
           </div>
-          <div className="h-[6em] w-[6em] bg-secondary rounded-xl">leap</div>
+
+          <div
+            className=" w-[7em] rounded-xl flex-col flex items-center justify-center group"
+            onClick={connectToLeap}
+          >
+            <Image
+              src="/leap_icon.png"
+              alt="Leap"
+              width={100}
+              height={100}
+              className="group-hover:shadow-md rounded-3xl group-hover:scale-105"
+            />
+            <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
+              Leap
+            </p>
+          </div>
         </div>
       </div>
     </>
