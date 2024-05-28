@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectNetwork from "./SelectNetwork";
-import { chainDatas } from "@/constants/chainDatas";
-import { Window as KeplrWindow } from "@keplr-wallet/types";
+import {
+  AccountData,
+  Window as KeplrWindow,
+  OfflineAminoSigner,
+  OfflineDirectSigner,
+} from "@keplr-wallet/types";
 
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -21,6 +25,11 @@ function WalletModal({}: {}) {
 
   const [network, setNetwork] = useState(cosmoshubTestnetData);
 
+  // connecting to wallet
+  const [wallet, setWallet] = useState<null | string>(null); // ["keplr", "leap"]
+  const [userAddress, setUserAddress] = useState<null | string>(null);
+  const [userbalance, setUserBalance] = useState<null | string>(null);
+
   // connecting to keplr
   async function connectToKeplr() {
     try {
@@ -32,6 +41,8 @@ function WalletModal({}: {}) {
       }
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
+    } finally {
+      setWallet("keplr");
     }
   }
 
@@ -46,8 +57,29 @@ function WalletModal({}: {}) {
       }
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
+    } finally {
+      setWallet("leap");
     }
   }
+
+  console.log(network, "ini networknya");
+
+  useEffect(() => {
+    // offline signer
+    let offlineSigner: OfflineAminoSigner & OfflineDirectSigner;
+    if (wallet === "keplr") {
+      offlineSigner = window.getOfflineSigner!(network.chain_id);
+    }
+    if (wallet === "leap") {
+      offlineSigner = window.leap!.getOfflineSignerAuto!(network.chain_id);
+    }
+
+    const getAccount = async () => {
+      const account: AccountData = (await offlineSigner.getAccounts())[0];
+      setUserAddress(account.address);
+    };
+    getAccount();
+  }, [wallet, network.chain_id]);
 
   return (
     <>
@@ -55,6 +87,7 @@ function WalletModal({}: {}) {
         {/* select network */}
         <SelectNetwork network={network} setNetwork={setNetwork} />
 
+        <p>HELLO: {userAddress}</p>
         {/* select wallet */}
         <div className="flex mt-3 gap-3">
           <div

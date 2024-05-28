@@ -19,7 +19,7 @@ export const chainDatas: ChainData[] = [
     name: "Dymension Testnet",
     data: {
       rpcUrl: "https://froopyland-public.rpc.silknodes.io/",
-      chain_id: "froopyland_100-1",
+      chain_id: "blumbus_111-1",
     },
   },
 ];
