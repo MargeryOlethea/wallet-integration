@@ -5,6 +5,9 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useWallet } from "@/hooks/useWallet";
+import { IoCopy } from "react-icons/io5";
+import { truncateString } from "@/helpers/stringModifiers";
+import { copyToClipboard } from "@/utils/copyToClipboard";
 
 declare global {
   interface Window extends KeplrWindow {
@@ -14,7 +17,8 @@ declare global {
 }
 
 function WalletModal() {
-  const { wallet, setWallet, setUserAddress, connectToWallet } = useWallet();
+  const { wallet, setWallet, setUserAddress, userAddress, connectToWallet } =
+    useWallet();
 
   // disconnect wallet
   const disconnectWallet = () => {
@@ -22,6 +26,8 @@ function WalletModal() {
     setUserAddress(null);
     localStorage.removeItem("wallet");
     localStorage.removeItem("userAddress");
+    localStorage.removeItem("network");
+    window.location.reload();
   };
 
   return (
@@ -73,6 +79,19 @@ function WalletModal() {
           </>
         ) : (
           <>
+            {userAddress && (
+              <div className="flex items-center gap-2 mb-2">
+                <p>{truncateString(userAddress, 12, 10)}</p>
+                <button
+                  onClick={() => {
+                    copyToClipboard(userAddress!);
+                  }}
+                >
+                  <IoCopy />
+                </button>
+              </div>
+            )}
+
             <Button
               onClick={disconnectWallet}
               variant="secondary"

@@ -6,7 +6,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-function AccountBalanceCard() {
+function AccountBalanceCard({
+  amount,
+  denom,
+}: {
+  amount: string | undefined;
+  denom: string | undefined;
+}) {
   return (
     <>
       <Card className="col-span-2">

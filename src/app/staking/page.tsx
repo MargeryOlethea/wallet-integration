@@ -1,42 +1,39 @@
 "use client";
 
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
-import AccountBalanceCard from "@/components/staking-page/AccountBalanceCard";
-import AvailableBalanceCard from "@/components/staking-page/AvailableBalanceCard";
-import RewardBalanceCard from "@/components/staking-page/RewardBalanceCard";
-import StakeBalanceCard from "@/components/staking-page/StakeBalanceCard";
-import { useCosmjs } from "@/hooks/useCosmJs";
+import AccountDashboard from "@/components/staking-page/AccountDashboard";
 import { useWallet } from "@/hooks/useWallet";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function Staking() {
-  const { wallet, userAddress } = useWallet();
-
-  const [balances, setBalances] = useState();
-  const { getBalances } = useCosmjs();
+  const { wallet, userAddress, setWallet, setUserAddress, setNetwork } =
+    useWallet();
 
   useEffect(() => {
-    const getBalance = async () => {
-      const data = await getBalances();
-      console.log(data, "ini data yg didapetin");
+    const checkExistingUser = () => {
+      const localWallet = localStorage.getItem("wallet");
+      const localUserAddress = localStorage.getItem("userAddress");
+      const localNetwork = localStorage.getItem("network");
+
+      if (localWallet && localUserAddress && localNetwork) {
+        setWallet(localWallet);
+        setUserAddress(localUserAddress);
+        setNetwork(JSON.parse(localNetwork));
+      }
     };
 
-    getBalance();
-  }, [wallet, userAddress, getBalances]);
+    checkExistingUser();
+  }, []);
 
   if (!wallet || !userAddress) {
     return <NoConnectedWalletHeader />;
-  } else
+  } else {
     return (
       <>
-        <div className="grid grid-cols-9 gap-5">
-          <AccountBalanceCard />
-          <AvailableBalanceCard />
-          <StakeBalanceCard />
-          <RewardBalanceCard />
-        </div>
+        <AccountDashboard />
       </>
     );
+  }
 }
 
 export default Staking;

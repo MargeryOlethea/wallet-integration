@@ -1,11 +1,14 @@
 "use client";
+import { cosmosHubTestnetChain } from "@/constants/chainInfos";
 import { WalletContext } from "@/hooks/useWallet";
+import { StargateClient } from "@cosmjs/stargate";
 import {
   AccountData,
   OfflineAminoSigner,
   OfflineDirectSigner,
 } from "@keplr-wallet/types";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 interface WalletProviderProps {
   children: React.ReactNode;
@@ -20,6 +23,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   });
 
   // connect to wallet
+  // TODO : experimental suggest chain?
   const connectToWallet = async (walletType: "keplr" | "leap") => {
     try {
       let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
@@ -40,9 +44,12 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         setUserAddress(account.address);
         localStorage.setItem("wallet", walletType);
         localStorage.setItem("userAddress", account.address);
+        localStorage.setItem("network", JSON.stringify(network));
       }
     } catch (error) {
-      console.error("Failed to connect to wallet:", error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   };
 

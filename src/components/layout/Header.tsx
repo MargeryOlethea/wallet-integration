@@ -84,7 +84,7 @@ function Header() {
                   className="rounded-sm"
                 />
               )}
-              {truncateString(userAddress!, 6, 4)}
+              {truncateString(userAddress!, 6, 5)}
             </Button>
           ) : (
             <Button

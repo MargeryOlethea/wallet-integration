@@ -6,14 +6,20 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-function StakeBalanceCard() {
+function StakeBalanceCard({
+  amount,
+  denom,
+}: {
+  amount: string | undefined;
+  denom: string | undefined;
+}) {
   return (
     <>
       <Card className="col-span-2">
         <CardHeader>
           <CardDescription>Staked Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">
-            50.20290 <Badge variant="secondary">OSMO</Badge>
+            {amount} <Badge variant="secondary">{denom}</Badge>
           </CardTitle>
         </CardHeader>
       </Card>

@@ -7,12 +7,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-function RewardBalanceCard() {
+function RewardBalanceCard({
+  amount,
+  denom,
+}: {
+  amount: string | undefined;
+  denom: string | undefined;
+}) {
   return (
     <>
       <Card className="bg-gradient-to-r from-blue-100 flex items-center justify-even col-span-3 pr-6">
         <CardHeader>
-          <CardDescription>Balance</CardDescription>
+          <CardDescription>Rewarded Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">
             50.20290 <Badge>OSMO</Badge>
           </CardTitle>
