@@ -19,7 +19,7 @@ function AccountDashboard() {
     queryKey: ["availableBalances"],
     queryFn: getAvailableBalances,
   });
-
+  console.log(availableBalances, "woi");
   const firstBalance = (availableBalances && availableBalances[0]) || {
     amount: "",
     denom: "",
@@ -34,11 +34,19 @@ function AccountDashboard() {
     queryFn: getStakeBalances,
   });
 
-  const totalBalance = firstBalance &&
-    stakeBalances && {
-      amount: +firstBalance.amount + +stakeBalances.amount,
-      denom: firstBalance.denom,
-    };
+  const totalBalance = (() => {
+    const firstAmount = firstBalance?.amount || 0;
+    const stakeAmount = stakeBalances?.amount || 0;
+
+    const amount = Number(firstAmount) + Number(stakeAmount);
+    const denom = firstBalance?.denom || stakeBalances?.denom || "";
+
+    if (amount === 0) {
+      return { amount: 0, denom: "" };
+    }
+
+    return { amount, denom };
+  })();
 
   if (availableLoading || stakeLoading) {
     return <p>Loading...</p>;
@@ -53,15 +61,24 @@ function AccountDashboard() {
     <>
       <div className="grid grid-cols-9 gap-5">
         <AccountBalanceCard
-          amount={microCoinConverter(Number(totalBalance?.amount || 0))}
+          amount={microCoinConverter(
+            Number(totalBalance?.amount || 0),
+            totalBalance?.denom || "",
+          )}
           denom={splitMicroCoin(totalBalance?.denom || "")}
         />
         <AvailableBalanceCard
-          amount={microCoinConverter(Number(firstBalance?.amount || 0))}
+          amount={microCoinConverter(
+            Number(firstBalance?.amount || 0),
+            firstBalance?.denom || "",
+          )}
           denom={splitMicroCoin(firstBalance?.denom || "")}
         />
         <StakeBalanceCard
-          amount={microCoinConverter(Number(stakeBalances?.amount || 0))}
+          amount={microCoinConverter(
+            Number(stakeBalances?.amount || 0),
+            stakeBalances?.denom || "",
+          )}
           denom={splitMicroCoin(stakeBalances?.denom || "")}
         />
         <RewardBalanceCard amount={0} denom="" />
