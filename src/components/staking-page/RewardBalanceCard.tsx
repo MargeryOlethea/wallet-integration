@@ -11,7 +11,7 @@ function RewardBalanceCard({
   amount,
   denom,
 }: {
-  amount: string | undefined;
+  amount: number | undefined;
   denom: string | undefined;
 }) {
   return (
@@ -20,7 +20,7 @@ function RewardBalanceCard({
         <CardHeader>
           <CardDescription>Rewarded Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">
-            50.20290 <Badge>OSMO</Badge>
+            0 <Badge>denom</Badge>
           </CardTitle>
         </CardHeader>
 

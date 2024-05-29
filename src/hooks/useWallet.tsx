@@ -6,11 +6,8 @@ interface WalletContextType {
   setWallet: Dispatch<SetStateAction<null | string>>;
   userAddress: string | null;
   setUserAddress: Dispatch<SetStateAction<null | string>>;
-  network: {
-    rpcUrl: string;
-    chain_id: string;
-  };
-  setNetwork: (network: { rpcUrl: string; chain_id: string }) => void;
+  chainId: string | null;
+  setChainId: (chainId: string) => void;
   connectToWallet: (walletType: "keplr" | "leap") => void;
 }
 

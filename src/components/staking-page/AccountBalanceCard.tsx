@@ -10,7 +10,7 @@ function AccountBalanceCard({
   amount,
   denom,
 }: {
-  amount: string | undefined;
+  amount: number | undefined;
   denom: string | undefined;
 }) {
   return (
@@ -19,7 +19,7 @@ function AccountBalanceCard({
         <CardHeader>
           <CardDescription>Total Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">
-            50.20290 <Badge variant="secondary">OSMO</Badge>
+            {amount} <Badge variant="secondary">{denom}</Badge>
           </CardTitle>
         </CardHeader>
       </Card>

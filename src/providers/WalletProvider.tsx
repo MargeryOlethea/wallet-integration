@@ -1,7 +1,7 @@
 "use client";
-import { cosmosHubTestnetChain } from "@/constants/chainInfos";
+
+import { chainInfoMap } from "@/constants/chainInfoMap";
 import { WalletContext } from "@/hooks/useWallet";
-import { StargateClient } from "@cosmjs/stargate";
 import {
   AccountData,
   OfflineAminoSigner,
@@ -17,25 +17,32 @@ interface WalletProviderProps {
 export const WalletProvider = ({ children }: WalletProviderProps) => {
   const [wallet, setWallet] = useState<null | string>(null);
   const [userAddress, setUserAddress] = useState<null | string>(null);
-  const [network, setNetwork] = useState({
-    rpcUrl: "https://rpc.sentry-01.theta-testnet.polypore.xyz",
-    chain_id: "theta-testnet-001",
-  });
+  const [chainId, setChainId] = useState<null | string>(null);
 
+  const network = chainInfoMap[chainId!] || {};
   // connect to wallet
-  // TODO : experimental suggest chain?
+
   const connectToWallet = async (walletType: "keplr" | "leap") => {
     try {
+      if (!chainId) {
+        throw new Error("Please select network");
+      }
+
+      if (!window.keplr && !window.leap) {
+        throw new Error("Please install Keplr or Leap wallet");
+      }
+
       let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
         null;
-
       if (walletType === "keplr" && window.keplr) {
-        await window.keplr.enable(network.chain_id);
-        offlineSigner = window.getOfflineSigner!(network.chain_id);
+        await window.keplr!.experimentalSuggestChain(network);
+        offlineSigner = window.getOfflineSigner!(chainId!);
         setWallet("keplr");
-      } else if (walletType === "leap" && window.leap) {
-        await window.leap.enable(network.chain_id);
-        offlineSigner = window.leap!.getOfflineSigner!(network.chain_id);
+      }
+
+      if (walletType === "leap" && window.leap) {
+        await window.leap.experimentalSuggestChain(network);
+        offlineSigner = window.leap!.getOfflineSigner!(chainId);
         setWallet("leap");
       }
 
@@ -44,7 +51,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         setUserAddress(account.address);
         localStorage.setItem("wallet", walletType);
         localStorage.setItem("userAddress", account.address);
-        localStorage.setItem("network", JSON.stringify(network));
+        localStorage.setItem("chainId", chainId);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -58,8 +65,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     setWallet,
     userAddress,
     setUserAddress,
-    network,
-    setNetwork,
+    chainId,
+    setChainId,
     connectToWallet,
   };
 

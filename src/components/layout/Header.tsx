@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { IoWallet } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import WalletModal from "./WalletModal";
 import { useEffect, useState } from "react";
@@ -22,8 +21,7 @@ function Header() {
   const [isWalletOpen, setWalletOpen] = useState(false);
 
   // wallet info
-  const { wallet, userAddress, setWallet, setUserAddress, network } =
-    useWallet();
+  const { wallet, userAddress, setWallet, setUserAddress } = useWallet();
 
   // checking if the wallet has connected
   useEffect(() => {
@@ -63,7 +61,7 @@ function Header() {
 
         {/* wallet connect */}
         <div className="relative">
-          {wallet && userAddress ? (
+          {wallet && userAddress && (
             <Button
               className="flex gap-2"
               onClick={() => setWalletOpen(!isWalletOpen)}
@@ -85,13 +83,6 @@ function Header() {
                 />
               )}
               {truncateString(userAddress!, 6, 5)}
-            </Button>
-          ) : (
-            <Button
-              className="flex gap-2"
-              onClick={() => setWalletOpen(!isWalletOpen)}
-            >
-              <IoWallet size="18" /> Connect
             </Button>
           )}
 

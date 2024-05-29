@@ -5,7 +5,8 @@ import RewardBalanceCard from "./RewardBalanceCard";
 import StakeBalanceCard from "./StakeBalanceCard";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { Coin } from "@cosmjs/proto-signing";
+import { microCoinConverter } from "@/helpers/integerModifiers";
+import { splitMicroCoin } from "@/helpers/stringModifiers";
 
 function AccountDashboard() {
   const { getStakeBalances, getAvailableBalances } = useCosmjs();
@@ -33,6 +34,12 @@ function AccountDashboard() {
     queryFn: getStakeBalances,
   });
 
+  const totalBalance = firstBalance &&
+    stakeBalances && {
+      amount: +firstBalance.amount + +stakeBalances.amount,
+      denom: firstBalance.denom,
+    };
+
   if (availableLoading || stakeLoading) {
     return <p>Loading...</p>;
   }
@@ -45,16 +52,19 @@ function AccountDashboard() {
   return (
     <>
       <div className="grid grid-cols-9 gap-5">
-        <AccountBalanceCard amount="" denom="" />
+        <AccountBalanceCard
+          amount={microCoinConverter(Number(totalBalance?.amount || 0))}
+          denom={splitMicroCoin(totalBalance?.denom || "")}
+        />
         <AvailableBalanceCard
-          amount={firstBalance?.amount}
-          denom={firstBalance?.denom}
+          amount={microCoinConverter(Number(firstBalance?.amount || 0))}
+          denom={splitMicroCoin(firstBalance?.denom || "")}
         />
         <StakeBalanceCard
-          amount={stakeBalances?.amount}
-          denom={stakeBalances?.denom}
+          amount={microCoinConverter(Number(stakeBalances?.amount || 0))}
+          denom={splitMicroCoin(stakeBalances?.denom || "")}
         />
-        <RewardBalanceCard amount="" denom="" />
+        <RewardBalanceCard amount={0} denom="" />
       </div>
     </>
   );

@@ -2,23 +2,25 @@
 
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
 import AccountDashboard from "@/components/staking-page/AccountDashboard";
+import MyValidators from "@/components/staking-page/MyValidators";
+import ValidatorsList from "@/components/staking-page/ValidatorsList";
 import { useWallet } from "@/hooks/useWallet";
 import { useEffect } from "react";
 
 function Staking() {
-  const { wallet, userAddress, setWallet, setUserAddress, setNetwork } =
+  const { wallet, userAddress, setWallet, setUserAddress, setChainId } =
     useWallet();
 
   useEffect(() => {
     const checkExistingUser = () => {
       const localWallet = localStorage.getItem("wallet");
       const localUserAddress = localStorage.getItem("userAddress");
-      const localNetwork = localStorage.getItem("network");
+      const localChainId = localStorage.getItem("network");
 
-      if (localWallet && localUserAddress && localNetwork) {
+      if (localWallet && localUserAddress && localChainId) {
         setWallet(localWallet);
         setUserAddress(localUserAddress);
-        setNetwork(JSON.parse(localNetwork));
+        setChainId(localChainId);
       }
     };
 
@@ -31,6 +33,10 @@ function Staking() {
     return (
       <>
         <AccountDashboard />
+
+        <MyValidators />
+
+        <ValidatorsList />
       </>
     );
   }
