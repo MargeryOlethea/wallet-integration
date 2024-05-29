@@ -1,13 +1,8 @@
 import { chainDatas } from "@/constants/chainDatas";
-import { ChainDetail } from "@/types/chain.types";
+import { useWallet } from "@/providers/WalletProvider";
 
-function SelectNetwork({
-  network,
-  setNetwork,
-}: {
-  network: ChainDetail;
-  setNetwork: (network: ChainDetail) => void;
-}) {
+function SelectNetwork() {
+  const { setNetwork } = useWallet();
   return (
     <>
       <select

@@ -1,5 +1,10 @@
 "use client";
 import {
+  AccountData,
+  OfflineAminoSigner,
+  OfflineDirectSigner,
+} from "@keplr-wallet/types";
+import {
   createContext,
   Dispatch,
   ReactNode,
@@ -18,6 +23,7 @@ interface WalletContextType {
     chain_id: string;
   };
   setNetwork: (network: { rpcUrl: string; chain_id: string }) => void;
+  connectToWallet: (walletType: "keplr" | "leap") => void;
 }
 
 export const WalletContext = createContext<WalletContextType | undefined>(
@@ -44,6 +50,33 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     chain_id: "theta-testnet-001",
   });
 
+  // connect to wallet
+  const connectToWallet = async (walletType: "keplr" | "leap") => {
+    try {
+      let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+        null;
+
+      if (walletType === "keplr" && window.keplr) {
+        await window.keplr.enable(network.chain_id);
+        offlineSigner = window.getOfflineSigner!(network.chain_id);
+        setWallet("keplr");
+      } else if (walletType === "leap" && window.leap) {
+        await window.leap.enable(network.chain_id);
+        offlineSigner = window.leap!.getOfflineSigner!(network.chain_id);
+        setWallet("leap");
+      }
+
+      if (offlineSigner) {
+        const account: AccountData = (await offlineSigner.getAccounts())[0];
+        setUserAddress(account.address);
+        localStorage.setItem("wallet", walletType);
+        localStorage.setItem("userAddress", account.address);
+      }
+    } catch (error) {
+      console.error("Failed to connect to wallet:", error);
+    }
+  };
+
   const value: WalletContextType = {
     wallet,
     setWallet,
@@ -51,6 +84,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     setUserAddress,
     network,
     setNetwork,
+    connectToWallet,
   };
 
   return (

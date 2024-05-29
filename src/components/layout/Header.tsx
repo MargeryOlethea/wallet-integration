@@ -4,9 +4,10 @@ import { Button } from "../ui/button";
 import { IoWallet } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import WalletModal from "./WalletModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWallet } from "@/providers/WalletProvider";
 import Image from "next/image";
+import { truncateString } from "@/helpers/stringModifiers";
 
 function Header() {
   // navigations
@@ -18,10 +19,22 @@ function Header() {
   const pathname = usePathname();
 
   // modal
-  const [isOpen, setOpenModal] = useState(false);
+  const [isWalletOpen, setWalletOpen] = useState(false);
 
   // wallet info
-  const { wallet, userAddress } = useWallet();
+  const { wallet, userAddress, setWallet, setUserAddress, network } =
+    useWallet();
+
+  // checking if the wallet has connected
+  useEffect(() => {
+    const savedWallet = localStorage.getItem("wallet");
+    const savedUserAddress = localStorage.getItem("userAddress");
+
+    if (savedWallet && savedUserAddress) {
+      setWallet(savedWallet);
+      setUserAddress(savedUserAddress);
+    }
+  }, [setWallet, setUserAddress]);
 
   return (
     <>
@@ -50,10 +63,10 @@ function Header() {
 
         {/* wallet connect */}
         <div className="relative">
-          {wallet ? (
+          {wallet && userAddress ? (
             <Button
               className="flex gap-2"
-              onClick={() => setOpenModal(!isOpen)}
+              onClick={() => setWalletOpen(!isWalletOpen)}
             >
               {wallet == "keplr" ? (
                 <Image
@@ -71,18 +84,18 @@ function Header() {
                   className="rounded-sm"
                 />
               )}
-              {userAddress!.slice(0, 6)}...
+              {truncateString(userAddress!, 6, 4)}
             </Button>
           ) : (
             <Button
               className="flex gap-2"
-              onClick={() => setOpenModal(!isOpen)}
+              onClick={() => setWalletOpen(!isWalletOpen)}
             >
               <IoWallet size="18" /> Connect
             </Button>
           )}
 
-          {isOpen && <WalletModal />}
+          {isWalletOpen && <WalletModal />}
         </div>
       </nav>
     </>
