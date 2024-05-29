@@ -14,6 +14,8 @@ export const useCosmjs = () => {
         userAddress,
       );
       return balances;
+    } else {
+      return;
     }
   };
 
