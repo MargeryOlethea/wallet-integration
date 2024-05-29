@@ -1,5 +1,5 @@
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
-import { useWallet } from "@/providers/WalletProvider";
+import { useWallet } from "@/hooks/useWallet";
 
 function Governance() {
   const { wallet, userAddress } = useWallet();

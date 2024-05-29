@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import SelectNetwork from "./layout/SelectNetwork";
 import Image from "next/image";
-import { useWallet } from "@/providers/WalletProvider";
+import { useWallet } from "@/hooks/useWallet";
 
 function NoConnectedWalletHeader() {
   const { connectToWallet } = useWallet();

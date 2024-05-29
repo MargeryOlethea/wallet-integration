@@ -1,45 +1,14 @@
 "use client";
+import { WalletContext } from "@/hooks/useWallet";
 import {
   AccountData,
   OfflineAminoSigner,
   OfflineDirectSigner,
 } from "@keplr-wallet/types";
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
-
-interface WalletContextType {
-  wallet: string | null;
-  setWallet: Dispatch<SetStateAction<null | string>>;
-  userAddress: string | null;
-  setUserAddress: Dispatch<SetStateAction<null | string>>;
-  network: {
-    rpcUrl: string;
-    chain_id: string;
-  };
-  setNetwork: (network: { rpcUrl: string; chain_id: string }) => void;
-  connectToWallet: (walletType: "keplr" | "leap") => void;
-}
-
-export const WalletContext = createContext<WalletContextType | undefined>(
-  undefined,
-);
-
-export const useWallet = () => {
-  const context = useContext(WalletContext);
-  if (!context) {
-    throw new Error("useWallet must be used within a WalletProvider");
-  }
-  return context;
-};
+import React, { useState } from "react";
 
 interface WalletProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const WalletProvider = ({ children }: WalletProviderProps) => {
@@ -77,7 +46,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   };
 
-  const value: WalletContextType = {
+  const value = {
     wallet,
     setWallet,
     userAddress,

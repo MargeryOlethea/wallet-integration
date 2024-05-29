@@ -1,5 +1,5 @@
 import { chainDatas } from "@/constants/chainDatas";
-import { useWallet } from "@/providers/WalletProvider";
+import { useWallet } from "@/hooks/useWallet";
 
 function SelectNetwork() {
   const { setNetwork } = useWallet();

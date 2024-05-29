@@ -5,9 +5,9 @@ import { IoWallet } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import WalletModal from "./WalletModal";
 import { useEffect, useState } from "react";
-import { useWallet } from "@/providers/WalletProvider";
 import Image from "next/image";
 import { truncateString } from "@/helpers/stringModifiers";
+import { useWallet } from "@/hooks/useWallet";
 
 function Header() {
   // navigations

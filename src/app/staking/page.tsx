@@ -5,15 +5,7 @@ import AccountBalanceCard from "@/components/staking-page/AccountBalanceCard";
 import AvailableBalanceCard from "@/components/staking-page/AvailableBalanceCard";
 import RewardBalanceCard from "@/components/staking-page/RewardBalanceCard";
 import StakeBalanceCard from "@/components/staking-page/StakeBalanceCard";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useWallet } from "@/providers/WalletProvider";
+import { useWallet } from "@/hooks/useWallet";
 
 function Staking() {
   const { wallet, userAddress } = useWallet();
