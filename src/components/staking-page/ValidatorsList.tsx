@@ -62,8 +62,8 @@ function ValidatorsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {validators?.map((validator, i) => (
-              <TableRow key={i}>
+            {validators?.map((validator) => (
+              <TableRow key={validator.operator_address}>
                 <TableCell>
                   <p className="font-semibold text-md">
                     {validator.description.moniker}
@@ -117,7 +117,7 @@ function ValidatorsList() {
             <PaginationItem>
               <Button
                 variant="secondary"
-                disabled={validators!.length < paginationOffset}
+                disabled={validators!.length < paginationLimit!}
                 onClick={() =>
                   setPaginationOffset((prev) => prev + paginationLimit!)
                 }

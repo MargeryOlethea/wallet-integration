@@ -9,17 +9,19 @@ import { microCoinConverter } from "@/helpers/integerModifiers";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useMemo } from "react";
+import { useStakingApi } from "@/hooks/useStakingApi";
 
 function AccountDashboard() {
   //  get functions for fetching data
   const { getStakeBalances, getAvailableBalances } = useCosmjs();
-  const { chainId, userAddress } = useWallet();
+  const { getRewardsByDelegator } = useStakingApi();
+  const { chainId } = useWallet();
 
   // setup denom
   const coinDenom =
     (chainId && chainInfoMap[chainId].currencies[0].coinDenom) || "";
 
-  // fetching data
+  // fetching available balance
   const {
     data: availableBalances,
     error: availableError,
@@ -29,6 +31,7 @@ function AccountDashboard() {
     queryFn: getAvailableBalances,
   });
 
+  // fetching stake balance
   const {
     data: stakeBalances,
     error: stakeError,
@@ -36,6 +39,16 @@ function AccountDashboard() {
   } = useQuery({
     queryKey: ["stakeBalances"],
     queryFn: getStakeBalances,
+  });
+
+  // fetching rewards balance
+  const {
+    data: rewardsData,
+    isLoading: rewardsLoading,
+    error: rewardsError,
+  } = useQuery({
+    queryFn: getRewardsByDelegator,
+    queryKey: ["rewardsBalance"],
   });
 
   // extracting available balance data
