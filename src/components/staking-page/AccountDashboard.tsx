@@ -43,13 +43,14 @@ function AccountDashboard() {
 
   // fetching rewards balance
   const {
-    data: rewardsData,
+    data: rewardsBalances,
     isLoading: rewardsLoading,
     error: rewardsError,
   } = useQuery({
     queryFn: getRewardsByDelegator,
     queryKey: ["rewardsBalance"],
   });
+  const rewardsAmount = rewardsBalances?.total[0]?.amount ?? 0;
 
   // extracting available balance data
   //TODO: Fix the exhaustive-deps warning
@@ -71,13 +72,18 @@ function AccountDashboard() {
     return { amount };
   }, [firstBalance, stakeBalances]);
 
-  if (availableLoading || stakeLoading) {
+  if (availableLoading || stakeLoading || rewardsLoading) {
     return <p>Loading...</p>;
   }
 
-  if (availableError || stakeError) {
-    console.error(availableError || stakeError);
-    toast.error(availableError!.message || stakeError!.message);
+  if (availableError || stakeError || rewardsError) {
+    console.error(availableError || stakeError || rewardsError);
+    toast.error(
+      availableError?.message ||
+        stakeError?.message ||
+        rewardsError?.message ||
+        "",
+    );
   }
 
   return (
@@ -104,7 +110,10 @@ function AccountDashboard() {
           )}
           denom={coinDenom}
         />
-        <RewardBalanceCard amount={0} denom={coinDenom} />
+        <RewardBalanceCard
+          amount={microCoinConverter(+rewardsAmount, coinDenom)}
+          denom={coinDenom}
+        />
       </div>
     </>
   );
