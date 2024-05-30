@@ -21,8 +21,8 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-import ManageValidatorModal from "./ManageValidatorModal";
 import { ValidatorItem } from "@/types/validator.types";
+import DelegateModal from "./DelegateModal";
 
 function ValidatorsList() {
   // get denom
@@ -56,10 +56,12 @@ function ValidatorsList() {
     setIsOpen(false);
   };
 
+  // loading
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
+  // error
   if (error) {
     console.error(error.message);
     toast.error(error.message);
@@ -148,7 +150,7 @@ function ValidatorsList() {
           </PaginationContent>
         </Pagination>
       </section>
-      <ManageValidatorModal
+      <DelegateModal
         validator={selectedValidator!}
         isOpen={isOpen}
         onClose={handleCloseModal}

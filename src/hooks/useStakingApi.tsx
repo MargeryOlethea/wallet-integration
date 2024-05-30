@@ -1,7 +1,7 @@
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
 import { ValidatorData } from "@/types/validator.types";
-import { DelegationData } from "@/types/delegatios.types";
+import { DelegationData } from "@/types/delegations.types";
 
 export const useStakingApi = () => {
   const { userAddress, chainId } = useWallet();

@@ -15,6 +15,10 @@ import toast from "react-hot-toast";
 import { Badge } from "../ui/badge";
 import { microCoinConverter } from "@/helpers/integerModifiers";
 import { useDistributionApi } from "@/hooks/useDistributionApi";
+import { useState } from "react";
+import { ValidatorItem } from "@/types/validator.types";
+import { DelegationResponse } from "@/types/delegations.types";
+import ManageModal, { DelegationAndValidator } from "./ManageModal";
 
 function MyValidators() {
   // get denom
@@ -60,6 +64,23 @@ function MyValidators() {
 
   const rewards = rewardsData && rewardsData.rewards;
 
+  // modal handling
+  const [isOpen, setIsOpen] = useState(false);
+  const [delegationAndValidator, setDelegationAndValidator] =
+    useState<DelegationAndValidator | null>(null);
+  const handleOpenModal = (
+    validator: ValidatorItem,
+    delegation: DelegationResponse,
+  ) => {
+    const data = { validator, delegation };
+    setDelegationAndValidator(data);
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
+
   // loading
   if (delegationLoading || rewardsLoading || validatorsLoading) {
     return <p>Loading...</p>;
@@ -79,7 +100,7 @@ function MyValidators() {
   if (validators && validators.length > 0) {
     return (
       <>
-        <div className="my-10">
+        <section className="my-10">
           <h1 className="text-xl">My Validators</h1>
 
           <Table className="bg-gradient-to-r from-blue-50 my-2">
@@ -115,13 +136,25 @@ function MyValidators() {
                   </TableCell>
 
                   <TableCell>
-                    <Button>Manage</Button>
+                    <Button
+                      onClick={() =>
+                        handleOpenModal(validators[idx], delegation)
+                      }
+                    >
+                      Manage
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </div>
+        </section>
+
+        <ManageModal
+          delegationAndValidator={delegationAndValidator!}
+          isOpen={isOpen}
+          onClose={handleCloseModal}
+        />
       </>
     );
   }

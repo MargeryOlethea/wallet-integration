@@ -14,21 +14,21 @@ import { TbAlertCircleFilled } from "react-icons/tb";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 
-interface ModalProps {
+interface AllModalProps {
   validator: ValidatorItem;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function ManageValidatorModal({
+export default function DelegateModal({
   validator,
   isOpen,
   onClose,
-}: ModalProps) {
+}: AllModalProps) {
+  // modal handling
   const handleBackgroundClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    // Check if the click occurred on the background overlay
     if (e.target === e.currentTarget) {
       onClose();
     }
