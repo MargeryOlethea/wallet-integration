@@ -8,24 +8,7 @@ import { useWallet } from "@/hooks/useWallet";
 import { useEffect } from "react";
 
 function Staking() {
-  const { wallet, userAddress, setWallet, setUserAddress, setChainId } =
-    useWallet();
-
-  useEffect(() => {
-    const checkExistingUser = () => {
-      const localWallet = localStorage.getItem("wallet");
-      const localUserAddress = localStorage.getItem("userAddress");
-      const localChainId = localStorage.getItem("network");
-
-      if (localWallet && localUserAddress && localChainId) {
-        setWallet(localWallet);
-        setUserAddress(localUserAddress);
-        setChainId(localChainId);
-      }
-    };
-
-    checkExistingUser();
-  }, []);
+  const { wallet, userAddress } = useWallet();
 
   if (!wallet || !userAddress) {
     return <NoConnectedWalletHeader />;

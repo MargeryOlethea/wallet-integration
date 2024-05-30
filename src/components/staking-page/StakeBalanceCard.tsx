@@ -10,7 +10,7 @@ function StakeBalanceCard({
   amount,
   denom,
 }: {
-  amount: number | undefined;
+  amount: number | string | undefined;
   denom: string | undefined;
 }) {
   return (

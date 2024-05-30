@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
-import { useWallet } from "./useWallet";
 import { Coin, StargateClient } from "@cosmjs/stargate";
 import { chainInfoMap } from "@/constants/chainInfoMap";
+import { useWallet } from "./useWallet";
 
 export const useCosmjs = () => {
   const { chainId, userAddress } = useWallet();
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
-
   const getAvailableBalances = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
 

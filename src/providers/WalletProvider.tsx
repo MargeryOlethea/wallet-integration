@@ -7,7 +7,7 @@ import {
   OfflineAminoSigner,
   OfflineDirectSigner,
 } from "@keplr-wallet/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 interface WalletProviderProps {
@@ -20,8 +20,24 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const [chainId, setChainId] = useState<null | string>(null);
 
   const network = chainInfoMap[chainId!] || {};
-  // connect to wallet
 
+  useEffect(() => {
+    const checkExistingUser = () => {
+      const localWallet = localStorage.getItem("wallet");
+      const localUserAddress = localStorage.getItem("userAddress");
+      const localChainId = localStorage.getItem("chainId");
+
+      if (localWallet && localUserAddress && localChainId) {
+        setWallet(localWallet);
+        setUserAddress(localUserAddress);
+        setChainId(localChainId);
+      }
+    };
+
+    checkExistingUser();
+  }, []);
+
+  // connect to wallet
   const connectToWallet = async (walletType: "keplr" | "leap") => {
     try {
       if (!chainId) {

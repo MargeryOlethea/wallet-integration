@@ -14,9 +14,3 @@ export function truncateString(
 
   return `${frontPart}${ellipsis}${endPart}`;
 }
-
-export function splitMicroCoin(denom: string) {
-  if (denom.startsWith("u")) {
-    return denom.slice(1);
-  } else return denom;
-}

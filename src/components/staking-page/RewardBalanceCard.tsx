@@ -11,7 +11,7 @@ function RewardBalanceCard({
   amount,
   denom,
 }: {
-  amount: number | undefined;
+  amount: number | string | undefined;
   denom: string | undefined;
 }) {
   return (
@@ -20,11 +20,16 @@ function RewardBalanceCard({
         <CardHeader>
           <CardDescription>Rewarded Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">
-            0 <Badge>denom</Badge>
+            {amount} <Badge>{denom}</Badge>
           </CardTitle>
         </CardHeader>
 
-        <Button className="bg-blue-500">Claim Rewards</Button>
+        <Button
+          className="bg-blue-500"
+          disabled={amount && Number(amount) > 0 ? false : true}
+        >
+          Claim Rewards
+        </Button>
       </Card>
     </>
   );

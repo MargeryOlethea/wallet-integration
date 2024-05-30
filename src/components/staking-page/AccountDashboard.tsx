@@ -6,11 +6,20 @@ import StakeBalanceCard from "./StakeBalanceCard";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { microCoinConverter } from "@/helpers/integerModifiers";
-import { splitMicroCoin } from "@/helpers/stringModifiers";
+import { useWallet } from "@/hooks/useWallet";
+import { chainInfoMap } from "@/constants/chainInfoMap";
+import { useMemo } from "react";
 
 function AccountDashboard() {
+  //  get functions for fetching data
   const { getStakeBalances, getAvailableBalances } = useCosmjs();
+  const { chainId, userAddress } = useWallet();
 
+  // setup denom
+  const coinDenom =
+    (chainId && chainInfoMap[chainId].currencies[0].coinDenom) || "";
+
+  // fetching data
   const {
     data: availableBalances,
     error: availableError,
@@ -19,11 +28,6 @@ function AccountDashboard() {
     queryKey: ["availableBalances"],
     queryFn: getAvailableBalances,
   });
-  console.log(availableBalances, "woi");
-  const firstBalance = (availableBalances && availableBalances[0]) || {
-    amount: "",
-    denom: "",
-  };
 
   const {
     data: stakeBalances,
@@ -34,19 +38,25 @@ function AccountDashboard() {
     queryFn: getStakeBalances,
   });
 
-  const totalBalance = (() => {
+  // extracting available balance data
+  //TODO: Fix the exhaustive-deps warning
+  const firstBalance = (availableBalances && availableBalances[0]) || {
+    amount: "",
+  };
+
+  // calculating total balance
+  const totalBalance = useMemo(() => {
     const firstAmount = firstBalance?.amount || 0;
     const stakeAmount = stakeBalances?.amount || 0;
 
     const amount = Number(firstAmount) + Number(stakeAmount);
-    const denom = firstBalance?.denom || stakeBalances?.denom || "";
 
     if (amount === 0) {
-      return { amount: 0, denom: "" };
+      return { amount: 0 };
     }
 
-    return { amount, denom };
-  })();
+    return { amount };
+  }, [firstBalance, stakeBalances]);
 
   if (availableLoading || stakeLoading) {
     return <p>Loading...</p>;
@@ -63,25 +73,25 @@ function AccountDashboard() {
         <AccountBalanceCard
           amount={microCoinConverter(
             Number(totalBalance?.amount || 0),
-            totalBalance?.denom || "",
+            coinDenom,
           )}
-          denom={splitMicroCoin(totalBalance?.denom || "")}
+          denom={coinDenom}
         />
         <AvailableBalanceCard
           amount={microCoinConverter(
             Number(firstBalance?.amount || 0),
-            firstBalance?.denom || "",
+            coinDenom,
           )}
-          denom={splitMicroCoin(firstBalance?.denom || "")}
+          denom={coinDenom}
         />
         <StakeBalanceCard
           amount={microCoinConverter(
             Number(stakeBalances?.amount || 0),
-            stakeBalances?.denom || "",
+            coinDenom,
           )}
-          denom={splitMicroCoin(stakeBalances?.denom || "")}
+          denom={coinDenom}
         />
-        <RewardBalanceCard amount={0} denom="" />
+        <RewardBalanceCard amount={0} denom={coinDenom} />
       </div>
     </>
   );
