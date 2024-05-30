@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -13,6 +13,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { TbAlertCircleFilled } from "react-icons/tb";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { useWallet } from "@/hooks/useWallet";
+import { chainInfoMap } from "@/constants/chainInfoMap";
+import { useQuery } from "@tanstack/react-query";
+import { useCosmjs } from "@/hooks/useCosmjs";
+import toast from "react-hot-toast";
+import { microCoinConverter } from "@/helpers/integerModifiers";
+import { Skeleton } from "../ui/skeleton";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -34,6 +41,42 @@ export default function DelegateModal({
     }
   };
 
+  // denom
+  const { chainId } = useWallet();
+  const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
+
+  // fetching available balance
+  const { getAvailableBalances } = useCosmjs();
+  const {
+    data: availableBalances,
+    error: availableError,
+    isLoading: availableLoading,
+  } = useQuery({
+    queryKey: ["availableBalances"],
+    queryFn: getAvailableBalances,
+  });
+
+  const firstBalance = (availableBalances && availableBalances[0]?.amount) || 0;
+
+  // handle amount
+  const [amount, setAmount] = useState("");
+  const handleAmountButton = (amount: "1/3" | "1/2" | "MAX") => {
+    switch (amount) {
+      case "1/3":
+        setAmount(microCoinConverter(+firstBalance / 3, denom!).toString());
+        break;
+      case "1/2":
+        setAmount(microCoinConverter(+firstBalance / 2, denom!).toString());
+        break;
+      case "MAX":
+        setAmount(microCoinConverter(+firstBalance, denom!).toString());
+        break;
+    }
+  };
+
+  if (availableError) {
+    toast.error(availableError.message);
+  }
   if (!isOpen) return null;
 
   return (
@@ -72,31 +115,54 @@ export default function DelegateModal({
             <CardHeader className="flex flex-row justify-between">
               <p className="text-sm">
                 Available Balances:{" "}
-                <span className="font-semibold text-lg">123</span>
+                {availableLoading ? (
+                  <Skeleton className="h-10 w-1/2" />
+                ) : (
+                  <span className="font-semibold text-lg">
+                    {microCoinConverter(+firstBalance, denom!)}
+                  </span>
+                )}
               </p>
 
-              <Badge variant="secondary">ATOM</Badge>
+              <Badge variant="secondary">{denom}</Badge>
             </CardHeader>
           </Card>
           <Card className="my-2">
-            <CardHeader className="flex flex-row justify-between">
+            <CardHeader className="flex flex-row justify-between gap-5">
               <input
-                type="text"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                type="number"
                 placeholder="your staking amount"
                 className="focus:border-transparent focus:outline-none active:outline-none active:border-none bg-transparent w-full font-semibold text-lg placeholder:font-light placeholder:text-sm"
               />
-              <Badge variant="secondary">ATOM</Badge>
+              <Badge variant="secondary">{denom}</Badge>
             </CardHeader>
           </Card>
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" size="sm" className="text-xs">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              onClick={() => handleAmountButton("1/3")}
+            >
               1/3
             </Button>
-            <Button variant="outline" size="sm" className="text-xs">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              onClick={() => handleAmountButton("1/2")}
+            >
               1/2
             </Button>
-            <Button variant="outline" size="sm" className="text-xs">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              onClick={() => handleAmountButton("MAX")}
+            >
               MAX
             </Button>
           </div>

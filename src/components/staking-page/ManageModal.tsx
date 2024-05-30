@@ -42,9 +42,6 @@ export default function ManageModal({
     }
   };
 
-  // get delegation and validator
-  const { delegation, validator } = delegationAndValidator;
-
   // get denom
   const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
@@ -63,10 +60,16 @@ export default function ManageModal({
           <IoClose size="25" />
         </button>
         <CardHeader>
-          <CardTitle>{validator?.description?.moniker}</CardTitle>
+          <CardTitle>
+            {delegationAndValidator?.validator?.description?.moniker}
+          </CardTitle>
           <CardDescription>
             Commission:{" "}
-            {Math.floor(+validator.commission.commission_rates.rate * 100)}%
+            {Math.floor(
+              +delegationAndValidator?.validator?.commission?.commission_rates
+                ?.rate * 100,
+            )}
+            %
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -75,7 +78,10 @@ export default function ManageModal({
               <p>Your delegation:</p>
               <div className="flex items-center justify-between">
                 <p className="font-semibold text-lg">
-                  {microCoinConverter(+delegation.balance.amount, denom!)}
+                  {microCoinConverter(
+                    +delegationAndValidator?.delegation?.balance?.amount,
+                    denom!,
+                  )}
                 </p>{" "}
                 <Badge>{denom}</Badge>
               </div>
