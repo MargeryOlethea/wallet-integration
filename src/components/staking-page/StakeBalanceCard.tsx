@@ -15,7 +15,7 @@ function StakeBalanceCard({
 }) {
   return (
     <>
-      <Card className="col-span-2">
+      <Card>
         <CardHeader>
           <CardDescription>Staked Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">

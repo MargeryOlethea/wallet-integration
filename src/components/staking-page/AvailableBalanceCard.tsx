@@ -15,7 +15,7 @@ function AvailableBalanceCard({
 }) {
   return (
     <>
-      <Card className="col-span-2">
+      <Card>
         <CardHeader>
           <CardDescription>Available Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">

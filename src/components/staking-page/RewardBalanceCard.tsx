@@ -16,7 +16,7 @@ function RewardBalanceCard({
 }) {
   return (
     <>
-      <Card className="bg-gradient-to-r from-blue-100 flex items-center justify-even col-span-3 pr-6">
+      <Card className="bg-gradient-to-r from-blue-100 flex items-center justify-even pr-6">
         <CardHeader>
           <CardDescription>Rewarded Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">
@@ -24,12 +24,12 @@ function RewardBalanceCard({
           </CardTitle>
         </CardHeader>
 
-        <Button
+        {/* <Button
           className="bg-blue-500"
           disabled={amount && Number(amount) > 0 ? false : true}
         >
           Claim Rewards
-        </Button>
+        </Button> */}
       </Card>
     </>
   );

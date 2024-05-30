@@ -15,7 +15,7 @@ function AccountBalanceCard({
 }) {
   return (
     <>
-      <Card className="col-span-2">
+      <Card>
         <CardHeader>
           <CardDescription>Total Balance</CardDescription>
           <CardTitle className="flex items-center gap-2">
