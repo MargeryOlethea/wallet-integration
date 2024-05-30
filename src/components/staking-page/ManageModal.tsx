@@ -16,22 +16,24 @@ import { chainInfoMap } from "@/constants/chainInfoMap";
 import { microCoinConverter } from "@/helpers/integerModifiers";
 import { DelegationResponse } from "@/types/delegations.types";
 import { Button } from "../ui/button";
+import { Reward } from "@/types/reward.types";
 
 interface MyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  delegationAndValidator: DelegationAndValidator;
+  userDelegationData: UserDelegationData;
 }
 
-export interface DelegationAndValidator {
+export interface UserDelegationData {
   delegation: DelegationResponse;
   validator: ValidatorItem;
+  reward: Reward;
 }
 
 export default function ManageModal({
   isOpen,
   onClose,
-  delegationAndValidator,
+  userDelegationData,
 }: MyModalProps) {
   // modal handling
   const handleBackgroundClick = (
@@ -45,6 +47,11 @@ export default function ManageModal({
   // get denom
   const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
+
+  // handle claim rewards
+  const handleClaimRewards = () => {
+    alert("TODO!");
+  };
 
   if (!isOpen) return null;
   return (
@@ -61,30 +68,58 @@ export default function ManageModal({
         </button>
         <CardHeader>
           <CardTitle>
-            {delegationAndValidator?.validator?.description?.moniker}
+            {userDelegationData?.validator?.description?.moniker}
           </CardTitle>
           <CardDescription>
             Commission:{" "}
             {Math.floor(
-              +delegationAndValidator?.validator?.commission?.commission_rates
+              +userDelegationData?.validator?.commission?.commission_rates
                 ?.rate * 100,
             )}
             %
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Card>
+          {/* delegation */}
+          <Card className="my-2">
             <CardHeader>
-              <p>Your delegation:</p>
-              <div className="flex items-center justify-between">
+              <p className="text-xs">Your delegation:</p>
+              <div className="flex items-center gap-2">
                 <p className="font-semibold text-lg">
                   {microCoinConverter(
-                    +delegationAndValidator?.delegation?.balance?.amount,
+                    +userDelegationData?.delegation?.balance?.amount || 0,
                     denom!,
                   )}
                 </p>{" "}
-                <Badge>{denom}</Badge>
+                <Badge className="mt-1">{denom}</Badge>
               </div>
+            </CardHeader>
+          </Card>
+
+          {/* rewards */}
+          <Card className="my-2 bg-gradient-to-r from-blue-100">
+            <CardHeader className="flex-row justify-between">
+              <div>
+                <p className="text-xs">Your Rewards:</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold text-lg">
+                    {microCoinConverter(
+                      +userDelegationData?.reward?.amount || 0,
+                      denom!,
+                    )}
+                  </p>{" "}
+                  <Badge className="mt-1">{denom}</Badge>
+                </div>
+              </div>
+              <Button
+                onClick={handleClaimRewards}
+                className="bg-blue-500 hover:bg-blue-600"
+                disabled={
+                  +userDelegationData?.reward?.amount > 0 ? false : true
+                }
+              >
+                Claim Rewards
+              </Button>
             </CardHeader>
           </Card>
         </CardContent>

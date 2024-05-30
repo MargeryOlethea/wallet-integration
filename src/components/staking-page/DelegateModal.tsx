@@ -85,6 +85,7 @@ export default function DelegateModal({
       onClick={handleBackgroundClick}
     >
       <Card className="relative w-1/3 h-2/3 p-5 flex flex-col justify-between">
+        {/* close button */}
         <button
           className="absolute top-5 right-5 text-gray-500 hover:text-gray-800"
           onClick={onClose}
@@ -93,10 +94,13 @@ export default function DelegateModal({
         </button>
         <CardHeader>
           <CardTitle>{validator?.description?.moniker}</CardTitle>
+
+          {/* commission */}
           <CardDescription>
             Commission:{" "}
             {Math.floor(+validator.commission.commission_rates.rate * 100)}%
           </CardDescription>
+
           {/* alert */}
           <Alert className="bg-red-50 border-red-200 text-red-700">
             <AlertTitle className="flex gap-1 items-center text-sm">
@@ -110,6 +114,7 @@ export default function DelegateModal({
           </Alert>
         </CardHeader>
         <CardContent>
+          {/* available balances */}
           <Card className="my-2">
             {" "}
             <CardHeader className="flex flex-row justify-between">
@@ -127,6 +132,8 @@ export default function DelegateModal({
               <Badge variant="secondary">{denom}</Badge>
             </CardHeader>
           </Card>
+
+          {/* amount to delegate */}
           <Card className="my-2">
             <CardHeader className="flex flex-row justify-between gap-5">
               <input
@@ -140,6 +147,7 @@ export default function DelegateModal({
             </CardHeader>
           </Card>
 
+          {/* amount buttons */}
           <div className="flex justify-end gap-2">
             <Button
               variant="outline"

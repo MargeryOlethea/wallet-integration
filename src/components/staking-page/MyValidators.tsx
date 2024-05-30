@@ -18,7 +18,8 @@ import { useDistributionApi } from "@/hooks/useDistributionApi";
 import { useState } from "react";
 import { ValidatorItem } from "@/types/validator.types";
 import { DelegationResponse } from "@/types/delegations.types";
-import ManageModal, { DelegationAndValidator } from "./ManageModal";
+import { Reward } from "@/types/reward.types";
+import ManageModal, { UserDelegationData } from "./ManageModal";
 
 function MyValidators() {
   // get denom
@@ -66,14 +67,15 @@ function MyValidators() {
 
   // modal handling
   const [isOpen, setIsOpen] = useState(false);
-  const [delegationAndValidator, setDelegationAndValidator] =
-    useState<DelegationAndValidator | null>(null);
+  const [userDelegationData, setUserDelegationData] =
+    useState<UserDelegationData | null>(null);
   const handleOpenModal = (
-    validator: ValidatorItem,
     delegation: DelegationResponse,
+    validator: ValidatorItem,
+    reward: Reward,
   ) => {
-    const data = { validator, delegation };
-    setDelegationAndValidator(data);
+    const data = { validator, delegation, reward };
+    setUserDelegationData(data);
     setIsOpen(true);
   };
 
@@ -138,7 +140,11 @@ function MyValidators() {
                   <TableCell>
                     <Button
                       onClick={() =>
-                        handleOpenModal(validators[idx], delegation)
+                        handleOpenModal(
+                          delegation,
+                          validators[idx],
+                          rewards![idx].reward[0],
+                        )
                       }
                     >
                       Manage
@@ -151,7 +157,7 @@ function MyValidators() {
         </section>
 
         <ManageModal
-          delegationAndValidator={delegationAndValidator!}
+          userDelegationData={userDelegationData!}
           isOpen={isOpen}
           onClose={handleCloseModal}
         />
