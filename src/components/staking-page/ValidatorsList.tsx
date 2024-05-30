@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Table,
   TableBody,
@@ -20,6 +21,8 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
+import ManageValidatorModal from "./ManageValidatorModal";
+import { ValidatorItem } from "@/types/validator.types";
 
 function ValidatorsList() {
   // get denom
@@ -39,6 +42,20 @@ function ValidatorsList() {
 
   const validators = data && data.validatorsList.validators;
 
+  // modal handling
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedValidator, setSelectedValidator] =
+    useState<ValidatorItem | null>(null);
+
+  const handleOpenModal = (validator: ValidatorItem) => {
+    setSelectedValidator(validator);
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -47,6 +64,7 @@ function ValidatorsList() {
     console.error(error.message);
     toast.error(error.message);
   }
+
   return (
     <>
       <section className="my-10">
@@ -93,7 +111,9 @@ function ValidatorsList() {
                 </TableCell>
 
                 <TableCell>
-                  <Button>Manage</Button>
+                  <Button onClick={() => handleOpenModal(validator)}>
+                    Manage
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -128,6 +148,11 @@ function ValidatorsList() {
           </PaginationContent>
         </Pagination>
       </section>
+      <ManageValidatorModal
+        validator={selectedValidator!}
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+      />
     </>
   );
 }

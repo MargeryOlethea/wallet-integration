@@ -27,5 +27,18 @@ export const useStakingApi = () => {
 
     return myDelegations;
   };
-  return { getValidatorsList, getDelegationByDelegator };
+
+  const getValidatorsInfoByDelegator = async () => {
+    const response = await fetch(
+      `${baseUrl}/cosmos/staking/v1beta1/delegators/${userAddress}/validators`,
+    );
+    const myValidators: ValidatorData = await response.json();
+
+    return myValidators;
+  };
+  return {
+    getValidatorsList,
+    getDelegationByDelegator,
+    getValidatorsInfoByDelegator,
+  };
 };

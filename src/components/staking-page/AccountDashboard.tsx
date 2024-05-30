@@ -82,7 +82,7 @@ function AccountDashboard() {
       availableError?.message ||
         stakeError?.message ||
         rewardsError?.message ||
-        "",
+        "An error occured.",
     );
   }
 

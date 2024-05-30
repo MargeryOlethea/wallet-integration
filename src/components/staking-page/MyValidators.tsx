@@ -20,7 +20,8 @@ function MyValidators() {
   // get denom
   const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
-  const { getDelegationByDelegator } = useStakingApi();
+  const { getDelegationByDelegator, getValidatorsInfoByDelegator } =
+    useStakingApi();
   const { getRewardsByDelegator } = useDistributionApi();
 
   // get staked amount
@@ -35,6 +36,18 @@ function MyValidators() {
 
   const delegations = delegationData && delegationData.delegation_responses;
 
+  // get validators info
+  const {
+    data: validatorsData,
+    isLoading: validatorsLoading,
+    error: validatorsError,
+  } = useQuery({
+    queryFn: getValidatorsInfoByDelegator,
+    queryKey: ["myValidatorsList"],
+  });
+
+  const validators = validatorsData && validatorsData.validators;
+
   // get rewards
   const {
     data: rewardsData,
@@ -48,17 +61,22 @@ function MyValidators() {
   const rewards = rewardsData && rewardsData.rewards;
 
   // loading
-  if (delegationLoading || rewardsLoading) {
+  if (delegationLoading || rewardsLoading || validatorsLoading) {
     return <p>Loading...</p>;
   }
 
   // error
-  if (delegationError || rewardsError) {
+  if (delegationError || rewardsError || validatorsError) {
     console.error(delegationError?.message || rewardsError?.message);
-    toast.error(delegationError?.message || rewardsError?.message || "");
+    toast.error(
+      delegationError?.message ||
+        rewardsError?.message ||
+        validatorsError?.message ||
+        "An error occured.",
+    );
   }
 
-  if (rewards && delegations && rewards.length > 0 && delegations.length > 0) {
+  if (validators && validators.length > 0) {
     return (
       <>
         <div className="my-10">
@@ -78,12 +96,12 @@ function MyValidators() {
                 <TableRow key={delegation.delegation.validator_address}>
                   <TableCell className="flex items-center gap-2">
                     <p className="font-semibold">
-                      {delegation.delegation.validator_address}
+                      {validators[idx].description.moniker}
                     </p>
                   </TableCell>
                   <TableCell className="font-semibold">
                     {microCoinConverter(+delegation.balance.amount, denom!)}{" "}
-                    <Badge>{denom}</Badge>
+                    <Badge className="ml-2">{denom}</Badge>
                   </TableCell>
                   <TableCell className="font-semibold">
                     {microCoinConverter(
@@ -93,7 +111,7 @@ function MyValidators() {
                         0,
                       denom!,
                     )}{" "}
-                    <Badge>{denom}</Badge>
+                    <Badge className="ml-2">{denom}</Badge>
                   </TableCell>
 
                   <TableCell>
