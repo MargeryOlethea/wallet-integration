@@ -14,12 +14,14 @@ import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Badge } from "../ui/badge";
 import { microCoinConverter } from "@/helpers/integerModifiers";
+import { useDistributionApi } from "@/hooks/useDistributionApi";
 
 function MyValidators() {
   // get denom
   const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
-  const { getDelegationByDelegator, getRewardsByDelegator } = useStakingApi();
+  const { getDelegationByDelegator } = useStakingApi();
+  const { getRewardsByDelegator } = useDistributionApi();
 
   // get staked amount
   const {

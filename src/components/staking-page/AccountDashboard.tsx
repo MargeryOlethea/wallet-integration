@@ -9,12 +9,12 @@ import { microCoinConverter } from "@/helpers/integerModifiers";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useMemo } from "react";
-import { useStakingApi } from "@/hooks/useStakingApi";
+import { useDistributionApi } from "@/hooks/useDistributionApi";
 
 function AccountDashboard() {
   //  get functions for fetching data
   const { getStakeBalances, getAvailableBalances } = useCosmjs();
-  const { getRewardsByDelegator } = useStakingApi();
+  const { getRewardsByDelegator } = useDistributionApi();
   const { chainId } = useWallet();
 
   // setup denom

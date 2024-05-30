@@ -5,7 +5,6 @@ import AccountDashboard from "@/components/staking-page/AccountDashboard";
 import MyValidators from "@/components/staking-page/MyValidators";
 import ValidatorsList from "@/components/staking-page/ValidatorsList";
 import { useWallet } from "@/hooks/useWallet";
-import { useEffect } from "react";
 
 function Staking() {
   const { wallet, userAddress } = useWallet();

@@ -2,7 +2,6 @@ import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
 import { ValidatorData } from "@/types/validator.types";
 import { DelegationData } from "@/types/delegatios.types";
-import { RewardsData } from "@/types/reward.types";
 
 export const useStakingApi = () => {
   const { userAddress, chainId } = useWallet();
@@ -28,14 +27,5 @@ export const useStakingApi = () => {
 
     return myDelegations;
   };
-
-  const getRewardsByDelegator = async () => {
-    const response = await fetch(
-      `${baseUrl}/cosmos/distribution/v1beta1/delegators/${userAddress}/rewards`,
-    );
-    const myRewards: RewardsData = await response.json();
-    return myRewards;
-  };
-
-  return { getValidatorsList, getDelegationByDelegator, getRewardsByDelegator };
+  return { getValidatorsList, getDelegationByDelegator };
 };
