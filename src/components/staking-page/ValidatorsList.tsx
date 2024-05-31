@@ -139,7 +139,7 @@ function ValidatorsList() {
             <PaginationItem>
               <Button
                 variant="secondary"
-                disabled={validators!.length < paginationLimit!}
+                disabled={validators && validators?.length < paginationLimit!}
                 onClick={() =>
                   setPaginationOffset((prev) => prev + paginationLimit!)
                 }

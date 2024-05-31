@@ -13,8 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 
 function Governance() {
-  const wallet = localStorage.getItem("wallet");
-  const userAddress = localStorage.getItem("userAddress");
+  const { wallet, userAddress } = useWallet();
 
   if (!wallet || !userAddress) {
     return <NoConnectedWalletHeader />;

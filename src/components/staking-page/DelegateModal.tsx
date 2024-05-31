@@ -25,7 +25,6 @@ import toast from "react-hot-toast";
 import { microCoinConverter } from "@/helpers/integerModifiers";
 import { Skeleton } from "../ui/skeleton";
 import { DeliverTxResponse } from "@cosmjs/stargate";
-import { copyToClipboard } from "@/utils/copyToClipboard";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -47,7 +46,7 @@ export default function DelegateModal({
     }
   };
 
-  // denom
+  // get denom
   const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 

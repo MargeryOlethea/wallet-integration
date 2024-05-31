@@ -79,10 +79,35 @@ export const useCosmjs = () => {
     return result;
   };
 
+  const undelegateToken = async (validatorAddress: string, amount: string) => {
+    const denom =
+      chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
+    const offlineSigner = window.getOfflineSigner!(chainId!);
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
+
+    const fee = "auto";
+    const memo = "";
+
+    const result = await signingClient.undelegateTokens(
+      userAddress!,
+      validatorAddress,
+      { amount: amount, denom: denom! },
+      fee,
+      memo,
+    );
+
+    return result;
+  };
+
   return {
     getStakeBalances,
     getAvailableBalances,
     withdrawStakedReward,
     delegateToken,
+    undelegateToken,
   };
 };

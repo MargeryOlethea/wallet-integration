@@ -23,6 +23,7 @@ import toast from "react-hot-toast";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { copyToClipboard } from "@/utils/copyToClipboard";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface MyModalProps {
   isOpen: boolean;
@@ -70,6 +71,8 @@ export default function ManageModal({
       },
     });
 
+  const [showUndelegate, setShowUndelegate] = useState(false);
+
   if (!isOpen) return null;
   return (
     <div
@@ -100,7 +103,7 @@ export default function ManageModal({
           {/* delegation */}
           <Card className="my-2">
             <CardHeader>
-              <p className="text-xs">Your delegation:</p>
+              <p className="text-xs">Your Delegation:</p>
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-lg">
                   {microCoinConverter(
@@ -108,7 +111,9 @@ export default function ManageModal({
                     denom!,
                   )}
                 </p>{" "}
-                <Badge className="mt-1">{denom}</Badge>
+                <Badge className="mt-1" variant="secondary">
+                  {denom}
+                </Badge>
               </div>
             </CardHeader>
           </Card>
@@ -125,7 +130,7 @@ export default function ManageModal({
                       denom!,
                     )}
                   </p>{" "}
-                  <Badge className="mt-1">{denom}</Badge>
+                  <Badge className="mt-2 bg-blue-400">{denom}</Badge>
                 </div>
               </div>
               <Button
@@ -133,7 +138,8 @@ export default function ManageModal({
                 className="bg-blue-500 hover:bg-blue-600"
                 disabled={
                   withdrawMutation.isPending ||
-                  +userDelegationData?.reward?.amount <= 0
+                  !userDelegationData?.reward?.amount ||
+                  +userDelegationData.reward.amount <= 100
                 }
               >
                 {withdrawMutation.isPending
@@ -142,10 +148,38 @@ export default function ManageModal({
               </Button>
             </CardHeader>
           </Card>
+
+          {/* undelegate amount */}
+          {showUndelegate && (
+            <Card className="my-2">
+              <CardHeader>
+                <p className="text-xs">Undelegate Tokens:</p>
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-5 items-center">
+                    <input
+                      type="number"
+                      placeholder="your amount"
+                      className="focus:border-transparent focus:outline-none active:outline-none active:border-none bg-transparent w-1/2 font-semibold text-lg placeholder:font-light placeholder:text-sm"
+                    />
+                    <Badge variant="secondary" className="max-h-6">
+                      {denom}
+                    </Badge>
+                  </div>
+                  <Button>Undelegate</Button>
+                </div>
+              </CardHeader>
+            </Card>
+          )}
         </CardContent>
         <CardFooter className="justify-between gap-3">
           <Button className="w-full">Redelegate</Button>
-          <Button className="w-full">Undelegate</Button>
+          <Button
+            className="w-full"
+            onClick={() => setShowUndelegate(!showUndelegate)}
+            variant={showUndelegate ? "secondary" : "default"}
+          >
+            {showUndelegate ? "Cancel" : "Undelegate"}
+          </Button>
         </CardFooter>
       </Card>
     </div>
