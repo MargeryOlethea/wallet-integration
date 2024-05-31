@@ -7,9 +7,11 @@ export const useStakingApi = () => {
   const { userAddress, chainId } = useWallet();
   const baseUrl = (chainId && chainInfoMap[chainId].rest) || "";
 
-  const getValidatorsList = async (paginationOffset: number) => {
+  const getValidatorsList = async (
+    paginationOffset: number | string = 0,
+    paginationLimit: number | string = 999,
+  ) => {
     const validatorStatus = "BOND_STATUS_BONDED";
-    const paginationLimit = 10;
 
     const response = await fetch(
       `${baseUrl}/cosmos/staking/v1beta1/validators?status=${validatorStatus}&pagination.limit=${paginationLimit}&pagination.offset=${paginationOffset}`,

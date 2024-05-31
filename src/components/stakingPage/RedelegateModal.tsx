@@ -24,7 +24,17 @@ import {
 import { Badge } from "../ui/badge";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import {
+  microCoinConverter,
+  numberFormatter,
+} from "@/helpers/integerModifiers";
+import { useStakingApi } from "@/hooks/useStakingApi";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { Input } from "../ui/input";
+import { useState } from "react";
+import { Alert, AlertTitle } from "../ui/alert";
+import { TbAlertCircleFilled } from "react-icons/tb";
 
 interface RedelegateModalProps {
   userDelegationData: UserDelegationData;
@@ -51,14 +61,59 @@ export default function RedelegateModal({
 
   const handleCloseModal = () => {
     setRedelegateModalOpen(false);
+    setSearch("");
+    setSelectedValidator("...");
   };
 
   // get denom
   const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
+  // get validators list
+  const { getValidatorsList } = useStakingApi();
+  const { data, isLoading, error } = useQuery({
+    queryFn: () => getValidatorsList(),
+    queryKey: ["validatorsList"],
+  });
+
+  const validators = data && data.validatorsList.validators;
+
+  // handle search
+  const [search, setSearch] = useState("");
+  const filteredValidators = search
+    ? validators &&
+      validators.filter((validator) =>
+        new RegExp(search.trim(), "i").test(validator.description.moniker),
+      )
+    : validators;
+
+  // handle select validator
+  const [selectedValidator, setSelectedValidator] = useState("...");
+
+  // handle redelegate amount
+  const [redelegateAmount, setRedelegateAmount] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const handleInput = (value: string) => {
+    const delegationBalance =
+      denom == "DYM"
+        ? +userDelegationData?.delegation?.balance?.amount /
+          1_000_000_000_000_000
+        : +userDelegationData?.delegation?.balance?.amount / 1_000_000;
+    if (+value > delegationBalance) {
+      setShowAlert(true);
+      setRedelegateAmount(value);
+    } else {
+      setShowAlert(false);
+      setRedelegateAmount(value);
+    }
+  };
+
   if (!isRedelegateModalOpen) {
     return null;
+  }
+
+  if (error) {
+    toast.error(error.message);
   }
 
   return (
@@ -82,6 +137,14 @@ export default function RedelegateModal({
           {/* commission */}
         </CardHeader>
         <CardContent>
+          {/* search */}
+          <Input
+            placeholder="Search validator by name..."
+            type="text"
+            className="mb-2"
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+          />
           {/* scrollable table */}
           <ScrollArea className="h-[200px] w-full rounded-md border p-4">
             <Table>
@@ -94,33 +157,44 @@ export default function RedelegateModal({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {"12345".split("").map((i) => (
-                  <TableRow key={i}>
+                {filteredValidators?.map((validator) => (
+                  <TableRow key={validator.operator_address}>
                     <TableCell>
-                      <p className="font-semibold text-md">earth</p>
+                      <p className="font-semibold text-md">
+                        {validator.description.moniker}
+                      </p>
                       <a
                         className="font-semilight text-xs hover:text-blue-500"
-                        href="validator.description.website"
+                        href={validator.description.website}
                         target="_blank"
                         rel="noreferrer"
                       >
-                        www.disni.com
+                        {validator.description.website}
                       </a>
                     </TableCell>
                     <TableCell>
-                      <div className="text-right pr-10 w-2/3 font-semibold">
-                        123.456.789
-                        <Badge className="ml-2">atom</Badge>
+                      <div className="text-right pr-10 w-4/5 font-semibold">
+                        {numberFormatter(+validator.delegator_shares, denom!)}{" "}
+                        <Badge className="ml-2">{denom}</Badge>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="text-right pr-10 w-2/3 font-semibold">
-                        10%
+                        {Math.floor(
+                          +validator.commission.commission_rates.rate * 100,
+                        )}
+                        %
                       </div>
                     </TableCell>
 
                     <TableCell>
-                      <Button>Select</Button>
+                      <Button
+                        onClick={() =>
+                          setSelectedValidator(validator.description.moniker)
+                        }
+                      >
+                        Select
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -163,21 +237,36 @@ export default function RedelegateModal({
                 <CardDescription className="text-xs">
                   Redelegate to:
                 </CardDescription>
-                <CardTitle className="text-lg">fire</CardTitle>
+                <CardTitle className="text-lg">{selectedValidator}</CardTitle>
                 <div className="flex flex-row justify-between gap-5">
                   <input
                     type="number"
                     placeholder="your redelegate amount"
                     className="focus:border-transparent focus:outline-none active:outline-none active:border-none bg-transparent w-full font-semibold text-lg placeholder:font-light placeholder:text-sm"
+                    value={redelegateAmount}
+                    onChange={(e) => handleInput(e.target.value)}
                   />
                   <Badge variant="secondary">{denom}</Badge>
                 </div>
+                {showAlert && (
+                  <AlertTitle className="flex gap-1 items-center text-xs text-red-700">
+                    <TbAlertCircleFilled size="14" />
+                    <p>Amount can&apos;t be bigger than delegated amount</p>
+                  </AlertTitle>
+                )}
               </CardHeader>
             </Card>
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Redelegate Tokens</Button>
+          <Button
+            className="w-full"
+            disabled={
+              showAlert || selectedValidator === "..." || +redelegateAmount <= 0
+            }
+          >
+            Redelegate Tokens
+          </Button>
         </CardFooter>
       </Card>
     </div>

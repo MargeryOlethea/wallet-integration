@@ -32,14 +32,13 @@ function ValidatorsList() {
 
   // query
   const [paginationOffset, setPaginationOffset] = useState(0);
+  const paginationLimit = 10;
 
   const { getValidatorsList } = useStakingApi();
   const { data, isLoading, error } = useQuery({
-    queryFn: () => getValidatorsList(paginationOffset),
+    queryFn: () => getValidatorsList(paginationOffset, paginationLimit),
     queryKey: ["validatorsList", paginationOffset],
   });
-
-  const paginationLimit = data && data.paginationLimit;
 
   const validators = data && data.validatorsList.validators;
 

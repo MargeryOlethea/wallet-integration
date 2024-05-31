@@ -23,3 +23,15 @@ export const microCoinConverter = (amount: number, denom: string) => {
 
   return parts.join(",");
 };
+
+export const numberFormatter = (num: number, denom: string): string => {
+  const suffixes: string[] = ["", "K", "M", "B", "T"];
+  const amount = denom == "DYM" ? num / 1_000_000_000_000_000 : num / 1_000_000;
+  if (amount < 1000) {
+    return amount.toFixed(1);
+  } else {
+    const exp: number = Math.floor(Math.log10(amount) / 3);
+    const roundedNum: string = (amount / Math.pow(1000, exp)).toFixed(1);
+    return `${roundedNum} ${suffixes[exp]}`;
+  }
+};
