@@ -9,6 +9,8 @@ function ModalProvider({ children }: ModalProviderProps) {
   const [isWalletModalOpen, setWalletModalOpen] = useState<boolean>(false);
   const [isDelegateModalOpen, setDelegateModalOpen] = useState<boolean>(false);
   const [isManageModalOpen, setManageModalOpen] = useState<boolean>(false);
+  const [isRedelegateModalOpen, setRedelegateModalOpen] =
+    useState<boolean>(false);
 
   const value = {
     isWalletModalOpen,
@@ -17,6 +19,8 @@ function ModalProvider({ children }: ModalProviderProps) {
     setDelegateModalOpen,
     isManageModalOpen,
     setManageModalOpen,
+    isRedelegateModalOpen,
+    setRedelegateModalOpen,
   };
   return (
     <>

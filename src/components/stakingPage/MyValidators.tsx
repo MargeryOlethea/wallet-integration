@@ -21,6 +21,7 @@ import { DelegationResponse } from "@/types/delegations.types";
 import { Reward } from "@/types/reward.types";
 import ManageModal, { UserDelegationData } from "./ManageModal";
 import { useModal } from "@/hooks/useModal";
+import RedelegateModal from "./RedelegateModal";
 
 function MyValidators() {
   // get denom
@@ -154,6 +155,7 @@ function MyValidators() {
         </section>
 
         <ManageModal userDelegationData={userDelegationData!} />
+        <RedelegateModal userDelegationData={userDelegationData!} />
       </>
     );
   }

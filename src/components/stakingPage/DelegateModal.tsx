@@ -142,6 +142,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
         >
           <IoClose size="25" />
         </button>
+        {/* header */}
         <CardHeader>
           <CardTitle>{validator?.description?.moniker}</CardTitle>
 

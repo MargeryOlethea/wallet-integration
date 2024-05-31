@@ -38,7 +38,8 @@ export interface UserDelegationData {
 
 export default function ManageModal({ userDelegationData }: MyModalProps) {
   // modal handling
-  const { isManageModalOpen, setManageModalOpen } = useModal();
+  const { isManageModalOpen, setManageModalOpen, setRedelegateModalOpen } =
+    useModal();
   const handleBackgroundClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -51,6 +52,11 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
     setUndelegateAmount("");
     setShowUndelegate(false);
     setManageModalOpen(false);
+  };
+
+  const openRedelegateModal = () => {
+    handleCloseModal();
+    setRedelegateModalOpen(true);
   };
 
   // get denom
@@ -133,6 +139,7 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
         >
           <IoClose size="25" />
         </button>
+        {/* header */}
         <CardHeader>
           <CardTitle>
             {userDelegationData?.validator?.description?.moniker}
@@ -249,7 +256,9 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
           )}
         </CardContent>
         <CardFooter className="justify-between gap-3">
-          <Button className="w-full">Redelegate</Button>
+          <Button className="w-full" onClick={openRedelegateModal}>
+            Redelegate
+          </Button>
           <Button
             className="w-full"
             onClick={() => setShowUndelegate(!showUndelegate)}
