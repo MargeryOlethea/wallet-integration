@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/pagination";
 import { ValidatorItem } from "@/types/validator.types";
 import DelegateModal from "./DelegateModal";
+import { useModal } from "@/hooks/useModal";
 
 function ValidatorsList() {
   // get denom
@@ -43,17 +44,13 @@ function ValidatorsList() {
   const validators = data && data.validatorsList.validators;
 
   // modal handling
-  const [isOpen, setIsOpen] = useState(false);
+  const { setDelegateModalOpen } = useModal();
   const [selectedValidator, setSelectedValidator] =
     useState<ValidatorItem | null>(null);
 
   const handleOpenModal = (validator: ValidatorItem) => {
     setSelectedValidator(validator);
-    setIsOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsOpen(false);
+    setDelegateModalOpen(true);
   };
 
   // loading
@@ -150,11 +147,7 @@ function ValidatorsList() {
           </PaginationContent>
         </Pagination>
       </section>
-      <DelegateModal
-        validator={selectedValidator!}
-        isOpen={isOpen}
-        onClose={handleCloseModal}
-      />
+      <DelegateModal validator={selectedValidator!} />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { useWallet } from "@/hooks/useWallet";
 import { IoCopy } from "react-icons/io5";
 import { truncateString } from "@/helpers/stringModifiers";
 import { copyToClipboard } from "@/utils/copyToClipboard";
+import { useModal } from "@/hooks/useModal";
 
 declare global {
   interface Window extends KeplrWindow {
@@ -14,9 +15,18 @@ declare global {
 }
 
 function WalletModal() {
-  const { setWallet, setUserAddress, userAddress } = useWallet();
+  const { isWalletModalOpen, setWalletModalOpen } = useModal();
+
+  const handleBackgroundClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    if (e.target === e.currentTarget) {
+      setWalletModalOpen(false);
+    }
+  };
 
   // disconnect wallet
+  const { setWallet, setUserAddress, userAddress } = useWallet();
   const disconnectWallet = () => {
     setWallet(null);
     setUserAddress(null);
@@ -26,9 +36,17 @@ function WalletModal() {
     window.location.reload();
   };
 
+  if (!isWalletModalOpen) {
+    return null;
+  }
+
   return (
     <>
-      <div className="z-10 bg-white absolute shadow-lg border-slate-100 border my-2 rounded-xl flex-col flex-1 gap-5 p-5 justify-end right-0">
+      <div
+        className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50"
+        onClick={handleBackgroundClick}
+      />
+      <div className="z-100 bg-white absolute shadow-lg border-slate-100 border my-2 rounded-xl flex-col flex-1 gap-5 p-5 justify-end right-0">
         {userAddress && (
           <div className="flex items-center gap-2 mb-2">
             <p>{truncateString(userAddress, 12, 10)}</p>

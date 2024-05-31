@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { truncateString } from "@/helpers/stringModifiers";
 import { useWallet } from "@/hooks/useWallet";
+import { useModal } from "@/hooks/useModal";
 
 function Header() {
   // navigations
@@ -18,7 +19,7 @@ function Header() {
   const pathname = usePathname();
 
   // modal
-  const [isWalletOpen, setWalletOpen] = useState(false);
+  const { isWalletModalOpen, setWalletModalOpen } = useModal();
 
   // wallet info
   const { wallet, userAddress, setWallet, setUserAddress } = useWallet();
@@ -64,7 +65,7 @@ function Header() {
           {wallet && userAddress && (
             <Button
               className="flex gap-2"
-              onClick={() => setWalletOpen(!isWalletOpen)}
+              onClick={() => setWalletModalOpen(!isWalletModalOpen)}
             >
               {wallet == "keplr" ? (
                 <Image
@@ -86,7 +87,7 @@ function Header() {
             </Button>
           )}
 
-          {isWalletOpen && <WalletModal />}
+          <WalletModal />
         </div>
       </nav>
     </>

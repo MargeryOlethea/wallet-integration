@@ -25,24 +25,20 @@ import toast from "react-hot-toast";
 import { microCoinConverter } from "@/helpers/integerModifiers";
 import { Skeleton } from "../ui/skeleton";
 import { DeliverTxResponse } from "@cosmjs/stargate";
+import { useModal } from "@/hooks/useModal";
 
 interface AllModalProps {
   validator: ValidatorItem;
-  isOpen: boolean;
-  onClose: () => void;
 }
 
-export default function DelegateModal({
-  validator,
-  isOpen,
-  onClose,
-}: AllModalProps) {
+export default function DelegateModal({ validator }: AllModalProps) {
   // modal handling
+  const { isDelegateModalOpen, setDelegateModalOpen } = useModal();
   const handleBackgroundClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      setDelegateModalOpen(false);
     }
   };
 
@@ -124,7 +120,9 @@ export default function DelegateModal({
   if (availableError) {
     toast.error(availableError.message);
   }
-  if (!isOpen) return null;
+  if (!isDelegateModalOpen) {
+    return null;
+  }
 
   return (
     <div
@@ -135,7 +133,7 @@ export default function DelegateModal({
         {/* close button */}
         <button
           className="absolute top-5 right-5 text-gray-500 hover:text-gray-800"
-          onClick={onClose}
+          onClick={() => setDelegateModalOpen(false)}
         >
           <IoClose size="25" />
         </button>
