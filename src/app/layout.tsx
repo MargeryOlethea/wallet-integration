@@ -23,12 +23,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <main>
           <Toaster position="bottom-center" />
-          <ReactQueryProvider>
-            <WalletProvider>
+          <WalletProvider>
+            <ReactQueryProvider>
               <Header />
               {children}
-            </WalletProvider>
-          </ReactQueryProvider>
+            </ReactQueryProvider>
+          </WalletProvider>
         </main>
       </body>
     </html>

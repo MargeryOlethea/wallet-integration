@@ -239,7 +239,7 @@ export default function DelegateModal({
             disabled={showAlert || +amount <= 0 || delegateMutation.isPending}
             onClick={() => delegateMutation.mutate()}
           >
-            {delegateMutation.isPending ? "Delegating tokens..." : "Delegate"}
+            {delegateMutation.isPending ? "Processing..." : "Delegate"}
           </Button>
         </CardFooter>
       </Card>
