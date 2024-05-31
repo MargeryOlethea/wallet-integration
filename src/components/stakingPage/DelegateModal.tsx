@@ -38,8 +38,13 @@ export default function DelegateModal({ validator }: AllModalProps) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (e.target === e.currentTarget) {
-      setDelegateModalOpen(false);
+      handleCloseModal();
     }
+  };
+
+  const handleCloseModal = () => {
+    setAmount("");
+    setDelegateModalOpen(false);
   };
 
   // get denom
@@ -133,7 +138,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
         {/* close button */}
         <button
           className="absolute top-5 right-5 text-gray-500 hover:text-gray-800"
-          onClick={() => setDelegateModalOpen(false)}
+          onClick={handleCloseModal}
         >
           <IoClose size="25" />
         </button>

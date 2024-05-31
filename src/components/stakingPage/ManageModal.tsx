@@ -24,10 +24,9 @@ import toast from "react-hot-toast";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { useModal } from "@/hooks/useModal";
 
 interface MyModalProps {
-  isOpen: boolean;
-  onClose: () => void;
   userDelegationData: UserDelegationData;
 }
 
@@ -37,18 +36,21 @@ export interface UserDelegationData {
   reward: Reward;
 }
 
-export default function ManageModal({
-  isOpen,
-  onClose,
-  userDelegationData,
-}: MyModalProps) {
+export default function ManageModal({ userDelegationData }: MyModalProps) {
   // modal handling
+  const { isManageModalOpen, setManageModalOpen } = useModal();
   const handleBackgroundClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      handleCloseModal();
     }
+  };
+
+  const handleCloseModal = () => {
+    setUndelegateAmount("");
+    setShowUndelegate(false);
+    setManageModalOpen(false);
   };
 
   // get denom
@@ -116,7 +118,9 @@ export default function ManageModal({
       },
     });
 
-  if (!isOpen) return null;
+  if (!isManageModalOpen) {
+    return null;
+  }
   return (
     <div
       className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -125,7 +129,7 @@ export default function ManageModal({
       <Card className="relative p-5 flex flex-col justify-between w-1/3">
         <button
           className="absolute top-5 right-5 text-gray-500 hover:text-gray-800"
-          onClick={onClose}
+          onClick={handleCloseModal}
         >
           <IoClose size="25" />
         </button>

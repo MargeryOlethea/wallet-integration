@@ -20,6 +20,7 @@ import { ValidatorItem } from "@/types/validator.types";
 import { DelegationResponse } from "@/types/delegations.types";
 import { Reward } from "@/types/reward.types";
 import ManageModal, { UserDelegationData } from "./ManageModal";
+import { useModal } from "@/hooks/useModal";
 
 function MyValidators() {
   // get denom
@@ -66,7 +67,7 @@ function MyValidators() {
   const rewards = rewardsData && rewardsData.rewards;
 
   // modal handling
-  const [isOpen, setIsOpen] = useState(false);
+  const { setManageModalOpen } = useModal();
   const [userDelegationData, setUserDelegationData] =
     useState<UserDelegationData | null>(null);
   const handleOpenModal = (
@@ -76,11 +77,7 @@ function MyValidators() {
   ) => {
     const data = { validator, delegation, reward };
     setUserDelegationData(data);
-    setIsOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsOpen(false);
+    setManageModalOpen(true);
   };
 
   // loading
@@ -156,11 +153,7 @@ function MyValidators() {
           </Table>
         </section>
 
-        <ManageModal
-          userDelegationData={userDelegationData!}
-          isOpen={isOpen}
-          onClose={handleCloseModal}
-        />
+        <ManageModal userDelegationData={userDelegationData!} />
       </>
     );
   }
