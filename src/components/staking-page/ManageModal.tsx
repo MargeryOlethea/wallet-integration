@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardContent,
@@ -17,6 +16,13 @@ import { microCoinConverter } from "@/helpers/integerModifiers";
 import { DelegationResponse } from "@/types/delegations.types";
 import { Button } from "../ui/button";
 import { Reward } from "@/types/reward.types";
+import { useCosmjs } from "@/hooks/useCosmjs";
+
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { copyToClipboard } from "@/utils/copyToClipboard";
+import { useRouter } from "next/router";
 
 interface MyModalProps {
   isOpen: boolean;
@@ -49,9 +55,20 @@ export default function ManageModal({
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // handle claim rewards
-  const handleClaimRewards = () => {
-    alert("TODO!");
-  };
+  const { withdrawStakedReward } = useCosmjs();
+  const withdrawMutation: UseMutationResult<DeliverTxResponse, Error, void> =
+    useMutation({
+      mutationFn: () =>
+        withdrawStakedReward(userDelegationData.validator.operator_address),
+      onSuccess: (data) => {
+        toast.success(`Rewards claimed successfully!`);
+        window.location.reload();
+      },
+      onError: (error) => {
+        toast.error(`Failed to claim rewards: ${error.message}`);
+        console.error(error.message);
+      },
+    });
 
   if (!isOpen) return null;
   return (
@@ -112,19 +129,21 @@ export default function ManageModal({
                 </div>
               </div>
               <Button
-                onClick={handleClaimRewards}
+                onClick={() => withdrawMutation.mutate()}
                 className="bg-blue-500 hover:bg-blue-600"
                 disabled={
-                  +userDelegationData?.reward?.amount > 0 ? false : true
+                  withdrawMutation.isPending ||
+                  +userDelegationData?.reward?.amount <= 0
                 }
               >
-                Claim Rewards
+                {withdrawMutation.isPending
+                  ? "Claiming Rewards..."
+                  : "Claim Rewards"}
               </Button>
             </CardHeader>
           </Card>
         </CardContent>
         <CardFooter className="justify-between gap-3">
-          <Button className="w-full">Delegate</Button>
           <Button className="w-full">Redelegate</Button>
           <Button className="w-full">Undelegate</Button>
         </CardFooter>

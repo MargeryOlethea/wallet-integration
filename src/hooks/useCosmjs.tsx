@@ -1,4 +1,9 @@
-import { Coin, StargateClient } from "@cosmjs/stargate";
+import {
+  Coin,
+  GasPrice,
+  SigningStargateClient,
+  StargateClient,
+} from "@cosmjs/stargate";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
 
@@ -29,5 +34,55 @@ export const useCosmjs = () => {
     }
   };
 
-  return { getStakeBalances, getAvailableBalances };
+  const withdrawStakedReward = async (validatorAddress: string) => {
+    const offlineSigner = window.getOfflineSigner!(chainId!);
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
+
+    const fee = "auto";
+    const memo = "";
+
+    const result = await signingClient.withdrawRewards(
+      userAddress!,
+      validatorAddress,
+      fee,
+      memo,
+    );
+
+    return result;
+  };
+
+  const delegateToken = async (validatorAddress: string, amount: string) => {
+    const denom =
+      chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
+    const offlineSigner = window.getOfflineSigner!(chainId!);
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
+
+    const fee = "auto";
+    const memo = "";
+
+    const result = await signingClient.delegateTokens(
+      userAddress!,
+      validatorAddress,
+      { amount: amount, denom: denom! },
+      fee,
+      memo,
+    );
+
+    return result;
+  };
+
+  return {
+    getStakeBalances,
+    getAvailableBalances,
+    withdrawStakedReward,
+    delegateToken,
+  };
 };

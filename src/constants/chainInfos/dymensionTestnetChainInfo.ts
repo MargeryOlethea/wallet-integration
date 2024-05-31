@@ -13,7 +13,7 @@ export const dymensionTestnetChainInfo: ChainInfo = {
   },
   currencies: [
     {
-      coinMinimalDenom: "adym",
+      coinMinimalDenom: "udym",
       coinDenom: "DYM",
       coinDecimals: 18,
       coinGeckoId: "dymension",
@@ -33,7 +33,7 @@ export const dymensionTestnetChainInfo: ChainInfo = {
     bech32PrefixConsPub: "dymvalconspub",
   },
   stakeCurrency: {
-    coinMinimalDenom: "adym",
+    coinMinimalDenom: "udym",
     coinDenom: "DYM",
     coinDecimals: 18,
     coinGeckoId: "dymension",
@@ -42,7 +42,7 @@ export const dymensionTestnetChainInfo: ChainInfo = {
   },
   feeCurrencies: [
     {
-      coinMinimalDenom: "adym",
+      coinMinimalDenom: "udym",
       coinDenom: "DYM",
       coinDecimals: 18,
       coinGeckoId: "dymension",

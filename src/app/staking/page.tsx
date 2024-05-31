@@ -7,7 +7,8 @@ import ValidatorsList from "@/components/staking-page/ValidatorsList";
 import { useWallet } from "@/hooks/useWallet";
 
 function Staking() {
-  const { wallet, userAddress } = useWallet();
+  const wallet = localStorage.getItem("wallet");
+  const userAddress = localStorage.getItem("userAddress");
 
   if (!wallet || !userAddress) {
     return <NoConnectedWalletHeader />;
