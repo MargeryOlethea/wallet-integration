@@ -56,6 +56,7 @@ export const useCosmjs = () => {
   };
 
   const delegateToken = async (validatorAddress: string, amount: string) => {
+    console.log({ chainId, rpcUrl, userAddress, validatorAddress, amount });
     const denom =
       chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
     const offlineSigner = window.getOfflineSigner!(chainId!);
@@ -103,11 +104,49 @@ export const useCosmjs = () => {
     return result;
   };
 
+  const redelegateToken = async (
+    validatorSourceAddress: string,
+    validatorDestinationAddress: string,
+    amount: string,
+  ) => {
+    const denom =
+      chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
+    const offlineSigner = window.getOfflineSigner!(chainId!);
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
+
+    const fee = "auto";
+    const memo = "";
+    const message = [
+      {
+        typeUrl: "/cosmos.staking.v1beta1.MsgBeginRedelegate",
+        value: {
+          amount: { amount: amount, denom: denom! },
+          delegatorAddress: userAddress!,
+          validatorSrcAddress: validatorSourceAddress,
+          validatorDstAddress: validatorDestinationAddress,
+        },
+      },
+    ];
+
+    const result = await signingClient.signAndBroadcast(
+      userAddress!,
+      message,
+      fee,
+      memo,
+    );
+    return result;
+  };
+
   return {
     getStakeBalances,
     getAvailableBalances,
     withdrawStakedReward,
     delegateToken,
     undelegateToken,
+    redelegateToken,
   };
 };

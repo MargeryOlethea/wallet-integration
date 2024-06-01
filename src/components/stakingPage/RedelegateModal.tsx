@@ -29,12 +29,18 @@ import {
   numberFormatter,
 } from "@/helpers/integerModifiers";
 import { useStakingApi } from "@/hooks/useStakingApi";
-import { useQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { Alert, AlertTitle } from "../ui/alert";
 import { TbAlertCircleFilled } from "react-icons/tb";
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { useCosmjs } from "@/hooks/useCosmjs";
 
 interface RedelegateModalProps {
   userDelegationData: UserDelegationData;
@@ -107,6 +113,35 @@ export default function RedelegateModal({
       setRedelegateAmount(value);
     }
   };
+
+  // handle redelegate
+  const realAmount =
+    denom == "DYM"
+      ? (+redelegateAmount * 1_000_000_000_000_000).toString()
+      : (+redelegateAmount * 1_000_000).toString();
+
+  const sourceValidator =
+    userDelegationData && userDelegationData.validator.operator_address;
+  const destinationValidator =
+    validators &&
+    validators.find(
+      (validator) => validator.description.moniker === selectedValidator,
+    )?.operator_address;
+
+  const { redelegateToken } = useCosmjs();
+  const redelegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
+    useMutation({
+      mutationFn: () =>
+        redelegateToken(sourceValidator, destinationValidator!, realAmount),
+      onSuccess: (data) => {
+        toast.success(`Redelegate successful!`);
+        window.location.reload();
+      },
+      onError: (error) => {
+        toast.error(`Failed to redelegate token: ${error.message}`);
+        console.error(error.message);
+      },
+    });
 
   if (!isRedelegateModalOpen) {
     return null;
@@ -262,10 +297,16 @@ export default function RedelegateModal({
           <Button
             className="w-full"
             disabled={
-              showAlert || selectedValidator === "..." || +redelegateAmount <= 0
+              showAlert ||
+              selectedValidator === "..." ||
+              +redelegateAmount <= 0 ||
+              redelegateMutation.isPending
             }
+            onClick={() => redelegateMutation.mutate()}
           >
-            Redelegate Tokens
+            {redelegateMutation.isPending
+              ? "Processing..."
+              : "Redelegate Tokens"}
           </Button>
         </CardFooter>
       </Card>

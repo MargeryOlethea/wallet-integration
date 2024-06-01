@@ -42,10 +42,6 @@ function WalletModal() {
 
   return (
     <>
-      <div
-        className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50"
-        onClick={handleBackgroundClick}
-      />
       <div className="z-100 bg-white absolute shadow-lg border-slate-100 border my-2 rounded-xl flex-col flex-1 gap-5 p-5 justify-end right-0">
         {userAddress && (
           <div className="flex items-center gap-2 mb-2">
