@@ -40,7 +40,7 @@ function ValidatorsList() {
     queryKey: ["validatorsList", paginationOffset],
   });
 
-  const validators = data && data.validatorsList.validators;
+  const validators = data && data.validators;
 
   // modal handling
   const { setDelegateModalOpen } = useModal();
@@ -74,7 +74,6 @@ function ValidatorsList() {
               <TableHead>Validator</TableHead>
               <TableHead>Voting Power</TableHead>
               <TableHead>Comission</TableHead>
-              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

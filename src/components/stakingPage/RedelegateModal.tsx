@@ -82,7 +82,7 @@ export default function RedelegateModal({
     queryKey: ["validatorsList"],
   });
 
-  const validators = data && data.validatorsList.validators;
+  const validators = data && data.validators;
 
   // handle search
   const [search, setSearch] = useState("");

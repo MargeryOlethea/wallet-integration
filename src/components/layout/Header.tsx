@@ -13,7 +13,7 @@ function Header() {
   // navigations
   const navigations = [
     { name: "Staking", href: "/staking" },
-    { name: "Governance", href: "/governance" },
+    { name: "Proposals", href: "/proposals" },
   ];
 
   const pathname = usePathname();

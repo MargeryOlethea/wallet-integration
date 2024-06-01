@@ -18,7 +18,7 @@ export const useStakingApi = () => {
     );
     const validatorsList: ValidatorData = await response.json();
 
-    return { validatorsList, paginationLimit };
+    return validatorsList;
   };
 
   const getDelegationByDelegator = async () => {
