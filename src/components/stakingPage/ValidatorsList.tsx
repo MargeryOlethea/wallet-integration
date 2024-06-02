@@ -26,6 +26,8 @@ import DelegateModal from "./DelegateModal";
 import { useModal } from "@/hooks/useModal";
 import { Card } from "../ui/card";
 import BottomPagination from "../BottomPagination";
+import LoadingValidatorsListTable from "./LoadingValidatorsListTable";
+import NoDataFound from "../NoDataFound";
 
 function ValidatorsList() {
   // get denom
@@ -54,11 +56,6 @@ function ValidatorsList() {
     setDelegateModalOpen(true);
   };
 
-  // loading
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   // error
   if (error) {
     console.error(error.message);
@@ -70,56 +67,66 @@ function ValidatorsList() {
       <section className="my-10">
         <h1 className="text-xl">Validators List</h1>
 
-        <Card className="my-5">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Validator</TableHead>
-                <TableHead>Voting Power</TableHead>
-                <TableHead>Comission</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {validators?.map((validator) => (
-                <TableRow key={validator.operator_address}>
-                  <TableCell>
-                    <p className="font-semibold text-md">
-                      {validator.description.moniker}
-                    </p>
-                    <a
-                      className="font-semilight text-xs hover:text-blue-500"
-                      href={validator.description.website}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {validator.description.website}
-                    </a>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-right pr-10 w-2/3 font-semibold">
-                      {microCoinConverter(+validator.delegator_shares, denom!)}{" "}
-                      <Badge className="ml-2">{denom}</Badge>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-right pr-10 w-2/3 font-semibold">
-                      {Math.floor(
-                        +validator.commission.commission_rates.rate * 100,
-                      )}
-                      %
-                    </div>
-                  </TableCell>
+        {isLoading && <LoadingValidatorsListTable rows={paginationLimit} />}
+        {!isLoading && (!validators || validators.length === 0) && (
+          <NoDataFound />
+        )}
 
-                  <TableCell>
-                    <Button onClick={() => handleOpenModal(validator)}>
-                      Manage
-                    </Button>
-                  </TableCell>
+        {!isLoading && validators && validators.length > 0 && (
+          <Card className="my-5">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Validator</TableHead>
+                  <TableHead>Voting Power</TableHead>
+                  <TableHead>Comission</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+              </TableHeader>
+              <TableBody>
+                {validators?.map((validator) => (
+                  <TableRow key={validator.operator_address}>
+                    <TableCell>
+                      <p className="font-semibold text-md">
+                        {validator.description.moniker}
+                      </p>
+                      <a
+                        className="font-semilight text-xs hover:text-blue-500"
+                        href={validator.description.website}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {validator.description.website}
+                      </a>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-right pr-10 w-2/3 font-semibold">
+                        {microCoinConverter(
+                          +validator.delegator_shares,
+                          denom!,
+                        )}{" "}
+                        <Badge className="ml-2">{denom}</Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-right pr-10 w-2/3 font-semibold">
+                        {Math.floor(
+                          +validator.commission.commission_rates.rate * 100,
+                        )}
+                        %
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      <Button onClick={() => handleOpenModal(validator)}>
+                        Manage
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        )}
 
         <BottomPagination
           paginationOffset={paginationOffset}
