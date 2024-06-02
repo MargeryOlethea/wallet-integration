@@ -1,35 +1,35 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "../ui/skeleton";
 
-function RewardBalanceCard({
-  amount,
-  denom,
-}: {
+interface RewardBalanceCardProps {
   amount: number | string | undefined;
   denom: string | undefined;
-}) {
+  loading: boolean;
+}
+
+function RewardBalanceCard({ amount, denom, loading }: RewardBalanceCardProps) {
   return (
     <>
       <Card className="bg-gradient-to-r from-blue-100 flex items-center justify-even pr-6">
         <CardHeader>
           <CardDescription>Rewarded Balance</CardDescription>
-          <CardTitle className="flex items-center gap-2">
-            {amount} <Badge>{denom}</Badge>
-          </CardTitle>
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-8 w-20" />{" "}
+              <Skeleton className="rounded-full h-5 w-14" />
+            </div>
+          ) : (
+            <CardTitle className="flex items-center gap-2">
+              {amount} <Badge className="bg-blue-500">{denom}</Badge>
+            </CardTitle>
+          )}
         </CardHeader>
-
-        {/* <Button
-          className="bg-blue-500"
-          disabled={amount && Number(amount) > 0 ? false : true}
-        >
-          Claim Rewards
-        </Button> */}
       </Card>
     </>
   );

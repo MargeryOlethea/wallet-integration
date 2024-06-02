@@ -19,7 +19,7 @@ import BottomPagination from "@/components/BottomPagination";
 import ProposalDetailModal from "@/components/proposalsPage/ProposalDetailModal";
 import StatusTab from "@/components/proposalsPage/StatusTab";
 import NoDataFound from "@/components/NoDataFound";
-import ProposalLoadingTable from "@/components/proposalsPage/ProposalLoadingTable";
+import LoadingProposalTable from "@/components/proposalsPage/LoadingProposalTable";
 
 function Proposals() {
   const { wallet, userAddress } = useWallet();
@@ -72,7 +72,7 @@ function Proposals() {
           />
         </div>
 
-        {isLoading && <ProposalLoadingTable rows={paginationLimit} />}
+        {isLoading && <LoadingProposalTable rows={paginationLimit} />}
 
         {proposals && proposals.length < 1 && <NoDataFound />}
 

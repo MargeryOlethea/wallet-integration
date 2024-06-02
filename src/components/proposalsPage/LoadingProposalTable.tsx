@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "../ui/table";
 
-function ProposalLoadingTable({ rows }: { rows: number }) {
+function LoadingProposalTable({ rows }: { rows: number }) {
   const loadingRows = Array.from({ length: rows }, (_, i) => {
     return (
       <TableRow key={i}>
@@ -51,4 +51,4 @@ function ProposalLoadingTable({ rows }: { rows: number }) {
   );
 }
 
-export default ProposalLoadingTable;
+export default LoadingProposalTable;

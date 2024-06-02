@@ -72,10 +72,6 @@ function AccountDashboard() {
     return { amount };
   }, [firstBalance, stakeBalances]);
 
-  if (availableLoading || stakeLoading || rewardsLoading) {
-    return <p>Loading...</p>;
-  }
-
   if (availableError || stakeError || rewardsError) {
     console.error(availableError || stakeError || rewardsError);
     toast.error(
@@ -95,6 +91,7 @@ function AccountDashboard() {
             coinDenom,
           )}
           denom={coinDenom}
+          loading={availableLoading || stakeLoading || rewardsLoading}
         />
         <AvailableBalanceCard
           amount={microCoinConverter(
@@ -102,6 +99,7 @@ function AccountDashboard() {
             coinDenom,
           )}
           denom={coinDenom}
+          loading={availableLoading}
         />
         <StakeBalanceCard
           amount={microCoinConverter(
@@ -109,10 +107,12 @@ function AccountDashboard() {
             coinDenom,
           )}
           denom={coinDenom}
+          loading={stakeLoading}
         />
         <RewardBalanceCard
           amount={microCoinConverter(+rewardsAmount, coinDenom)}
           denom={coinDenom}
+          loading={rewardsLoading}
         />
       </div>
     </>

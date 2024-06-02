@@ -5,22 +5,34 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "../ui/skeleton";
+
+interface AccountBalanceCardProps {
+  amount: number | string | undefined;
+  denom: string | undefined;
+  loading: boolean;
+}
 
 function AccountBalanceCard({
   amount,
   denom,
-}: {
-  amount: number | string | undefined;
-  denom: string | undefined;
-}) {
+  loading,
+}: AccountBalanceCardProps) {
   return (
     <>
       <Card>
         <CardHeader>
           <CardDescription>Total Balance</CardDescription>
-          <CardTitle className="flex items-center gap-2">
-            {amount} <Badge variant="secondary">{denom}</Badge>
-          </CardTitle>
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-8 w-20" />{" "}
+              <Skeleton className="rounded-full h-5 w-14" />
+            </div>
+          ) : (
+            <CardTitle className="flex items-center gap-2">
+              {amount} <Badge variant="secondary">{denom}</Badge>
+            </CardTitle>
+          )}
         </CardHeader>
       </Card>
     </>
