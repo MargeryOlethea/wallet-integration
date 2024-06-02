@@ -19,6 +19,7 @@ import BottomPagination from "@/components/BottomPagination";
 import ProposalDetailModal from "@/components/proposalsPage/ProposalDetailModal";
 import StatusTab from "@/components/proposalsPage/StatusTab";
 import NoDataFound from "@/components/NoDataFound";
+import ProposalLoadingTable from "@/components/proposalsPage/ProposalLoadingTable";
 
 function Proposals() {
   const { wallet, userAddress } = useWallet();
@@ -56,9 +57,7 @@ function Proposals() {
   if (error) {
     toast.error(error.message);
   }
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+
   if (!wallet || !userAddress) {
     return <NoConnectedWalletHeader />;
   } else {
@@ -73,42 +72,43 @@ function Proposals() {
           />
         </div>
 
-        {proposals && proposals.length < 1 ? (
-          <NoDataFound />
-        ) : (
-          <>
-            <Card className="my-5">
-              <Table className="my-2">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>#ID</TableHead>
-                    <TableHead>Proposal</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>End Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {proposals?.map((proposal) => (
-                    <ProposalTableRows
-                      key={proposal.id}
-                      proposal={proposal}
-                      proposalStatus={proposalStatus}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
+        {isLoading && <ProposalLoadingTable rows={paginationLimit} />}
 
-            <BottomPagination
-              paginationOffset={paginationOffset}
-              setPaginationOffset={setPaginationOffset}
-              data={proposals}
-              paginationLimit={paginationLimit}
-            />
+        {proposals && proposals.length < 1 && <NoDataFound />}
 
-            <ProposalDetailModal />
-          </>
+        {proposals && proposals.length > 0 && !isLoading && (
+          <Card className="my-5">
+            <Table className="my-2">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>#ID</TableHead>
+                  <TableHead>Proposal</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>End Time</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {proposals?.map((proposal) => (
+                  <ProposalTableRows
+                    key={proposal.id}
+                    proposal={proposal}
+                    proposalStatus={proposalStatus}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
         )}
+        <>
+          <BottomPagination
+            paginationOffset={paginationOffset}
+            setPaginationOffset={setPaginationOffset}
+            data={proposals}
+            paginationLimit={paginationLimit}
+          />
+
+          <ProposalDetailModal />
+        </>
       </>
     );
   }

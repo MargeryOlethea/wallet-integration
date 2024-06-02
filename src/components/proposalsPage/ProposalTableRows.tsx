@@ -5,7 +5,7 @@ import {
   getProposalStatusLabel,
   ProposalStatus,
 } from "@/helpers/stringModifiers";
-import { ProposalData, ProposalItem } from "@/types/proposal.types";
+import { ProposalItem } from "@/types/proposal.types";
 import { useModal } from "@/hooks/useModal";
 
 function ProposalTableRows({
@@ -26,19 +26,23 @@ function ProposalTableRows({
   const { setProposalModalOpen } = useModal();
 
   return (
-    <TableRow>
-      <TableCell className="font-semibold text-lg">#{proposal.id}</TableCell>
-      <TableCell className="max-w-xs font-semibold">{proposal.title}</TableCell>
-      <TableCell className="font-semibold">
-        {getProposalStatusLabel(proposalStatus)}
-      </TableCell>
-      <TableCell className="font-semibold">
-        {dayDifferenceCounter(proposal.voting_end_time)}
-      </TableCell>
-      <TableCell>
-        <Button onClick={() => setProposalModalOpen(true)}>Details</Button>
-      </TableCell>
-    </TableRow>
+    <>
+      <TableRow>
+        <TableCell className="font-semibold text-lg">#{proposal.id}</TableCell>
+        <TableCell className="max-w-xs font-semibold">
+          {proposal.title}
+        </TableCell>
+        <TableCell className="font-semibold">
+          {getProposalStatusLabel(proposalStatus)}
+        </TableCell>
+        <TableCell className="font-semibold">
+          {dayDifferenceCounter(proposal.voting_end_time)}
+        </TableCell>
+        <TableCell>
+          <Button onClick={() => setProposalModalOpen(true)}>Details</Button>
+        </TableCell>
+      </TableRow>
+    </>
   );
 }
 
