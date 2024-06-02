@@ -13,16 +13,9 @@ export const useGovernanceApi = () => {
   ) => {
     const paginationReverse = true;
 
-    let response;
-    if (proposalStatus === "PROPOSAL_STATUS_REJECTED") {
-      response = await fetch(
-        `${baseUrl}/cosmos/gov/v1/proposals?proposal_status=${proposalStatus}&pagination.limit=${paginationLimit}&pagination.offset=${paginationOffset}&pagination.reverse=${paginationReverse}`,
-      );
-    } else {
-      response = await fetch(
-        `${baseUrl}/cosmos/gov/v1beta1/proposals?proposal_status=${proposalStatus}&pagination.limit=${paginationLimit}&pagination.offset=${paginationOffset}&pagination.reverse=${paginationReverse}`,
-      );
-    }
+    const response = await fetch(
+      `${baseUrl}/cosmos/gov/v1/proposals?proposal_status=${proposalStatus}&pagination.limit=${paginationLimit}&pagination.offset=${paginationOffset}&pagination.reverse=${paginationReverse}`,
+    );
 
     const proposalsList: ProposalData = await response.json();
 

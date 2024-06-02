@@ -1,21 +1,9 @@
 export interface ProposalData {
-  proposals: (PassedProposalItem | RejectedProposalItem)[];
+  proposals: ProposalItem[];
   pagination: PaginationInfo;
 }
 
-export interface PassedProposalItem {
-  proposal_id: string;
-  content: ProposalContent;
-  status: string;
-  final_tally_result: TallyResult;
-  submit_time: string;
-  deposit_end_time: string;
-  total_deposit: Deposit[];
-  voting_start_time: string;
-  voting_end_time: string;
-}
-
-export interface RejectedProposalItem {
+export interface ProposalItem {
   id: string;
   title: string;
   summary: string;
@@ -48,11 +36,6 @@ export interface TallyResult {
   abstain: string;
   no: string;
   no_with_veto: string;
-}
-
-export interface Deposit {
-  denom: string;
-  amount: string;
 }
 
 export interface PaginationInfo {

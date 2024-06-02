@@ -25,6 +25,7 @@ import { ValidatorItem } from "@/types/validator.types";
 import DelegateModal from "./DelegateModal";
 import { useModal } from "@/hooks/useModal";
 import { Card } from "../ui/card";
+import BottomPagination from "../BottomPagination";
 
 function ValidatorsList() {
   // get denom
@@ -120,33 +121,12 @@ function ValidatorsList() {
           </Table>
         </Card>
 
-        <Pagination>
-          <PaginationContent className="gap-10">
-            <PaginationItem>
-              <Button
-                variant="secondary"
-                disabled={paginationOffset < 1}
-                onClick={() =>
-                  setPaginationOffset((prev) => prev - paginationLimit)
-                }
-              >
-                Previous
-              </Button>
-            </PaginationItem>
-
-            <PaginationItem>
-              <Button
-                variant="secondary"
-                disabled={validators && validators?.length < paginationLimit}
-                onClick={() =>
-                  setPaginationOffset((prev) => prev + paginationLimit)
-                }
-              >
-                Next
-              </Button>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <BottomPagination
+          paginationOffset={paginationOffset}
+          setPaginationOffset={setPaginationOffset}
+          data={validators}
+          paginationLimit={paginationLimit}
+        />
       </section>
       <DelegateModal validator={selectedValidator!} />
     </>

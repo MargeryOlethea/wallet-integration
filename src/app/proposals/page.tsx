@@ -10,20 +10,14 @@ import {
 } from "@/components/ui/table";
 import { MdOutlineError } from "react-icons/md";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { useGovernanceApi } from "@/hooks/useGovernanceApi";
 import { useState } from "react";
 import { ProposalStatus } from "@/helpers/stringModifiers";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
 import ProposalTableRows from "@/components/proposalsPage/ProposalTableRows";
 import toast from "react-hot-toast";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
-import { RejectedProposalItem } from "@/types/proposal.types";
+import BottomPagination from "@/components/BottomPagination";
 
 function Proposals() {
   const { wallet, userAddress } = useWallet();
@@ -57,11 +51,6 @@ function Proposals() {
   });
 
   const proposals = data && data.proposals;
-
-  // Type guard to check if the proposal is a RejectedProposalItem
-  const isRejected = (proposal: any): proposal is RejectedProposalItem => {
-    return (proposal as RejectedProposalItem).id !== undefined;
-  };
 
   if (error) {
     toast.error(error.message);
@@ -125,11 +114,7 @@ function Proposals() {
                 <TableBody>
                   {proposals?.map((proposal) => (
                     <ProposalTableRows
-                      key={
-                        isRejected(proposal)
-                          ? proposal.id
-                          : proposal.proposal_id
-                      }
+                      key={proposal.id}
                       proposal={proposal}
                       proposalStatus={proposalStatus}
                     />
@@ -138,33 +123,12 @@ function Proposals() {
               </Table>
             </Card>
 
-            <Pagination>
-              <PaginationContent className="gap-10">
-                <PaginationItem>
-                  <Button
-                    variant="secondary"
-                    disabled={paginationOffset < 1}
-                    onClick={() =>
-                      setPaginationOffset((prev) => prev - paginationLimit)
-                    }
-                  >
-                    Previous
-                  </Button>
-                </PaginationItem>
-
-                <PaginationItem>
-                  <Button
-                    variant="secondary"
-                    disabled={proposals && proposals?.length < paginationLimit}
-                    onClick={() =>
-                      setPaginationOffset((prev) => prev + paginationLimit)
-                    }
-                  >
-                    Next
-                  </Button>
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+            <BottomPagination
+              paginationOffset={paginationOffset}
+              setPaginationOffset={setPaginationOffset}
+              data={proposals}
+              paginationLimit={paginationLimit}
+            />
           </>
         )}
       </>

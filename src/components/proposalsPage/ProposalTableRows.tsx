@@ -5,20 +5,15 @@ import {
   getProposalStatusLabel,
   ProposalStatus,
 } from "@/helpers/stringModifiers";
-import {
-  PassedProposalItem,
-  RejectedProposalItem,
-} from "@/types/proposal.types";
-
-interface ProposalTableRowsProps {
-  proposal: RejectedProposalItem | PassedProposalItem;
-  proposalStatus: ProposalStatus;
-}
+import { ProposalData, ProposalItem } from "@/types/proposal.types";
 
 function ProposalTableRows({
   proposal,
   proposalStatus,
-}: ProposalTableRowsProps) {
+}: {
+  proposal: ProposalItem;
+  proposalStatus: ProposalStatus;
+}) {
   // Counting votes
   const yesVote = Number(proposal.final_tally_result.yes);
   const noVote = Number(proposal.final_tally_result.no);
@@ -27,19 +22,10 @@ function ProposalTableRows({
 
   const totalVotes = yesVote + noVote + vetoVote + abstainVote;
 
-  // Type guard to check if the proposal is a RejectedProposalItem
-  const isRejected = (proposal: any): proposal is RejectedProposalItem => {
-    return (proposal as RejectedProposalItem).id !== undefined;
-  };
-
   return (
     <TableRow>
-      <TableCell className="font-semibold text-lg">
-        #{isRejected(proposal) ? proposal.id : proposal.proposal_id}
-      </TableCell>
-      <TableCell className="max-w-xs font-semibold">
-        {isRejected(proposal) ? proposal.title : proposal.content?.title}
-      </TableCell>
+      <TableCell className="font-semibold text-lg">#{proposal.id}</TableCell>
+      <TableCell className="max-w-xs font-semibold">{proposal.title}</TableCell>
       <TableCell className="font-semibold">
         {getProposalStatusLabel(proposalStatus)}
       </TableCell>
