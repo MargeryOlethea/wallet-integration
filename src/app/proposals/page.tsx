@@ -18,6 +18,7 @@ import ProposalTableRows from "@/components/proposalsPage/ProposalTableRows";
 import toast from "react-hot-toast";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import BottomPagination from "@/components/BottomPagination";
+import ProposalDetailModal from "@/components/proposalsPage/ProposalDetailModal";
 
 function Proposals() {
   const { wallet, userAddress } = useWallet();
@@ -129,6 +130,8 @@ function Proposals() {
               data={proposals}
               paginationLimit={paginationLimit}
             />
+
+            <ProposalDetailModal />
           </>
         )}
       </>

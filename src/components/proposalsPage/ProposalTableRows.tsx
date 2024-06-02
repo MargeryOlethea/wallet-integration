@@ -6,6 +6,7 @@ import {
   ProposalStatus,
 } from "@/helpers/stringModifiers";
 import { ProposalData, ProposalItem } from "@/types/proposal.types";
+import { useModal } from "@/hooks/useModal";
 
 function ProposalTableRows({
   proposal,
@@ -22,6 +23,8 @@ function ProposalTableRows({
 
   const totalVotes = yesVote + noVote + vetoVote + abstainVote;
 
+  const { setProposalModalOpen } = useModal();
+
   return (
     <TableRow>
       <TableCell className="font-semibold text-lg">#{proposal.id}</TableCell>
@@ -33,7 +36,7 @@ function ProposalTableRows({
         {dayDifferenceCounter(proposal.voting_end_time)}
       </TableCell>
       <TableCell>
-        <Button>Details</Button>
+        <Button onClick={() => setProposalModalOpen(true)}>Details</Button>
       </TableCell>
     </TableRow>
   );
