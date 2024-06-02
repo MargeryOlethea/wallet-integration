@@ -56,7 +56,6 @@ export const useCosmjs = () => {
   };
 
   const delegateToken = async (validatorAddress: string, amount: string) => {
-    console.log({ chainId, rpcUrl, userAddress, validatorAddress, amount });
     const denom =
       chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
     const offlineSigner = window.getOfflineSigner!(chainId!);

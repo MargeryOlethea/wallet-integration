@@ -24,6 +24,7 @@ import {
 import { ValidatorItem } from "@/types/validator.types";
 import DelegateModal from "./DelegateModal";
 import { useModal } from "@/hooks/useModal";
+import { Card } from "../ui/card";
 
 function ValidatorsList() {
   // get denom
@@ -68,54 +69,56 @@ function ValidatorsList() {
       <section className="my-10">
         <h1 className="text-xl">Validators List</h1>
 
-        <Table className="mt-2">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Validator</TableHead>
-              <TableHead>Voting Power</TableHead>
-              <TableHead>Comission</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {validators?.map((validator) => (
-              <TableRow key={validator.operator_address}>
-                <TableCell>
-                  <p className="font-semibold text-md">
-                    {validator.description.moniker}
-                  </p>
-                  <a
-                    className="font-semilight text-xs hover:text-blue-500"
-                    href={validator.description.website}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {validator.description.website}
-                  </a>
-                </TableCell>
-                <TableCell>
-                  <div className="text-right pr-10 w-2/3 font-semibold">
-                    {microCoinConverter(+validator.delegator_shares, denom!)}{" "}
-                    <Badge className="ml-2">{denom}</Badge>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-right pr-10 w-2/3 font-semibold">
-                    {Math.floor(
-                      +validator.commission.commission_rates.rate * 100,
-                    )}
-                    %
-                  </div>
-                </TableCell>
-
-                <TableCell>
-                  <Button onClick={() => handleOpenModal(validator)}>
-                    Manage
-                  </Button>
-                </TableCell>
+        <Card className="my-5">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Validator</TableHead>
+                <TableHead>Voting Power</TableHead>
+                <TableHead>Comission</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {validators?.map((validator) => (
+                <TableRow key={validator.operator_address}>
+                  <TableCell>
+                    <p className="font-semibold text-md">
+                      {validator.description.moniker}
+                    </p>
+                    <a
+                      className="font-semilight text-xs hover:text-blue-500"
+                      href={validator.description.website}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {validator.description.website}
+                    </a>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-right pr-10 w-2/3 font-semibold">
+                      {microCoinConverter(+validator.delegator_shares, denom!)}{" "}
+                      <Badge className="ml-2">{denom}</Badge>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-right pr-10 w-2/3 font-semibold">
+                      {Math.floor(
+                        +validator.commission.commission_rates.rate * 100,
+                      )}
+                      %
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <Button onClick={() => handleOpenModal(validator)}>
+                      Manage
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
 
         <Pagination>
           <PaginationContent className="gap-10">
@@ -124,7 +127,7 @@ function ValidatorsList() {
                 variant="secondary"
                 disabled={paginationOffset < 1}
                 onClick={() =>
-                  setPaginationOffset((prev) => prev - paginationLimit!)
+                  setPaginationOffset((prev) => prev - paginationLimit)
                 }
               >
                 Previous
@@ -134,9 +137,9 @@ function ValidatorsList() {
             <PaginationItem>
               <Button
                 variant="secondary"
-                disabled={validators && validators?.length < paginationLimit!}
+                disabled={validators && validators?.length < paginationLimit}
                 onClick={() =>
-                  setPaginationOffset((prev) => prev + paginationLimit!)
+                  setPaginationOffset((prev) => prev + paginationLimit)
                 }
               >
                 Next
