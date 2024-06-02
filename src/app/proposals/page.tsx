@@ -8,17 +8,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MdOutlineError } from "react-icons/md";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { useGovernanceApi } from "@/hooks/useGovernanceApi";
 import { useState } from "react";
 import { ProposalStatus } from "@/helpers/stringModifiers";
 import ProposalTableRows from "@/components/proposalsPage/ProposalTableRows";
 import toast from "react-hot-toast";
-import { Card, CardDescription, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import BottomPagination from "@/components/BottomPagination";
 import ProposalDetailModal from "@/components/proposalsPage/ProposalDetailModal";
+import StatusTab from "@/components/proposalsPage/StatusTab";
+import NoDataFound from "@/components/NoDataFound";
 
 function Proposals() {
   const { wallet, userAddress } = useWallet();
@@ -67,39 +67,14 @@ function Proposals() {
         <div className="flex justify-between w-full">
           <h1 className="text-xl">Proposals</h1>
 
-          <Tabs value={proposalStatus}>
-            <TabsList>
-              <TabsTrigger
-                value={ProposalStatus.VOTING_PERIOD}
-                onClick={() => handleStatus(ProposalStatus.VOTING_PERIOD)}
-              >
-                Voting
-              </TabsTrigger>
-              <TabsTrigger
-                value={ProposalStatus.PASSED}
-                onClick={() => handleStatus(ProposalStatus.PASSED)}
-              >
-                Passed
-              </TabsTrigger>
-              <TabsTrigger
-                value={ProposalStatus.REJECTED}
-                onClick={() => handleStatus(ProposalStatus.REJECTED)}
-              >
-                Rejected
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <StatusTab
+            handleStatus={handleStatus}
+            proposalStatus={proposalStatus}
+          />
         </div>
 
         {proposals && proposals.length < 1 ? (
-          <Card className="my-5">
-            <CardHeader className="text-slate-400">
-              <MdOutlineError size="50" className="mx-auto my-2" />
-              <CardDescription className="text-center">
-                No Data Found
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <NoDataFound />
         ) : (
           <>
             <Card className="my-5">
