@@ -21,8 +21,8 @@ function RewardBalanceCard({ amount, denom, loading }: RewardBalanceCardProps) {
           <CardDescription>Rewarded Balance</CardDescription>
           {loading ? (
             <div className="flex items-center gap-2">
-              <Skeleton className="h-8 w-20" />{" "}
-              <Skeleton className="rounded-full h-5 w-14" />
+              <Skeleton className="bg-slate-200 h-8 w-20" />{" "}
+              <Skeleton className="bg-slate-200 rounded-full h-5 w-14" />
             </div>
           ) : (
             <CardTitle className="flex items-center gap-2">
