@@ -10,8 +10,6 @@ interface ModalContextType {
   setManageModalOpen: Dispatch<SetStateAction<boolean>>;
   isRedelegateModalOpen: boolean;
   setRedelegateModalOpen: Dispatch<SetStateAction<boolean>>;
-  isProposalModalOpen: boolean;
-  setProposalModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ModalContext = createContext<ModalContextType | undefined>(

@@ -7,6 +7,7 @@ export interface ProposalItem {
   id: string;
   title: string;
   summary: string;
+  status: string;
   final_tally_result: TallyResult;
   voting_end_time: string;
   messages: ProposalMessage[];
@@ -41,4 +42,8 @@ export interface TallyResult {
 export interface PaginationInfo {
   next_key: string | null;
   total: string;
+}
+
+export interface ProposalById {
+  proposal: ProposalItem;
 }

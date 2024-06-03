@@ -16,7 +16,6 @@ import ProposalTableRows from "@/components/proposalsPage/ProposalTableRows";
 import toast from "react-hot-toast";
 import { Card } from "@/components/ui/card";
 import BottomPagination from "@/components/BottomPagination";
-import ProposalDetailModal from "@/components/proposalsPage/ProposalDetailModal";
 import StatusTab from "@/components/proposalsPage/StatusTab";
 import NoDataFound from "@/components/NoDataFound";
 import LoadingProposalTable from "@/components/proposalsPage/LoadingProposalTable";
@@ -106,8 +105,6 @@ function Proposals() {
             data={proposals}
             paginationLimit={paginationLimit}
           />
-
-          <ProposalDetailModal />
         </>
       </>
     );

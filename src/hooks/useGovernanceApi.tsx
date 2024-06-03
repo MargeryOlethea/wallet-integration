@@ -1,6 +1,6 @@
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
-import { ProposalData } from "@/types/proposal.types";
+import { ProposalById, ProposalData } from "@/types/proposal.types";
 
 export const useGovernanceApi = () => {
   const { chainId } = useWallet();
@@ -22,5 +22,15 @@ export const useGovernanceApi = () => {
     return proposalsList;
   };
 
-  return { getProposalsList };
+  const getProposalById = async (proposalId: string) => {
+    const response = await fetch(
+      `${baseUrl}/cosmos/gov/v1/proposals/${proposalId}`,
+    );
+
+    const proposal: ProposalById = await response.json();
+
+    return proposal;
+  };
+
+  return { getProposalsList, getProposalById };
 };

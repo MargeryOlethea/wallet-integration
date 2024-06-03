@@ -95,3 +95,27 @@ h1 {
 h2 {
   @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
 }
+
+.proposal-content {
+  line-height: 1.5;
+  font-size: 0.825rem;
+}
+
+.proposal-content h1 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.proposal-content h2 {
+  font-size: 1.25em;
+  margin-bottom: 0.5em;
+}
+
+.proposal-content p {
+  margin-bottom: 1em;
+}
+
+.proposal-content a {
+  @apply text-blue-500;
+  text-decoration: underline;
+}

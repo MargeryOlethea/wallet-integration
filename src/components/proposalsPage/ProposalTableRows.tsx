@@ -6,7 +6,7 @@ import {
   ProposalStatus,
 } from "@/helpers/stringModifiers";
 import { ProposalItem } from "@/types/proposal.types";
-import { useModal } from "@/hooks/useModal";
+import Link from "next/link";
 
 function ProposalTableRows({
   proposal,
@@ -23,8 +23,6 @@ function ProposalTableRows({
 
   const totalVotes = yesVote + noVote + vetoVote + abstainVote;
 
-  const { setProposalModalOpen } = useModal();
-
   return (
     <>
       <TableRow>
@@ -39,7 +37,9 @@ function ProposalTableRows({
           {dayDifferenceCounter(proposal.voting_end_time)}
         </TableCell>
         <TableCell>
-          <Button onClick={() => setProposalModalOpen(true)}>Details</Button>
+          <Link href={`/proposals/${proposal.id}`}>
+            <Button>Details</Button>
+          </Link>
         </TableCell>
       </TableRow>
     </>
