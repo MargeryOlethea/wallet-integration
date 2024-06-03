@@ -36,10 +36,10 @@ export interface ProposalContent {
 }
 
 export interface TallyResult {
-  yes: string;
-  abstain: string;
-  no: string;
-  no_with_veto: string;
+  yes_count: string;
+  abstain_count: string;
+  no_count: string;
+  no_with_veto_count: string;
 }
 
 export interface PaginationInfo {
