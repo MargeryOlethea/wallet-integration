@@ -1,6 +1,7 @@
 import { ProposalItem } from "@/types/proposal.types";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { dayDifferenceCounter, timeFormatter } from "@/helpers/dateModifiers";
+import LoadingProposalTimelineCard from "./LoadingProposalTimelineCard";
 
 interface ProposalTimelineCardProps {
   proposal: ProposalItem | undefined;
@@ -11,7 +12,7 @@ function ProposalTimelineCard({
   proposal,
   loading,
 }: ProposalTimelineCardProps) {
-  if (loading) return <p>loading...</p>;
+  if (loading) return <LoadingProposalTimelineCard />;
 
   if (!loading && proposal) {
     return (
