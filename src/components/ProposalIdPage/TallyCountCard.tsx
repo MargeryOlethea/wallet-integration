@@ -6,6 +6,7 @@ import { TallyResult } from "@/types/proposal.types";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import LoadingTallyCountCard from "./LoadingTallyCountCard";
 interface TallyCountCardProps {
   proposalId: string | undefined;
   tallyCount: TallyResult | undefined;
@@ -53,7 +54,7 @@ function TallyCountCard({
   });
 
   if (loading) {
-    return <p>loading...</p>;
+    return <LoadingTallyCountCard />;
   }
 
   if (!loading && tallyCount) {
