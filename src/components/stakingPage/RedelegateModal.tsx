@@ -41,6 +41,7 @@ import { TbAlertCircleFilled } from "react-icons/tb";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useCosmjs } from "@/hooks/useCosmjs";
 import ModalCloseButton from "../ModalCloseButton";
+import LoadingRedelegateValidatorsListTable from "./LoadingRedelegateValidatorsListTable";
 
 interface RedelegateModalProps {
   userDelegationData: UserDelegationData;
@@ -177,59 +178,62 @@ export default function RedelegateModal({
           />
           {/* scrollable table */}
           <ScrollArea className="h-[200px] w-full rounded-md border p-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Validator</TableHead>
-                  <TableHead>Voting Power</TableHead>
-                  <TableHead>Comission</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredValidators?.map((validator) => (
-                  <TableRow key={validator.operator_address}>
-                    <TableCell>
-                      <p className="font-semibold text-md">
-                        {validator.description.moniker}
-                      </p>
-                      <a
-                        className="font-semilight text-xs hover:text-blue-500"
-                        href={validator.description.website}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {validator.description.website}
-                      </a>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-right pr-10 w-4/5 font-semibold">
-                        {numberFormatter(+validator.delegator_shares, denom!)}{" "}
-                        <Badge className="ml-2">{denom}</Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-right pr-10 w-2/3 font-semibold">
-                        {Math.floor(
-                          +validator.commission.commission_rates.rate * 100,
-                        )}
-                        %
-                      </div>
-                    </TableCell>
-
-                    <TableCell>
-                      <Button
-                        onClick={() =>
-                          setSelectedValidator(validator.description.moniker)
-                        }
-                      >
-                        Select
-                      </Button>
-                    </TableCell>
+            {isLoading && <LoadingRedelegateValidatorsListTable />}
+            {isLoading && validators && (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Validator</TableHead>
+                    <TableHead>Voting Power</TableHead>
+                    <TableHead>Comission</TableHead>
+                    <TableHead></TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredValidators?.map((validator) => (
+                    <TableRow key={validator.operator_address}>
+                      <TableCell>
+                        <p className="font-semibold text-md">
+                          {validator.description.moniker}
+                        </p>
+                        <a
+                          className="font-semilight text-xs hover:text-blue-500"
+                          href={validator.description.website}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {validator.description.website}
+                        </a>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-right pr-10 w-4/5 font-semibold">
+                          {numberFormatter(+validator.delegator_shares, denom!)}{" "}
+                          <Badge className="ml-2">{denom}</Badge>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-right pr-10 w-2/3 font-semibold">
+                          {Math.floor(
+                            +validator.commission.commission_rates.rate * 100,
+                          )}
+                          %
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <Button
+                          onClick={() =>
+                            setSelectedValidator(validator.description.moniker)
+                          }
+                        >
+                          Select
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </ScrollArea>
 
           {/* bottom section */}
