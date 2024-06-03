@@ -1,26 +1,14 @@
 "use client";
+import ProposalSummaryCard from "@/components/ProposalIdPage/ProposalSummaryCard";
+import ProposalTimelineCard from "@/components/ProposalIdPage/ProposalTimelineCard";
 import TallyCountCard from "@/components/ProposalIdPage/TallyCountCard";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { dayDifferenceCounter } from "@/helpers/dateModifiers";
-import {
-  getProposalStatusLabel,
-  ProposalStatus,
-} from "@/helpers/stringModifiers";
 import { useGovernanceApi } from "@/hooks/useGovernanceApi";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import toast from "react-hot-toast";
 import { IoChevronBack } from "react-icons/io5";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 function ProposalPage() {
   const { id } = useParams();
@@ -37,7 +25,8 @@ function ProposalPage() {
   }
 
   if (error) {
-    return <p>Error: {error.message}</p>;
+    console.error(error.message);
+    toast.error(error.message);
   }
   return (
     <>
@@ -47,34 +36,15 @@ function ProposalPage() {
           <span>Back</span>
         </Button>
       </Link>
-      <Card className="my-5">
-        <CardHeader>
-          <CardTitle className="flex justify-between">
-            <p>
-              {" "}
-              <span>#{proposal?.id}</span> {proposal?.title}
-            </p>
 
-            <Badge>
-              {proposal &&
-                getProposalStatusLabel(proposal.status as ProposalStatus)}
-            </Badge>
-          </CardTitle>
-          <CardDescription>
-            {proposal && dayDifferenceCounter(proposal?.voting_end_time)}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="font-semibold text-xl">Summary</p>
-          <div className="proposal-content">
-            <ReactMarkdown remarkPlugins={[remarkGfm]} className="font-xs">
-              {proposal?.summary}
-            </ReactMarkdown>
-          </div>
-        </CardContent>
-      </Card>
+      <ProposalSummaryCard proposal={proposal!} loading={isLoading} />
 
-      <TallyCountCard tallyCount={proposal!.final_tally_result} />
+      <ProposalTimelineCard proposal={proposal!} />
+
+      <TallyCountCard
+        tallyCount={proposal!.final_tally_result}
+        status={proposal!.status}
+      />
     </>
   );
 }

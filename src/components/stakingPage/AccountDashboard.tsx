@@ -53,10 +53,10 @@ function AccountDashboard() {
   const rewardsAmount = rewardsBalances?.total[0]?.amount ?? 0;
 
   // extracting available balance data
-  //TODO: Fix the exhaustive-deps warning
-  const firstBalance = (availableBalances && availableBalances[0]) || {
-    amount: "",
-  };
+  const firstBalance = useMemo(
+    () => (availableBalances && availableBalances[0]) || { amount: "" },
+    [availableBalances],
+  );
 
   // calculating total balance
   const totalBalance = useMemo(() => {

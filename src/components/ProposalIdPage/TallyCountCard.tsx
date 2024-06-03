@@ -8,9 +8,10 @@ interface TallyCountCardProps {
     no_with_veto: string;
     abstain: string;
   };
+  status: string;
 }
 
-function TallyCountCard({ tallyCount }: TallyCountCardProps) {
+function TallyCountCard({ tallyCount, status }: TallyCountCardProps) {
   // Counting votes
   const yesVote = Number(tallyCount.yes);
   const noVote = Number(tallyCount.no);
@@ -23,13 +24,17 @@ function TallyCountCard({ tallyCount }: TallyCountCardProps) {
     <>
       <Card className="my-5">
         <CardHeader>
-          <CardTitle className="flex justify-between">Tally</CardTitle>
+          <CardTitle>Tally</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-8">
             <Button
               className="flex-col flex h-full justify-center"
               variant="secondary"
+              disabled={
+                status === "PROPOSAL_STATUS_PASSED" ||
+                status === "PROPOSAL_STATUS_REJECTED"
+              }
             >
               <p className="text-md font-medium text-blue-500">Yes</p>
               <p className="text-2xl">50%</p>
@@ -38,6 +43,10 @@ function TallyCountCard({ tallyCount }: TallyCountCardProps) {
             <Button
               className="flex-col flex h-full justify-center"
               variant="secondary"
+              disabled={
+                status === "PROPOSAL_STATUS_PASSED" ||
+                status === "PROPOSAL_STATUS_REJECTED"
+              }
             >
               <p className="text-md font-medium text-red-500">No</p>
               <p className="text-2xl">20%</p>
@@ -46,6 +55,10 @@ function TallyCountCard({ tallyCount }: TallyCountCardProps) {
             <Button
               className="flex-col flex h-full justify-center"
               variant="secondary"
+              disabled={
+                status === "PROPOSAL_STATUS_PASSED" ||
+                status === "PROPOSAL_STATUS_REJECTED"
+              }
             >
               <p className="text-md font-medium">Abstain</p>
               <p className="text-2xl">20%</p>
@@ -54,8 +67,12 @@ function TallyCountCard({ tallyCount }: TallyCountCardProps) {
             <Button
               className="flex-col flex h-full justify-center"
               variant="secondary"
+              disabled={
+                status === "PROPOSAL_STATUS_PASSED" ||
+                status === "PROPOSAL_STATUS_REJECTED"
+              }
             >
-              <p className="text-md font-medium">No With Vote</p>
+              <p className="text-md font-medium">No With Veto</p>
               <p className="text-2xl">10%</p>
             </Button>
           </div>

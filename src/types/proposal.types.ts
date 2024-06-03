@@ -10,6 +10,9 @@ export interface ProposalItem {
   status: string;
   final_tally_result: TallyResult;
   voting_end_time: string;
+  voting_start_time: string;
+  submit_time: string;
+  deposit_end_time: string;
   messages: ProposalMessage[];
   metadata: string;
 }
