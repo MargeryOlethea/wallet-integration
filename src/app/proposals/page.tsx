@@ -73,7 +73,7 @@ function Proposals() {
 
         {isLoading && <LoadingProposalTable rows={paginationLimit} />}
 
-        {proposals && proposals.length < 1 && <NoDataFound />}
+        {(!proposals || proposals?.length < 1) && <NoDataFound />}
 
         {proposals && proposals.length > 0 && !isLoading && (
           <Card className="my-5">

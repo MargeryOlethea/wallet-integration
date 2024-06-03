@@ -1,9 +1,11 @@
 "use client";
+import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
 import ProposalSummaryCard from "@/components/ProposalIdPage/ProposalSummaryCard";
 import ProposalTimelineCard from "@/components/ProposalIdPage/ProposalTimelineCard";
 import TallyCountCard from "@/components/ProposalIdPage/TallyCountCard";
 import { Button } from "@/components/ui/button";
 import { useGovernanceApi } from "@/hooks/useGovernanceApi";
+import { useWallet } from "@/hooks/useWallet";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -20,33 +22,37 @@ function ProposalPage() {
 
   const proposal = data && data.proposal;
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   if (error) {
     console.error(error.message);
     toast.error(error.message);
   }
-  return (
-    <>
-      <Link href="/proposals">
-        <Button className="mb-5 gap-2" variant="secondary">
-          <IoChevronBack size="20" />
-          <span>Back</span>
-        </Button>
-      </Link>
 
-      <ProposalSummaryCard proposal={proposal!} loading={isLoading} />
+  const { wallet, userAddress } = useWallet();
+  if (!wallet || !userAddress) {
+    return <NoConnectedWalletHeader />;
+  } else {
+    return (
+      <>
+        <Link href="/proposals">
+          <Button className="mb-5 gap-2" variant="secondary">
+            <IoChevronBack size="20" />
+            <span>Back</span>
+          </Button>
+        </Link>
 
-      <ProposalTimelineCard proposal={proposal!} />
+        <ProposalSummaryCard proposal={proposal} loading={isLoading} />
 
-      <TallyCountCard
-        tallyCount={proposal!.final_tally_result}
-        status={proposal!.status}
-      />
-    </>
-  );
+        <ProposalTimelineCard proposal={proposal} loading={isLoading} />
+
+        <TallyCountCard
+          proposalId={proposal?.id}
+          tallyCount={proposal?.final_tally_result}
+          status={proposal?.status}
+          loading={isLoading}
+        />
+      </>
+    );
+  }
 }
 
 export default ProposalPage;
