@@ -14,6 +14,7 @@ import {
 import { ProposalItem } from "@/types/proposal.types";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import LoadingProposalSummaryCard from "./LoadingProposalSummaryCard";
 
 interface ProposalSummaryCardProps {
   proposal: ProposalItem | undefined;
@@ -21,8 +22,7 @@ interface ProposalSummaryCardProps {
 }
 
 function ProposalSummaryCard({ proposal, loading }: ProposalSummaryCardProps) {
-  if (loading) return <p>loading...</p>;
-
+  if (loading) return <LoadingProposalSummaryCard />;
   if (!loading && proposal) {
     return (
       <>
