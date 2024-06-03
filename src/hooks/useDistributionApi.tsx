@@ -7,11 +7,15 @@ export const useDistributionApi = () => {
   const baseUrl = (chainId && chainInfoMap[chainId].rest) || "";
 
   const getRewardsByDelegator = async () => {
-    const response = await fetch(
-      `${baseUrl}/cosmos/distribution/v1beta1/delegators/${userAddress}/rewards`,
-    );
-    const myRewards: RewardsData = await response.json();
-    return myRewards;
+    try {
+      const path =
+        "/cosmos/distribution/v1beta1/delegators/" + userAddress + "/rewards";
+      const response = await fetch(baseUrl + path);
+      const myRewards: RewardsData = await response.json();
+      return myRewards;
+    } catch (error) {
+      throw error;
+    }
   };
 
   return { getRewardsByDelegator };

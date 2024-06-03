@@ -179,7 +179,7 @@ export default function RedelegateModal({
           {/* scrollable table */}
           <ScrollArea className="h-[200px] w-full rounded-md border p-4">
             {isLoading && <LoadingRedelegateValidatorsListTable />}
-            {isLoading && validators && (
+            {!isLoading && validators && (
               <Table>
                 <TableHeader>
                   <TableRow>

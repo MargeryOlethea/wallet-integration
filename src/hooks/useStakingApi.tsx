@@ -11,32 +11,47 @@ export const useStakingApi = () => {
     paginationOffset: number | string = 0,
     paginationLimit: number | string = 999,
   ) => {
-    const validatorStatus = "BOND_STATUS_BONDED";
+    try {
+      const path = "/cosmos/staking/v1beta1/validators";
+      const validatorStatus = "BOND_STATUS_BONDED";
+      const queryParams = new URLSearchParams({
+        status: validatorStatus.toString(),
+        "pagination.limit": paginationLimit.toString(),
+        "pagination.offset": paginationOffset.toString(),
+      }).toString();
 
-    const response = await fetch(
-      `${baseUrl}/cosmos/staking/v1beta1/validators?status=${validatorStatus}&pagination.limit=${paginationLimit}&pagination.offset=${paginationOffset}`,
-    );
-    const validatorsList: ValidatorData = await response.json();
+      const response = await fetch(baseUrl + path + "?" + queryParams);
+      const validatorsList: ValidatorData = await response.json();
 
-    return validatorsList;
+      return validatorsList;
+    } catch (error) {
+      throw error;
+    }
   };
 
   const getDelegationByDelegator = async () => {
-    const response = await fetch(
-      `${baseUrl}/cosmos/staking/v1beta1/delegations/${userAddress}`,
-    );
-    const myDelegations: DelegationData = await response.json();
+    try {
+      const path = "/cosmos/staking/v1beta1/delegations/" + userAddress;
+      const response = await fetch(baseUrl + path);
+      const myDelegations: DelegationData = await response.json();
 
-    return myDelegations;
+      return myDelegations;
+    } catch (error) {
+      throw error;
+    }
   };
 
   const getValidatorsInfoByDelegator = async () => {
-    const response = await fetch(
-      `${baseUrl}/cosmos/staking/v1beta1/delegators/${userAddress}/validators`,
-    );
-    const myValidators: ValidatorData = await response.json();
+    try {
+      const path =
+        "/cosmos/staking/v1beta1/delegators/" + userAddress + "/validators";
+      const response = await fetch(baseUrl + path);
+      const myValidators: ValidatorData = await response.json();
 
-    return myValidators;
+      return myValidators;
+    } catch (error) {
+      throw error;
+    }
   };
   return {
     getValidatorsList,
