@@ -13,7 +13,7 @@ import { useDistributionApi } from "@/hooks/useDistributionApi";
 
 function AccountDashboard() {
   //  get functions for fetching data
-  const { getStakeBalances, getAvailableBalances } = useCosmjs();
+  const { getStakeBalance, getAvailableBalance } = useCosmjs();
   const { getRewardsByDelegator } = useDistributionApi();
   const { chainId } = useWallet();
 
@@ -23,54 +23,48 @@ function AccountDashboard() {
 
   // fetching available balance
   const {
-    data: availableBalances,
+    data: availableBalance,
     error: availableError,
     isLoading: availableLoading,
   } = useQuery({
-    queryKey: ["availableBalances"],
-    queryFn: getAvailableBalances,
+    queryKey: ["availableBalance"],
+    queryFn: getAvailableBalance,
   });
 
   // fetching stake balance
   const {
-    data: stakeBalances,
+    data: stakeBalance,
     error: stakeError,
     isLoading: stakeLoading,
   } = useQuery({
-    queryKey: ["stakeBalances"],
-    queryFn: getStakeBalances,
+    queryKey: ["stakeBalance"],
+    queryFn: getStakeBalance,
   });
 
   // fetching rewards balance
   const {
-    data: rewardsBalances,
+    data: rewardsBalance,
     isLoading: rewardsLoading,
     error: rewardsError,
   } = useQuery({
     queryFn: getRewardsByDelegator,
     queryKey: ["rewardsBalance"],
   });
-  const rewardsAmount = rewardsBalances?.total[0]?.amount ?? 0;
-
-  // extracting available balance data
-  const firstBalance = useMemo(
-    () => (availableBalances && availableBalances[0]) || { amount: "" },
-    [availableBalances],
-  );
+  const rewardsAmount = rewardsBalance?.total[0]?.amount ?? 0;
 
   // calculating total balance
   const totalBalance = useMemo(() => {
-    const firstAmount = firstBalance?.amount || 0;
-    const stakeAmount = stakeBalances?.amount || 0;
+    const availableAmount = availableBalance?.amount || 0;
+    const stakeAmount = stakeBalance?.amount || 0;
 
-    const amount = Number(firstAmount) + Number(stakeAmount);
+    const amount = Number(availableAmount) + Number(stakeAmount);
 
     if (amount === 0) {
       return { amount: 0 };
     }
 
     return { amount };
-  }, [firstBalance, stakeBalances]);
+  }, [availableBalance, stakeBalance]);
 
   if (availableError || stakeError || rewardsError) {
     console.error(availableError || stakeError || rewardsError);
@@ -95,7 +89,7 @@ function AccountDashboard() {
         />
         <AvailableBalanceCard
           amount={microCoinConverter(
-            Number(firstBalance?.amount || 0),
+            Number(availableBalance?.amount || 0),
             coinDenom,
           )}
           denom={coinDenom}
@@ -103,7 +97,7 @@ function AccountDashboard() {
         />
         <StakeBalanceCard
           amount={microCoinConverter(
-            Number(stakeBalances?.amount || 0),
+            Number(stakeBalance?.amount || 0),
             coinDenom,
           )}
           denom={coinDenom}

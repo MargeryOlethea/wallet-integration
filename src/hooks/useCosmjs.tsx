@@ -21,25 +21,23 @@ export const useCosmjs = () => {
   const denom =
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
 
-  const getAvailableBalances = async () => {
+  const getAvailableBalance = async () => {
     try {
       const client: StargateClient = await StargateClient.connect(rpcUrl);
 
-      const balances: readonly Coin[] = await client.getAllBalances(
-        userAddress!,
-      );
-      return balances;
+      const balance = await client.getBalance(userAddress!, denom!);
+      return balance;
     } catch (error) {
       throw error;
     }
   };
 
-  const getStakeBalances = async () => {
+  const getStakeBalance = async () => {
     try {
       const client: StargateClient = await StargateClient.connect(rpcUrl);
 
-      const balances: Coin | null = await client.getBalanceStaked(userAddress!);
-      return balances;
+      const balance: Coin | null = await client.getBalanceStaked(userAddress!);
+      return balance;
     } catch (error) {
       throw error;
     }
@@ -192,8 +190,8 @@ export const useCosmjs = () => {
   };
 
   return {
-    getStakeBalances,
-    getAvailableBalances,
+    getStakeBalance,
+    getAvailableBalance,
     withdrawStakedReward,
     delegateToken,
     undelegateToken,

@@ -52,17 +52,17 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // fetching available balance
-  const { getAvailableBalances } = useCosmjs();
+  const { getAvailableBalance } = useCosmjs();
   const {
-    data: availableBalances,
+    data: availableBalance,
     error: availableError,
     isLoading: availableLoading,
   } = useQuery({
-    queryKey: ["availableBalances"],
-    queryFn: getAvailableBalances,
+    queryKey: ["availableBalance"],
+    queryFn: getAvailableBalance,
   });
 
-  const firstBalance = (availableBalances && availableBalances[0]?.amount) || 0;
+  const availableAmount = availableBalance?.amount || 0;
 
   // handle amount
   const [amount, setAmount] = useState("");
@@ -70,8 +70,8 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const handleInput = (value: string) => {
     const balance =
       denom == "DYM"
-        ? +firstBalance / 1_000_000_000_000_000
-        : +firstBalance / 1_000_000;
+        ? +availableAmount / 1_000_000_000_000_000
+        : +availableAmount / 1_000_000;
     if (+value > balance) {
       setShowAlert(true);
       setAmount(value);
@@ -84,8 +84,8 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const handleAmountButton = (amount: "1/3" | "1/2" | "MAX") => {
     const coin =
       denom == "DYM"
-        ? +firstBalance / 1_000_000_000_000_000
-        : +firstBalance / 1_000_000;
+        ? +availableAmount / 1_000_000_000_000_000
+        : +availableAmount / 1_000_000;
     switch (amount) {
       case "1/3":
         setAmount((coin / 3).toFixed(4));
@@ -171,7 +171,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
                   <Skeleton className="h-3 w-1/4" />
                 ) : (
                   <span className="font-semibold text-lg">
-                    {microCoinConverter(+firstBalance, denom!)}
+                    {microCoinConverter(+availableAmount, denom!)}
                   </span>
                 )}
               </p>
