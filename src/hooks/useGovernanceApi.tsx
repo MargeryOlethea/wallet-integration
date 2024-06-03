@@ -12,8 +12,22 @@ export const useGovernanceApi = () => {
     paginationLimit: number | string = 999,
   ) => {
     try {
+      if (chainId === "froopyland-100-1") {
+        switch (proposalStatus) {
+          case "PROPOSAL_STATUS_VOTING_PERIOD":
+            proposalStatus = "2";
+            break;
+          case "PROPOSAL_STATUS_PASSED":
+            proposalStatus = "3";
+            break;
+          case "PROPOSAL_STATUS_REJECTED":
+            proposalStatus = "4";
+            break;
+        }
+      }
       const path = "/cosmos/gov/v1/proposals";
       const paginationReverse = true;
+
       const queryParams = new URLSearchParams({
         proposal_status: proposalStatus,
         "pagination.limit": paginationLimit.toString(),

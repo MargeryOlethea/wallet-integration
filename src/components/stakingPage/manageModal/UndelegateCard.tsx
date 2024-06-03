@@ -7,10 +7,10 @@ import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { TbAlertCircleFilled } from "react-icons/tb";
+import { UserDelegationData } from "../ManageModal";
 interface UndelegateCardProps {
-  userDelegationData: any;
-  denom: string;
-  realAmount: string;
+  userDelegationData: UserDelegationData;
+  denom: string | null;
   undelegateAmount: string;
   handleInput: (value: string) => void;
   showAlert: boolean;
@@ -19,18 +19,24 @@ interface UndelegateCardProps {
 function UndelegateCard({
   userDelegationData,
   denom,
-  realAmount,
   undelegateAmount,
   handleInput,
   showAlert,
 }: UndelegateCardProps) {
   const { undelegateToken } = useCosmjs();
 
+  const realAmount =
+    denom == "DYM"
+      ? (+undelegateAmount * 1_000_000_000_000_000).toString()
+      : (+undelegateAmount * 1_000_000).toString();
+
+  console.log({ realAmount, userDelegationData });
+
   const undelegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
     useMutation({
       mutationFn: () =>
         undelegateToken(
-          userDelegationData?.delegation?.delegation?.validator_address,
+          userDelegationData?.validator?.operator_address || "",
           realAmount,
         ),
       onSuccess: (data) => {

@@ -1,14 +1,12 @@
 "use client";
 
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import { useCosmjs } from "@/hooks/useCosmjs";
 import { WalletContext } from "@/hooks/useWallet";
 import {
   AccountData,
   OfflineAminoSigner,
   OfflineDirectSigner,
 } from "@keplr-wallet/types";
-import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 

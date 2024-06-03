@@ -15,18 +15,19 @@ function ProposalTableRows({
   proposal: ProposalItem;
   proposalStatus: ProposalStatus;
 }) {
+  console.log(proposal.title);
   return (
     <>
       <TableRow>
         <TableCell className="font-semibold text-lg">#{proposal.id}</TableCell>
         <TableCell className="max-w-xs font-semibold">
-          {proposal.title}
+          {proposal?.title || proposal?.messages[0]?.content?.title}
         </TableCell>
         <TableCell className="font-semibold">
           {getProposalStatusLabel(proposalStatus)}
         </TableCell>
         <TableCell className="font-semibold">
-          {dayDifferenceCounter(proposal.voting_end_time)}
+          {dayDifferenceCounter(proposal?.voting_end_time)}
         </TableCell>
         <TableCell>
           <Link href={`/proposals/${proposal.id}`}>

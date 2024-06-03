@@ -1,9 +1,5 @@
 "use client";
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
-import BackToProposalPage from "@/components/proposalIdPage/BackToProposalPage";
-import ProposalSummaryCard from "@/components/proposalIdPage/ProposalSummaryCard";
-import ProposalTimelineCard from "@/components/proposalIdPage/ProposalTimelineCard";
-import TallyCountCard from "@/components/proposalIdPage/TallyCountCard";
 import { useGovernanceApi } from "@/hooks/useGovernanceApi";
 import { useWallet } from "@/hooks/useWallet";
 import { useQuery } from "@tanstack/react-query";
