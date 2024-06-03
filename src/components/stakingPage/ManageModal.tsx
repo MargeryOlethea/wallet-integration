@@ -7,9 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ValidatorItem } from "@/types/validator.types";
-import { IoClose } from "react-icons/io5";
 import { TbAlertCircleFilled } from "react-icons/tb";
-
 import { Badge } from "../ui/badge";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
@@ -18,13 +16,13 @@ import { DelegationResponse } from "@/types/delegations.types";
 import { Button } from "../ui/button";
 import { Reward } from "@/types/reward.types";
 import { useCosmjs } from "@/hooks/useCosmjs";
-
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { useModal } from "@/hooks/useModal";
+import ModalCloseButton from "../ModalCloseButton";
 
 interface MyModalProps {
   userDelegationData: UserDelegationData;
@@ -133,12 +131,9 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
       onClick={handleBackgroundClick}
     >
       <Card className="relative p-5 flex flex-col justify-between w-1/3">
-        <button
-          className="absolute top-5 right-5 text-gray-500 hover:text-gray-800"
-          onClick={handleCloseModal}
-        >
-          <IoClose size="25" />
-        </button>
+        {/* close button */}
+        <ModalCloseButton handleCloseModal={handleCloseModal} />
+
         {/* header */}
         <CardHeader>
           <CardTitle>

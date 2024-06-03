@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ValidatorItem } from "@/types/validator.types";
-import { IoClose } from "react-icons/io5";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { TbAlertCircleFilled } from "react-icons/tb";
 import { Button } from "../ui/button";
@@ -26,6 +25,7 @@ import { microCoinConverter } from "@/helpers/integerModifiers";
 import { Skeleton } from "../ui/skeleton";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useModal } from "@/hooks/useModal";
+import ModalCloseButton from "../ModalCloseButton";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -136,12 +136,8 @@ export default function DelegateModal({ validator }: AllModalProps) {
     >
       <Card className="relative w-1/3 h-2/3 p-5 flex flex-col justify-between">
         {/* close button */}
-        <button
-          className="absolute top-5 right-5 text-gray-500 hover:text-gray-800"
-          onClick={handleCloseModal}
-        >
-          <IoClose size="25" />
-        </button>
+        <ModalCloseButton handleCloseModal={handleCloseModal} />
+
         {/* header */}
         <CardHeader>
           <CardTitle>{validator?.description?.moniker}</CardTitle>

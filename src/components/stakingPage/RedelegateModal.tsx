@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { IoClose } from "react-icons/io5";
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/useModal";
 import { DelegationResponse } from "@/types/delegations.types";
@@ -37,10 +36,11 @@ import {
 import toast from "react-hot-toast";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { Alert, AlertTitle } from "../ui/alert";
+import { AlertTitle } from "../ui/alert";
 import { TbAlertCircleFilled } from "react-icons/tb";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useCosmjs } from "@/hooks/useCosmjs";
+import ModalCloseButton from "../ModalCloseButton";
 
 interface RedelegateModalProps {
   userDelegationData: UserDelegationData;
@@ -158,12 +158,7 @@ export default function RedelegateModal({
     >
       <Card className="relative w-2/3 p-5 flex flex-col justify-between">
         {/* close button */}
-        <button
-          className="absolute top-5 right-5 text-gray-500 hover:text-gray-800"
-          onClick={handleCloseModal}
-        >
-          <IoClose size="25" />
-        </button>
+        <ModalCloseButton handleCloseModal={handleCloseModal} />
 
         {/* header */}
         <CardHeader>
