@@ -5,8 +5,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { Skeleton } from "../ui/skeleton";
+} from "../../ui/table";
+import { Skeleton } from "../../ui/skeleton";
 
 function LoadingRedelegateValidatorsListTable() {
   return (

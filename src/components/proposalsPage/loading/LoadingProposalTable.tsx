@@ -1,6 +1,5 @@
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
-import { Skeleton } from "../ui/skeleton";
+import { Card } from "../../ui/card";
+import { Skeleton } from "../../ui/skeleton";
 import {
   Table,
   TableBody,
@@ -8,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "../../ui/table";
 
 function LoadingProposalTable({ rows }: { rows: number }) {
   const loadingRows = Array.from({ length: rows }, (_, i) => {

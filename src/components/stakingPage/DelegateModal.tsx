@@ -8,10 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ValidatorItem } from "@/types/validator.types";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { TbAlertCircleFilled } from "react-icons/tb";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import {
@@ -21,11 +18,14 @@ import {
 } from "@tanstack/react-query";
 import { useCosmjs } from "@/hooks/useCosmjs";
 import toast from "react-hot-toast";
-import { microCoinConverter } from "@/helpers/integerModifiers";
-import { Skeleton } from "../ui/skeleton";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useModal } from "@/hooks/useModal";
 import ModalCloseButton from "../ModalCloseButton";
+import StakingAlert from "./delegateModal/StakingAlert";
+import AvailableBalanceCard from "./delegateModal/AvailableBalanceCard";
+import DelegateAmountCard from "./delegateModal/DelegateAmountCard";
+import InsufficientBalanceAlert from "./delegateModal/InsufficientBalanceAlert";
+import AmountButtons from "./delegateModal/AmountButtons";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -43,7 +43,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   };
 
   const handleCloseModal = () => {
-    setAmount("");
+    setDelegateAmount("");
     setDelegateModalOpen(false);
   };
 
@@ -65,7 +65,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const availableAmount = availableBalance?.amount || 0;
 
   // handle amount
-  const [amount, setAmount] = useState("");
+  const [delegateAmount, setDelegateAmount] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const handleInput = (value: string) => {
     const balance =
@@ -74,10 +74,10 @@ export default function DelegateModal({ validator }: AllModalProps) {
         : +availableAmount / 1_000_000;
     if (+value > balance) {
       setShowAlert(true);
-      setAmount(value);
+      setDelegateAmount(value);
     } else {
       setShowAlert(false);
-      setAmount(value);
+      setDelegateAmount(value);
     }
   };
 
@@ -88,15 +88,15 @@ export default function DelegateModal({ validator }: AllModalProps) {
         : +availableAmount / 1_000_000;
     switch (amount) {
       case "1/3":
-        setAmount((coin / 3).toFixed(4));
+        setDelegateAmount((coin / 3).toFixed(4));
         setShowAlert(false);
         break;
       case "1/2":
-        setAmount((coin / 2).toFixed(4));
+        setDelegateAmount((coin / 2).toFixed(4));
         setShowAlert(false);
         break;
       case "MAX":
-        setAmount(coin.toFixed(4));
+        setDelegateAmount(coin.toFixed(4));
         setShowAlert(false);
         break;
     }
@@ -105,8 +105,9 @@ export default function DelegateModal({ validator }: AllModalProps) {
   // handle submit
   const realAmount =
     denom == "DYM"
-      ? (+amount * 1_000_000_000_000_000).toString()
-      : (+amount * 1_000_000).toString();
+      ? (+delegateAmount * 1_000_000_000_000_000).toString()
+      : (+delegateAmount * 1_000_000).toString();
+
   const { delegateToken } = useCosmjs();
 
   const delegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
@@ -148,95 +149,37 @@ export default function DelegateModal({ validator }: AllModalProps) {
             {Math.floor(+validator.commission.commission_rates.rate * 100)}%
           </CardDescription>
 
-          {/* staking alert */}
-          <Alert className="bg-red-50 border-red-200 text-red-700">
-            <AlertTitle className="flex gap-1 items-center text-sm">
-              <TbAlertCircleFilled size="20" />
-              Staking will lock your funds for 2 days
-            </AlertTitle>
-            <AlertDescription className="text-xs">
-              You will need to undelegate in order for your staked assets to be
-              liquid again. This process will take 2 days to complete.
-            </AlertDescription>
-          </Alert>
+          <StakingAlert />
         </CardHeader>
         <CardContent>
           {/* available balances */}
-          <Card className="my-2">
-            {" "}
-            <CardHeader className="flex flex-row justify-between">
-              <p className="text-sm">
-                Available Balances:{" "}
-                {availableLoading ? (
-                  <Skeleton className="h-3 w-1/4" />
-                ) : (
-                  <span className="font-semibold text-lg">
-                    {microCoinConverter(+availableAmount, denom!)}
-                  </span>
-                )}
-              </p>
-
-              <Badge variant="secondary">{denom}</Badge>
-            </CardHeader>
-          </Card>
+          <AvailableBalanceCard
+            availableAmount={availableAmount}
+            availableLoading={availableLoading}
+            denom={denom}
+          />
 
           {/* amount to delegate */}
-          <Card className="my-2">
-            <CardHeader className="flex flex-row justify-between gap-5">
-              <input
-                value={amount}
-                onChange={(e) => handleInput(e.target.value)}
-                type="number"
-                placeholder="your staking amount"
-                className="focus:border-transparent focus:outline-none active:outline-none active:border-none bg-transparent w-full font-semibold text-lg placeholder:font-light placeholder:text-sm"
-              />
-              <Badge variant="secondary">{denom}</Badge>
-            </CardHeader>
-          </Card>
+          <DelegateAmountCard
+            delegateAmount={delegateAmount}
+            handleInput={handleInput}
+            denom={denom}
+          />
 
           {/* amount buttons */}
           <div className="flex justify-between items-center">
-            <AlertTitle className="flex gap-1 items-center text-xs text-red-700 pl-2">
-              {showAlert && (
-                <>
-                  <TbAlertCircleFilled size="14" />
-                  <p>Insufficient Balance</p>
-                </>
-              )}
-            </AlertTitle>
+            <InsufficientBalanceAlert showAlert={showAlert} />
 
-            <div className="flex justify-end gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs"
-                onClick={() => handleAmountButton("1/3")}
-              >
-                1/3
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs"
-                onClick={() => handleAmountButton("1/2")}
-              >
-                1/2
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs"
-                onClick={() => handleAmountButton("MAX")}
-              >
-                MAX
-              </Button>
-            </div>
+            <AmountButtons handleAmountButton={handleAmountButton} />
           </div>
         </CardContent>
         <CardFooter>
+          {/* delegate button */}
           <Button
             className="w-full"
-            disabled={showAlert || +amount <= 0 || delegateMutation.isPending}
+            disabled={
+              showAlert || +delegateAmount <= 0 || delegateMutation.isPending
+            }
             onClick={() => delegateMutation.mutate()}
           >
             {delegateMutation.isPending ? "Processing..." : "Delegate"}

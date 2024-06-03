@@ -23,7 +23,7 @@ import ManageModal, { UserDelegationData } from "./ManageModal";
 import { useModal } from "@/hooks/useModal";
 import RedelegateModal from "./RedelegateModal";
 import { Card } from "../ui/card";
-import LoadingMyValidatorPage from "./LoadingMyValidatorTable";
+import LoadingMyValidatorPage from "./loading/LoadingMyValidatorTable";
 import NoDataFound from "../NoDataFound";
 
 function MyValidators() {

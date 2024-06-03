@@ -1,16 +1,14 @@
 "use client";
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
-import ProposalSummaryCard from "@/components/ProposalIdPage/ProposalSummaryCard";
-import ProposalTimelineCard from "@/components/ProposalIdPage/ProposalTimelineCard";
-import TallyCountCard from "@/components/ProposalIdPage/TallyCountCard";
-import { Button } from "@/components/ui/button";
+import BackToProposalPage from "@/components/proposalIdPage/BackToProposalPage";
+import ProposalSummaryCard from "@/components/proposalIdPage/ProposalSummaryCard";
+import ProposalTimelineCard from "@/components/proposalIdPage/ProposalTimelineCard";
+import TallyCountCard from "@/components/proposalIdPage/TallyCountCard";
 import { useGovernanceApi } from "@/hooks/useGovernanceApi";
 import { useWallet } from "@/hooks/useWallet";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { IoChevronBack } from "react-icons/io5";
 
 function ProposalPage() {
   const { id } = useParams();
@@ -30,29 +28,23 @@ function ProposalPage() {
   const { wallet, userAddress } = useWallet();
   if (!wallet || !userAddress) {
     return <NoConnectedWalletHeader />;
-  } else {
-    return (
-      <>
-        <Link href="/proposals">
-          <Button className="mb-5 gap-2" variant="secondary">
-            <IoChevronBack size="20" />
-            <span>Back</span>
-          </Button>
-        </Link>
-
-        <ProposalSummaryCard proposal={proposal} loading={isLoading} />
-
-        <ProposalTimelineCard proposal={proposal} loading={isLoading} />
-
-        <TallyCountCard
-          proposalId={proposal?.id}
-          tallyCount={proposal?.final_tally_result}
-          status={proposal?.status}
-          loading={isLoading}
-        />
-      </>
-    );
   }
+  return (
+    <>
+      <BackToProposalPage />
+
+      <ProposalSummaryCard proposal={proposal} loading={isLoading} />
+
+      <ProposalTimelineCard proposal={proposal} loading={isLoading} />
+
+      <TallyCountCard
+        proposalId={proposal?.id}
+        tallyCount={proposal?.final_tally_result}
+        status={proposal?.status}
+        loading={isLoading}
+      />
+    </>
+  );
 }
 
 export default ProposalPage;

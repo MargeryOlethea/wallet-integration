@@ -11,17 +11,16 @@ function Staking() {
 
   if (!wallet || !userAddress) {
     return <NoConnectedWalletHeader />;
-  } else {
-    return (
-      <>
-        <AccountDashboard />
-
-        <MyValidators />
-
-        <ValidatorsList />
-      </>
-    );
   }
+  return (
+    <>
+      <AccountDashboard />
+
+      <MyValidators />
+
+      <ValidatorsList />
+    </>
+  );
 }
 
 export default Staking;

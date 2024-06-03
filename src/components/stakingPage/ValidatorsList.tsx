@@ -26,7 +26,7 @@ import DelegateModal from "./DelegateModal";
 import { useModal } from "@/hooks/useModal";
 import { Card } from "../ui/card";
 import BottomPagination from "../BottomPagination";
-import LoadingValidatorsListTable from "./LoadingValidatorsListTable";
+import LoadingValidatorsListTable from "./loading/LoadingValidatorsListTable";
 import NoDataFound from "../NoDataFound";
 
 function ValidatorsList() {

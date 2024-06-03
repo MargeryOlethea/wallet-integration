@@ -5,19 +5,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 
-interface StakeBalanceCardProps {
+interface AccountBalanceCardProps {
   amount: number | string | undefined;
   denom: string | undefined;
   loading: boolean;
 }
-function StakeBalanceCard({ amount, denom, loading }: StakeBalanceCardProps) {
+
+function AccountBalanceCard({
+  amount,
+  denom,
+  loading,
+}: AccountBalanceCardProps) {
   return (
     <>
       <Card>
         <CardHeader>
-          <CardDescription>Staked Balance</CardDescription>
+          <CardDescription>Total Balance</CardDescription>
           {loading ? (
             <div className="flex items-center gap-2">
               <Skeleton className="h-8 w-20" />{" "}
@@ -34,4 +39,4 @@ function StakeBalanceCard({ amount, denom, loading }: StakeBalanceCardProps) {
   );
 }
 
-export default StakeBalanceCard;
+export default AccountBalanceCard;

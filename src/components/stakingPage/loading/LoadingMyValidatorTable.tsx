@@ -6,10 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
-import { Skeleton } from "../ui/skeleton";
+import { Card } from "../../ui/card";
+import { Skeleton } from "../../ui/skeleton";
 
 function LoadingMyValidatorPage() {
   return (

@@ -15,14 +15,6 @@ function ProposalTableRows({
   proposal: ProposalItem;
   proposalStatus: ProposalStatus;
 }) {
-  // Counting votes
-  const yesVote = Number(proposal.final_tally_result.yes);
-  const noVote = Number(proposal.final_tally_result.no);
-  const vetoVote = Number(proposal.final_tally_result.no_with_veto);
-  const abstainVote = Number(proposal.final_tally_result.abstain);
-
-  const totalVotes = yesVote + noVote + vetoVote + abstainVote;
-
   return (
     <>
       <TableRow>

@@ -6,7 +6,7 @@ import { TallyResult } from "@/types/proposal.types";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import LoadingTallyCountCard from "./LoadingTallyCountCard";
+import LoadingTallyCountCard from "./loading/LoadingTallyCountCard";
 interface TallyCountCardProps {
   proposalId: string | undefined;
   tallyCount: TallyResult | undefined;

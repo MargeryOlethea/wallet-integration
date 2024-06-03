@@ -1,8 +1,8 @@
 import { useCosmjs } from "@/hooks/useCosmjs";
-import AccountBalanceCard from "./AccountBalanceCard";
-import AvailableBalanceCard from "./AvailableBalanceCard";
-import RewardBalanceCard from "./RewardBalanceCard";
-import StakeBalanceCard from "./StakeBalanceCard";
+import AccountBalanceCard from "./accountDashboard/AccountBalanceCard";
+import AvailableBalanceCard from "./accountDashboard/AvailableBalanceCard";
+import RewardBalanceCard from "./accountDashboard/RewardBalanceCard";
+import StakeBalanceCard from "./accountDashboard/StakeBalanceCard";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { microCoinConverter } from "@/helpers/integerModifiers";

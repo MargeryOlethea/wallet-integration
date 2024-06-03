@@ -14,8 +14,7 @@ import {
 import { ProposalItem } from "@/types/proposal.types";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import LoadingProposalSummaryCard from "./LoadingProposalSummaryCard";
-
+import LoadingProposalSummaryCard from "./loading/LoadingProposalSummaryCard";
 interface ProposalSummaryCardProps {
   proposal: ProposalItem | undefined;
   loading: boolean;

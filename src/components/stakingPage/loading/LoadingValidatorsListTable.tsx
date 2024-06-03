@@ -5,9 +5,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { Card } from "../ui/card";
-import { Skeleton } from "../ui/skeleton";
+} from "../../ui/table";
+import { Card } from "../../ui/card";
+import { Skeleton } from "../../ui/skeleton";
 
 function LoadingValidatorsListTable({ rows }: { rows: number }) {
   const loadingRows = Array.from({ length: rows }, (_, i) => {
