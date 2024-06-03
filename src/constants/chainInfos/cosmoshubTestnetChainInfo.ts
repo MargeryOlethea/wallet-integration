@@ -3,8 +3,8 @@ import { ChainInfo } from "@keplr-wallet/types";
 export const cosmoshubTestnetChainInfo: ChainInfo = {
   chainId: "theta-testnet-001",
   chainName: "Cosmoshub Testnet",
-  rpc: "https://rpc.sentry-01.theta-testnet.polypore.xyz/",
-  rest: "https://rest.sentry-01.theta-testnet.polypore.xyz/",
+  rpc: "https://rpc.sentry-01.theta-testnet.polypore.xyz",
+  rest: "https://rest.sentry-01.theta-testnet.polypore.xyz",
   bip44: {
     coinType: 118,
   },

@@ -3,8 +3,8 @@ import { ChainInfo } from "@keplr-wallet/types";
 export const osmosisTestnetChainInfo: ChainInfo = {
   chainId: "osmo-test-5",
   chainName: "Osmosis Testnet",
-  rpc: "https://rpc.osmotest5.osmosis.zone/",
-  rest: "https://lcd.osmotest5.osmosis.zone/",
+  rpc: "https://rpc.osmotest5.osmosis.zone",
+  rest: "https://lcd.osmotest5.osmosis.zone",
   stakeCurrency: {
     coinDenom: "OSMO",
     coinMinimalDenom: "uosmo",

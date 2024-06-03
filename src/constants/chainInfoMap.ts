@@ -5,7 +5,7 @@ import { osmosisTestnetChainInfo } from "./chainInfos/osmosisTestnetChainInfo";
 
 interface ChainInfoMap {
   [key: string]: ChainInfo;
-  "froopyland-100-1": ChainInfo;
+  "froopyland_100-1": ChainInfo;
   "theta-testnet-001": ChainInfo;
   "osmo-test-5": ChainInfo;
 }
@@ -13,5 +13,5 @@ interface ChainInfoMap {
 export const chainInfoMap: ChainInfoMap = {
   "theta-testnet-001": cosmoshubTestnetChainInfo,
   "osmo-test-5": osmosisTestnetChainInfo,
-  "froopyland-100-1": dymensionTestnetChainInfo,
+  "froopyland_100-1": dymensionTestnetChainInfo,
 };

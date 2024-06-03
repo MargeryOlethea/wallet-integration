@@ -22,99 +22,86 @@ export const useCosmjs = () => {
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
 
   const getAvailableBalance = async () => {
-    try {
-      const client: StargateClient = await StargateClient.connect(rpcUrl);
+    const client: StargateClient = await StargateClient.connect(rpcUrl);
 
-      const balance = await client.getBalance(userAddress!, denom!);
-      return balance;
-    } catch (error) {
-      throw error;
-    }
+    const balance = await client.getBalance(userAddress!, denom!);
+    return balance;
   };
 
   const getStakeBalance = async () => {
-    try {
-      const client: StargateClient = await StargateClient.connect(rpcUrl);
+    const client: StargateClient = await StargateClient.connect(rpcUrl);
 
-      const balance: Coin | null = await client.getBalanceStaked(userAddress!);
-      return balance;
-    } catch (error) {
-      throw error;
-    }
+    const balance: Coin | null = await client.getBalanceStaked(userAddress!);
+    return balance;
   };
 
   const withdrawStakedReward = async (validatorAddress: string) => {
-    try {
-      const signingClient = await SigningStargateClient.connectWithSigner(
-        rpcUrl,
-        offlineSigner,
-        { gasPrice: GasPrice.fromString("0.025uatom") },
-      );
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
 
-      const fee = "auto";
-      const memo = "";
+    const fee = "auto";
+    const memo = "";
 
-      const result = await signingClient.withdrawRewards(
-        userAddress!,
-        validatorAddress,
-        fee,
-        memo,
-      );
+    const result = await signingClient.withdrawRewards(
+      userAddress!,
+      validatorAddress,
+      fee,
+      memo,
+    );
 
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    return result;
   };
 
   const delegateToken = async (validatorAddress: string, amount: string) => {
-    try {
-      const signingClient = await SigningStargateClient.connectWithSigner(
-        rpcUrl,
-        offlineSigner,
-        { gasPrice: GasPrice.fromString("0.025uatom") },
-      );
+    console.log({ validatorAddress, amount });
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
+    console.log({
+      SigningClientChainId: await signingClient.getChainId(),
+      chainId: chainId,
+    });
 
-      const fee = "auto";
-      const memo = "";
+    const fee = "auto";
+    const memo = "";
 
-      const result = await signingClient.delegateTokens(
-        userAddress!,
-        validatorAddress,
-        { amount: amount, denom: denom! },
-        fee,
-        memo,
-      );
+    const result = await signingClient.delegateTokens(
+      userAddress!,
+      validatorAddress,
+      { amount: amount, denom: denom! },
+      fee,
+      memo,
+    );
 
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    console.log(result);
+
+    return result;
   };
 
   const undelegateToken = async (validatorAddress: string, amount: string) => {
-    try {
-      const signingClient = await SigningStargateClient.connectWithSigner(
-        rpcUrl,
-        offlineSigner,
-        { gasPrice: GasPrice.fromString("0.025uatom") },
-      );
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
 
-      const fee = "auto";
-      const memo = "";
+    const fee = "auto";
+    const memo = "";
 
-      const result = await signingClient.undelegateTokens(
-        userAddress!,
-        validatorAddress,
-        { amount: amount, denom: denom! },
-        fee,
-        memo,
-      );
+    const result = await signingClient.undelegateTokens(
+      userAddress!,
+      validatorAddress,
+      { amount: amount, denom: denom! },
+      fee,
+      memo,
+    );
 
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    return result;
   };
 
   const redelegateToken = async (
@@ -122,71 +109,63 @@ export const useCosmjs = () => {
     validatorDestinationAddress: string,
     amount: string,
   ) => {
-    try {
-      const signingClient = await SigningStargateClient.connectWithSigner(
-        rpcUrl,
-        offlineSigner,
-        { gasPrice: GasPrice.fromString("0.025uatom") },
-      );
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
 
-      const fee = "auto";
-      const memo = "";
-      const message = [
-        {
-          typeUrl: "/cosmos.staking.v1beta1.MsgBeginRedelegate",
-          value: {
-            amount: { amount: amount, denom: denom! },
-            delegatorAddress: userAddress!,
-            validatorSrcAddress: validatorSourceAddress,
-            validatorDstAddress: validatorDestinationAddress,
-          },
+    const fee = "auto";
+    const memo = "";
+    const message = [
+      {
+        typeUrl: "/cosmos.staking.v1beta1.MsgBeginRedelegate",
+        value: {
+          amount: { amount: amount, denom: denom! },
+          delegatorAddress: userAddress!,
+          validatorSrcAddress: validatorSourceAddress,
+          validatorDstAddress: validatorDestinationAddress,
         },
-      ];
+      },
+    ];
 
-      const result = await signingClient.signAndBroadcast(
-        userAddress!,
-        message,
-        fee,
-        memo,
-      );
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    const result = await signingClient.signAndBroadcast(
+      userAddress!,
+      message,
+      fee,
+      memo,
+    );
+    return result;
   };
 
   const voteProposal = async (proposalId: string, option: VoteOption) => {
-    try {
-      const signingClient = await SigningStargateClient.connectWithSigner(
-        rpcUrl,
-        offlineSigner,
-        { gasPrice: GasPrice.fromString("0.025uatom") },
-      );
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      rpcUrl,
+      offlineSigner,
+      { gasPrice: GasPrice.fromString("0.025uatom") },
+    );
 
-      const fee = "auto";
-      const memo = "";
-      const message = [
-        {
-          typeUrl: "/cosmos.gov.v1beta1.MsgVote",
-          value: {
-            voter: userAddress!,
-            proposalId: proposalId,
-            option: option,
-          },
+    const fee = "auto";
+    const memo = "";
+    const message = [
+      {
+        typeUrl: "/cosmos.gov.v1beta1.MsgVote",
+        value: {
+          voter: userAddress!,
+          proposalId: proposalId,
+          option: option,
         },
-      ];
+      },
+    ];
 
-      const result = await signingClient.signAndBroadcast(
-        userAddress!,
-        message,
-        fee,
-        memo,
-      );
+    const result = await signingClient.signAndBroadcast(
+      userAddress!,
+      message,
+      fee,
+      memo,
+    );
 
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    return result;
   };
 
   return {
