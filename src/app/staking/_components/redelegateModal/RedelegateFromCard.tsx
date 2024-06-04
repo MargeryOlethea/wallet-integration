@@ -6,7 +6,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { microCoinConverter } from "@/helpers/integerModifiers";
-import { UserDelegationData } from ".";
 
 interface RedelegateFromCardProps {
   userDelegationData: UserDelegationData;
