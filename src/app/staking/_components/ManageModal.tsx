@@ -7,30 +7,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ValidatorItem } from "@/types/validator.types";
-import { TbAlertCircleFilled } from "react-icons/tb";
-import { Badge } from "../../../components/ui/badge";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import { microCoinConverter } from "@/helpers/integerModifiers";
 import { DelegationResponse } from "@/types/delegations.types";
-import { Button } from "../../../components/ui/button";
 import { Reward } from "@/types/reward.types";
-import { useCosmjs } from "@/hooks/useCosmjs";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useState } from "react";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "../../../components/ui/alert";
 import { useModal } from "@/hooks/useModal";
-import ModalCloseButton from "../../../components/ModalCloseButton";
 import YourDelegationCard from "./manageModal/YourDelegationCard";
 import UndelegateAlert from "./manageModal/UndelegateAlert";
 import RewardsCard from "./manageModal/RewardsCard";
 import UndelegateCard from "./manageModal/UndelegateCard";
+import { Button } from "@/components/ui/button";
+import ModalCloseButton from "@/components/ModalCloseButton";
 
 interface MyModalProps {
   userDelegationData: UserDelegationData;
@@ -58,6 +46,7 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
     setUndelegateAmount("");
     setShowUndelegate(false);
     setManageModalOpen(false);
+    setShowAlert(false);
   };
 
   const openRedelegateModal = () => {

@@ -55,6 +55,7 @@ export default function RedelegateModal({
     setRedelegateModalOpen(false);
     setSearch("");
     setSelectedValidator("...");
+    setShowAlert(false);
   };
 
   // get denom

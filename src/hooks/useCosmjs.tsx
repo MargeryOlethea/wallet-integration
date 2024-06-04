@@ -17,10 +17,14 @@ export enum VoteOption {
 export const useCosmjs = () => {
   const { chainId, userAddress, wallet } = useWallet();
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
-  const offlineSigner =
-    wallet && wallet == "keplr"
-      ? window.getOfflineSigner!(chainId!)
-      : window.leap.getOfflineSigner!(chainId!);
+  let offlineSigner: any;
+
+  if (typeof window !== "undefined") {
+    offlineSigner =
+      wallet && wallet === "keplr"
+        ? window.getOfflineSigner!(chainId!)
+        : window.leap.getOfflineSigner!(chainId!);
+  }
   // let offlineSigner: any;
   // if (wallet == "keplr") {
   //   offlineSigner = window.getOfflineSigner!(chainId!);

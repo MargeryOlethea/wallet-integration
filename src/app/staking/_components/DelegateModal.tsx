@@ -45,6 +45,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const handleCloseModal = () => {
     setDelegateAmount("");
     setDelegateModalOpen(false);
+    setShowAlert(false);
   };
 
   // get denom
