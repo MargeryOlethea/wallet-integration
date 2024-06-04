@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 
 function MyValidators() {
   // get denom
-  const { chainId } = useWallet();
+  const { chainId, userAddress } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
   const { getDelegationByDelegator, getValidatorsInfoByDelegator } =
     useStakingApi();
@@ -41,7 +41,8 @@ function MyValidators() {
     error: delegationError,
   } = useQuery({
     queryFn: getDelegationByDelegator,
-    queryKey: ["delegationList"],
+    queryKey: ["delegationList", chainId, userAddress],
+    enabled: !!chainId && !!userAddress,
   });
 
   const delegations = delegationData && delegationData.delegation_responses;
@@ -53,7 +54,8 @@ function MyValidators() {
     error: validatorsError,
   } = useQuery({
     queryFn: getValidatorsInfoByDelegator,
-    queryKey: ["myValidatorsList"],
+    queryKey: ["myValidatorsList", chainId, userAddress],
+    enabled: !!chainId && !!userAddress,
   });
 
   const validators = validatorsData && validatorsData.validators;
@@ -65,7 +67,8 @@ function MyValidators() {
     error: rewardsError,
   } = useQuery({
     queryFn: getRewardsByDelegator,
-    queryKey: ["rewardsList"],
+    queryKey: ["rewardsList", chainId, userAddress],
+    enabled: !!chainId && !!userAddress,
   });
 
   const rewards = rewardsData && rewardsData.rewards;

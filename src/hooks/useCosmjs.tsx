@@ -18,7 +18,7 @@ export const useCosmjs = () => {
   const { chainId, userAddress, wallet } = useWallet();
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
   const offlineSigner =
-    wallet == "keplr"
+    wallet && wallet == "keplr"
       ? window.getOfflineSigner!(chainId!)
       : window.leap.getOfflineSigner!(chainId!);
   // let offlineSigner: any;
@@ -38,21 +38,14 @@ export const useCosmjs = () => {
   const getAvailableBalance = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
 
-    if (!userAddress) {
-      return null;
-    }
-    const balance = await client.getBalance(userAddress, denom!);
+    const balance = await client.getBalance(userAddress!, denom!);
     return balance;
   };
 
   const getStakeBalance = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
 
-    if (!userAddress) {
-      return null;
-    }
-
-    const balance: Coin | null = await client.getBalanceStaked(userAddress);
+    const balance: Coin | null = await client.getBalanceStaked(userAddress!);
     return balance;
   };
 

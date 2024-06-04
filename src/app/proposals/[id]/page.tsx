@@ -14,9 +14,11 @@ import TallyCountCard from "./_components/TallyCountCard";
 function ProposalPage() {
   const { id } = useParams();
   const { getProposalById } = useGovernanceApi();
+  const { chainId, userAddress, showConnectToWallet } = useWallet();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["proposal", id],
+    queryKey: ["proposal", id, chainId, userAddress],
     queryFn: () => getProposalById(id as string),
+    enabled: !!chainId && !!userAddress,
   });
 
   const proposal = data && data.proposal;
@@ -26,8 +28,7 @@ function ProposalPage() {
     toast.error(error.message);
   }
 
-  const { wallet, userAddress } = useWallet();
-  if (!wallet || !userAddress) {
+  if (showConnectToWallet) {
     return <NoConnectedWalletHeader />;
   }
   return (

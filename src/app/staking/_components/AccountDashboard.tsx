@@ -15,7 +15,7 @@ function AccountDashboard() {
   //  get functions for fetching data
   const { getStakeBalance, getAvailableBalance } = useCosmjs();
   const { getRewardsByDelegator } = useDistributionApi();
-  const { chainId } = useWallet();
+  const { chainId, userAddress } = useWallet();
 
   // setup denom
   const coinDenom =
@@ -27,8 +27,9 @@ function AccountDashboard() {
     error: availableError,
     isLoading: availableLoading,
   } = useQuery({
-    queryKey: ["availableBalance"],
+    queryKey: ["availableBalance", userAddress, chainId],
     queryFn: getAvailableBalance,
+    enabled: !!userAddress && !!chainId,
   });
 
   // fetching stake balance
@@ -37,8 +38,9 @@ function AccountDashboard() {
     error: stakeError,
     isLoading: stakeLoading,
   } = useQuery({
-    queryKey: ["stakeBalance"],
+    queryKey: ["stakeBalance", userAddress, chainId],
     queryFn: getStakeBalance,
+    enabled: !!userAddress && !!chainId,
   });
 
   // fetching rewards balance
@@ -48,7 +50,8 @@ function AccountDashboard() {
     error: rewardsError,
   } = useQuery({
     queryFn: getRewardsByDelegator,
-    queryKey: ["rewardsBalance"],
+    queryKey: ["rewardsBalance", userAddress, chainId],
+    enabled: !!userAddress && !!chainId,
   });
   const rewardsAmount = rewardsBalance?.total[0]?.amount ?? 0;
 

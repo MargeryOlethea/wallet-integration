@@ -26,9 +26,6 @@ export const useStakingApi = () => {
   };
 
   const getDelegationByDelegator = async () => {
-    if (!userAddress) {
-      return null;
-    }
     const path = "/cosmos/staking/v1beta1/delegations/" + userAddress;
     const response = await fetch(baseUrl + path);
     const myDelegations: DelegationData = await response.json();
@@ -37,9 +34,6 @@ export const useStakingApi = () => {
   };
 
   const getValidatorsInfoByDelegator = async () => {
-    if (!userAddress) {
-      return null;
-    }
     const path =
       "/cosmos/staking/v1beta1/delegators/" + userAddress + "/validators";
     const response = await fetch(baseUrl + path);

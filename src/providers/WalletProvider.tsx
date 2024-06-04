@@ -18,6 +18,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const [wallet, setWallet] = useState<null | string>(null);
   const [userAddress, setUserAddress] = useState<null | string>(null);
   const [chainId, setChainId] = useState<null | string>(null);
+  const [showConnectToWallet, setShowConnectToWallet] = useState(false);
 
   const network = chainInfoMap[chainId!] || {};
 
@@ -31,6 +32,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         setWallet(localWallet);
         setUserAddress(localUserAddress);
         setChainId(localChainId);
+      } else {
+        setShowConnectToWallet(true);
       }
     };
 
@@ -77,6 +80,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         localStorage.setItem("userAddress", account.address);
         localStorage.setItem("chainId", chainId);
       }
+
+      setShowConnectToWallet(false);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -92,6 +97,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     chainId,
     setChainId,
     connectToWallet,
+    showConnectToWallet,
+    setShowConnectToWallet,
   };
 
   return (

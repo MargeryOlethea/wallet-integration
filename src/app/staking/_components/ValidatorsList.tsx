@@ -26,7 +26,7 @@ import NoDataFound from "@/components/NoDataFound";
 
 function ValidatorsList() {
   // get denom
-  const { chainId } = useWallet();
+  const { chainId, userAddress } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // query
@@ -36,7 +36,8 @@ function ValidatorsList() {
   const { getValidatorsList } = useStakingApi();
   const { data, isLoading, error } = useQuery({
     queryFn: () => getValidatorsList(paginationOffset, paginationLimit),
-    queryKey: ["validatorsList", paginationOffset],
+    queryKey: ["validatorsList", paginationOffset, chainId, userAddress],
+    enabled: !!chainId && !!userAddress,
   });
 
   const validators = data && data.validators;

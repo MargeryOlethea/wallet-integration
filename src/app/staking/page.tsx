@@ -7,9 +7,8 @@ import MyValidators from "./_components/MyValidators";
 import ValidatorsList from "./_components/ValidatorsList";
 
 function Staking() {
-  const { wallet, userAddress } = useWallet();
-
-  if (!wallet || !userAddress) {
+  const { showConnectToWallet } = useWallet();
+  if (showConnectToWallet) {
     return <NoConnectedWalletHeader />;
   }
   return (

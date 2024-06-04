@@ -48,7 +48,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   };
 
   // get denom
-  const { chainId } = useWallet();
+  const { chainId, userAddress } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // fetching available balance
@@ -58,8 +58,9 @@ export default function DelegateModal({ validator }: AllModalProps) {
     error: availableError,
     isLoading: availableLoading,
   } = useQuery({
-    queryKey: ["availableBalance"],
+    queryKey: ["availableBalance", chainId, userAddress],
     queryFn: getAvailableBalance,
+    enabled: !!chainId && !!userAddress,
   });
 
   const availableAmount = availableBalance?.amount || 0;

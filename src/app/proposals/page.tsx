@@ -13,8 +13,6 @@ import NoDataFound from "@/components/NoDataFound";
 import ProposalListTable from "./_components/ProposalListTable";
 
 function Proposals() {
-  const { wallet, userAddress } = useWallet();
-
   // get proposals list
   const { getProposalsList } = useGovernanceApi();
 
@@ -32,15 +30,19 @@ function Proposals() {
   };
 
   // fetch
+  const { chainId, userAddress } = useWallet();
   const { data, isLoading, error } = useQuery({
     queryKey: [
       "proposalsList",
       proposalStatus,
       paginationOffset,
       paginationLimit,
+      chainId,
+      userAddress,
     ],
     queryFn: () =>
       getProposalsList(proposalStatus, paginationOffset, paginationLimit),
+    enabled: !!chainId && !!userAddress,
   });
 
   const proposals = data && data.proposals;
@@ -49,7 +51,8 @@ function Proposals() {
     toast.error(error.message);
   }
 
-  if (!wallet || !userAddress) {
+  const { showConnectToWallet } = useWallet();
+  if (showConnectToWallet) {
     return <NoConnectedWalletHeader />;
   }
 

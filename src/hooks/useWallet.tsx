@@ -9,6 +9,8 @@ interface WalletContextType {
   chainId: string | null;
   setChainId: (chainId: string) => void;
   connectToWallet: (walletType: "keplr" | "leap") => void;
+  setShowConnectToWallet: Dispatch<SetStateAction<boolean>>;
+  showConnectToWallet: boolean;
 }
 
 export const WalletContext = createContext<WalletContextType | undefined>(

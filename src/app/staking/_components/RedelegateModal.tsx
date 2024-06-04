@@ -58,14 +58,15 @@ export default function RedelegateModal({
   };
 
   // get denom
-  const { chainId } = useWallet();
+  const { chainId, userAddress } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // get validators list
   const { getValidatorsList } = useStakingApi();
   const { data, isLoading, error } = useQuery({
     queryFn: () => getValidatorsList(),
-    queryKey: ["validatorsList"],
+    queryKey: ["validatorsList", chainId, userAddress],
+    enabled: !!chainId && !!userAddress,
   });
 
   const validators = data && data.validators;
