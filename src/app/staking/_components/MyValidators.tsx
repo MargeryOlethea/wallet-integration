@@ -8,10 +8,8 @@ import {
 } from "@/components/ui/table";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import { useStakingApi } from "@/hooks/useStakingApi";
 import toast from "react-hot-toast";
 import { microCoinConverter } from "@/helpers/integerModifiers";
-import { useDistributionApi } from "@/hooks/useDistributionApi";
 import { useState } from "react";
 import { ValidatorItem } from "@/types/validator.types";
 import { DelegationResponse } from "@/types/delegations.types";
@@ -32,11 +30,8 @@ import {
 
 function MyValidators() {
   // get denom
-  const { chainId, userAddress } = useWallet();
+  const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
-  const { getDelegationByDelegator, getValidatorsInfoByDelegator } =
-    useStakingApi();
-  const { getRewardsByDelegator } = useDistributionApi();
 
   // get my delegation list
   const {
@@ -111,7 +106,7 @@ function MyValidators() {
                     <TableRow key={delegation.delegation.validator_address}>
                       <TableCell className="flex items-center gap-2">
                         <p className="font-semibold">
-                          {validators[idx].description.moniker}
+                          {validators[idx]?.description?.moniker}
                         </p>
                       </TableCell>
                       <TableCell className="font-semibold">

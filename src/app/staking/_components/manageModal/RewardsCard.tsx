@@ -2,11 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { microCoinConverter } from "@/helpers/integerModifiers";
-import { useCosmjs } from "@/hooks/useCosmjs";
-import { DeliverTxResponse } from "@cosmjs/stargate";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import { UserDelegationData } from "../ManageModal";
+import { useClaimRewards } from "@/hooks/useReactMutation";
 
 interface RewardsCardProps {
   userDelegationData: UserDelegationData;
@@ -15,20 +12,9 @@ interface RewardsCardProps {
 
 function RewardsCard({ userDelegationData, denom }: RewardsCardProps) {
   // handle claim rewards
-  const { withdrawStakedReward } = useCosmjs();
-  const withdrawMutation: UseMutationResult<DeliverTxResponse, Error, void> =
-    useMutation({
-      mutationFn: () =>
-        withdrawStakedReward(userDelegationData.validator.operator_address),
-      onSuccess: (data) => {
-        toast.success(`Rewards claimed successfully!`);
-        window.location.reload();
-      },
-      onError: (error) => {
-        toast.error(`Failed to claim rewards: ${error.message}`);
-        console.error(error.message);
-      },
-    });
+  const withdrawMutation = useClaimRewards(
+    userDelegationData.validator.operator_address,
+  );
 
   return (
     <>

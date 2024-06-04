@@ -10,10 +10,7 @@ import {
 import { ValidatorItem } from "@/types/validator.types";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import { useCosmjs } from "@/hooks/useCosmjs";
 import toast from "react-hot-toast";
-import { DeliverTxResponse } from "@cosmjs/stargate";
 import { useModal } from "@/hooks/useModal";
 import StakingAlert from "./delegateModal/StakingAlert";
 import AvailableBalanceCard from "./delegateModal/AvailableBalanceCard";
@@ -23,6 +20,7 @@ import AmountButtons from "./delegateModal/AmountButtons";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import { Button } from "@/components/ui/button";
 import { useAvailableBalance } from "@/hooks/useReactQuery";
+import { useDelegateToken } from "@/hooks/useReactMutation";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -102,20 +100,10 @@ export default function DelegateModal({ validator }: AllModalProps) {
       ? (+delegateAmount * 1_000_000_000_000_000_000).toString()
       : (+delegateAmount * 1_000_000).toString();
 
-  const { delegateToken } = useCosmjs();
-
-  const delegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
-    useMutation({
-      mutationFn: () => delegateToken(validator.operator_address, realAmount),
-      onSuccess: (data) => {
-        toast.success(`Staking successful!`);
-        window.location.reload();
-      },
-      onError: (error) => {
-        toast.error(`Failed to delegate token: ${error.message}`);
-        console.error(error.message);
-      },
-    });
+  const delegateMutation = useDelegateToken(
+    validator?.operator_address,
+    realAmount,
+  );
 
   if (availableError) {
     toast.error(availableError.message);

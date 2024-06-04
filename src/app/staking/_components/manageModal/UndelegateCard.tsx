@@ -2,12 +2,9 @@ import { AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
-import { useCosmjs } from "@/hooks/useCosmjs";
-import { DeliverTxResponse } from "@cosmjs/stargate";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import { TbAlertCircleFilled } from "react-icons/tb";
 import { UserDelegationData } from "../ManageModal";
+import { useUndelegateToken } from "@/hooks/useReactMutation";
 
 interface UndelegateCardProps {
   userDelegationData: UserDelegationData;
@@ -24,31 +21,15 @@ function UndelegateCard({
   handleInput,
   showAlert,
 }: UndelegateCardProps) {
-  const { undelegateToken } = useCosmjs();
-
   const realAmount =
     denom == "DYM"
       ? (+undelegateAmount * 1_000_000_000_000_000).toString()
       : (+undelegateAmount * 1_000_000).toString();
 
-  console.log({ realAmount, userDelegationData });
-
-  const undelegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
-    useMutation({
-      mutationFn: () =>
-        undelegateToken(
-          userDelegationData?.validator?.operator_address || "",
-          realAmount,
-        ),
-      onSuccess: (data) => {
-        toast.success(`Undelegate successful!`);
-        window.location.reload();
-      },
-      onError: (error) => {
-        toast.error(`Failed to undelegate token: ${error.message}`);
-        console.error(error.message);
-      },
-    });
+  const undelegateMutation = useUndelegateToken(
+    userDelegationData?.validator?.operator_address || "",
+    realAmount,
+  );
   return (
     <>
       <Card className="my-2">

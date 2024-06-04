@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useCosmjs, VoteOption } from "@/hooks/useCosmjs";
 import { TallyResult } from "@/types/proposal.types";
-import { DeliverTxResponse } from "@cosmjs/stargate";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import LoadingTallyCountCard from "./loading/LoadingTallyCountCard";
+import { useVoteProposal } from "@/hooks/useReactMutation";
+import { VoteOption } from "@/hooks/useCosmjs";
 interface TallyCountCardProps {
   proposalId: string | undefined;
   tallyCount: TallyResult | undefined;
@@ -33,25 +31,7 @@ function TallyCountCard({
   const abstainPercentage = (abstainVote / totalVotes || 0) * 100;
 
   // handle voting
-  const { voteProposal } = useCosmjs();
-  const votingMutation: UseMutationResult<
-    DeliverTxResponse,
-    Error,
-    VoteOption,
-    void
-  > = useMutation({
-    mutationFn: (option: VoteOption) => {
-      return voteProposal(proposalId!, option);
-    },
-    onSuccess: () => {
-      toast.success("Voting successful!");
-      window.location.reload();
-    },
-    onError: (error) => {
-      toast.error(`Failed to vote proposal: ${error.message}`);
-      console.error(error.message);
-    },
-  });
+  const votingMutation = useVoteProposal(proposalId!);
 
   if (loading) {
     return <LoadingTallyCountCard />;

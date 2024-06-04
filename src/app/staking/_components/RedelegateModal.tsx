@@ -12,17 +12,15 @@ import { ValidatorItem } from "@/types/validator.types";
 import { Reward } from "@/types/reward.types";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { DeliverTxResponse } from "@cosmjs/stargate";
-import { useCosmjs } from "@/hooks/useCosmjs";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ScrollableValidatorsTable from "./redelegateModal/ScrollableValidatorsTable";
 import RedelegateFromCard from "./redelegateModal/RedelegateFromCard";
 import InputAmountCard from "./redelegateModal/InputAmountCard";
 import { useValidatorsList } from "@/hooks/useReactQuery";
+import { useRedelegateToken } from "@/hooks/useReactMutation";
 
 interface RedelegateModalProps {
   userDelegationData: UserDelegationData;
@@ -106,20 +104,12 @@ export default function RedelegateModal({
       (validator) => validator.description.moniker === selectedValidator,
     )?.operator_address;
 
-  const { redelegateToken } = useCosmjs();
-  const redelegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
-    useMutation({
-      mutationFn: () =>
-        redelegateToken(sourceValidator, destinationValidator!, realAmount),
-      onSuccess: (data) => {
-        toast.success(`Redelegate successful!`);
-        window.location.reload();
-      },
-      onError: (error) => {
-        toast.error(`Failed to redelegate token: ${error.message}`);
-        console.error(error.message);
-      },
-    });
+  // redelegate
+  const redelegateMutation = useRedelegateToken(
+    sourceValidator,
+    destinationValidator!,
+    realAmount,
+  );
 
   if (!isRedelegateModalOpen) {
     return null;
