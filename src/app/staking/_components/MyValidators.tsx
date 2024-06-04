@@ -30,8 +30,7 @@ import {
 
 function MyValidators() {
   // get denom
-  const { chainId } = useWallet();
-  const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
+  const { denom } = useWallet();
 
   // get my delegation list
   const {

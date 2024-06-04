@@ -53,8 +53,7 @@ export default function RedelegateModal({
   };
 
   // get denom
-  const { chainId } = useWallet();
-  const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
+  const { denom } = useWallet();
 
   // get validators list
   const { data, isLoading, error } = useValidatorsList();

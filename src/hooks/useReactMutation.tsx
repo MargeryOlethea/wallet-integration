@@ -127,7 +127,7 @@ export const useUndelegateToken = (validatorAddres: string, amount: string) => {
   return undelegateMutation;
 };
 
-export const useVoteProposal = (proposalId: string, option: VoteOption) => {
+export const useVoteProposal = () => {
   const { voteProposal } = useCosmjs();
   const { refetch } = useProposalDetails(proposalId as string);
   const votingMutation: UseMutationResult<

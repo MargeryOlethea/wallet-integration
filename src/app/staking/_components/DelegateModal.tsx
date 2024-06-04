@@ -44,8 +44,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   };
 
   // get denom
-  const { chainId } = useWallet();
-  const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
+  const { denom } = useWallet();
 
   // fetching available balance
   const {

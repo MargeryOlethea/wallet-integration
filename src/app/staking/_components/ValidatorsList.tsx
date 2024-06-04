@@ -25,8 +25,7 @@ import { useValidatorsList } from "@/hooks/useReactQuery";
 
 function ValidatorsList() {
   // get denom
-  const { chainId } = useWallet();
-  const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
+  const { denom } = useWallet();
 
   // query
   const [paginationOffset, setPaginationOffset] = useState(0);

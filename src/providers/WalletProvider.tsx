@@ -21,6 +21,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const [showConnectToWallet, setShowConnectToWallet] = useState(false);
 
   const network = chainInfoMap[chainId!] || {};
+  const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   useEffect(() => {
     const checkExistingUser = () => {
@@ -91,6 +92,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     connectToWallet,
     showConnectToWallet,
     setShowConnectToWallet,
+    denom,
   };
 
   return (

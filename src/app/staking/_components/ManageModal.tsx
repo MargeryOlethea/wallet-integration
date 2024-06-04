@@ -55,8 +55,7 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
   };
 
   // get denom
-  const { chainId } = useWallet();
-  const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
+  const { denom } = useWallet();
 
   // handle undelegate input
   const [showUndelegate, setShowUndelegate] = useState(false);
