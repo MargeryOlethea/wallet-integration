@@ -15,7 +15,6 @@ function ProposalTableRows({
   proposal: ProposalItem;
   proposalStatus: ProposalStatus;
 }) {
-  console.log(proposal.title);
   return (
     <>
       <TableRow>

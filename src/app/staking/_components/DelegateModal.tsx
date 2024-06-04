@@ -10,11 +10,7 @@ import {
 import { ValidatorItem } from "@/types/validator.types";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import {
-  useMutation,
-  UseMutationResult,
-  useQuery,
-} from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { useCosmjs } from "@/hooks/useCosmjs";
 import toast from "react-hot-toast";
 import { DeliverTxResponse } from "@cosmjs/stargate";
@@ -26,6 +22,7 @@ import InsufficientBalanceAlert from "./delegateModal/InsufficientBalanceAlert";
 import AmountButtons from "./delegateModal/AmountButtons";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import { Button } from "@/components/ui/button";
+import { useAvailableBalance } from "@/hooks/useReactQuery";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -49,20 +46,15 @@ export default function DelegateModal({ validator }: AllModalProps) {
   };
 
   // get denom
-  const { chainId, userAddress } = useWallet();
+  const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // fetching available balance
-  const { getAvailableBalance } = useCosmjs();
   const {
     data: availableBalance,
     error: availableError,
     isLoading: availableLoading,
-  } = useQuery({
-    queryKey: ["availableBalance", chainId, userAddress],
-    queryFn: getAvailableBalance,
-    enabled: !!chainId && !!userAddress,
-  });
+  } = useAvailableBalance();
 
   const availableAmount = availableBalance?.amount || 0;
 

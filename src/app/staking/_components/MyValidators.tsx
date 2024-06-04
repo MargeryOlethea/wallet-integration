@@ -9,7 +9,6 @@ import {
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useStakingApi } from "@/hooks/useStakingApi";
-import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { microCoinConverter } from "@/helpers/integerModifiers";
 import { useDistributionApi } from "@/hooks/useDistributionApi";
@@ -25,6 +24,11 @@ import { Card } from "@/components/ui/card";
 import NoDataFound from "@/components/NoDataFound";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  useDelegationListByDelegator,
+  useRewardsListByDelegator,
+  useValidatorsListByDelegator,
+} from "@/hooks/useReactQuery";
 
 function MyValidators() {
   // get denom
@@ -34,43 +38,28 @@ function MyValidators() {
     useStakingApi();
   const { getRewardsByDelegator } = useDistributionApi();
 
-  // get staked amount
+  // get my delegation list
   const {
     data: delegationData,
     isLoading: delegationLoading,
     error: delegationError,
-  } = useQuery({
-    queryFn: getDelegationByDelegator,
-    queryKey: ["delegationList", chainId, userAddress],
-    enabled: !!chainId && !!userAddress,
-  });
-
+  } = useDelegationListByDelegator();
   const delegations = delegationData && delegationData.delegation_responses;
 
-  // get validators info
+  // get validators list
   const {
     data: validatorsData,
     isLoading: validatorsLoading,
     error: validatorsError,
-  } = useQuery({
-    queryFn: getValidatorsInfoByDelegator,
-    queryKey: ["myValidatorsList", chainId, userAddress],
-    enabled: !!chainId && !!userAddress,
-  });
-
+  } = useValidatorsListByDelegator();
   const validators = validatorsData && validatorsData.validators;
 
-  // get rewards
+  // get rewards list
   const {
     data: rewardsData,
     isLoading: rewardsLoading,
     error: rewardsError,
-  } = useQuery({
-    queryFn: getRewardsByDelegator,
-    queryKey: ["rewardsList", chainId, userAddress],
-    enabled: !!chainId && !!userAddress,
-  });
-
+  } = useRewardsListByDelegator();
   const rewards = rewardsData && rewardsData.rewards;
 
   // modal handling

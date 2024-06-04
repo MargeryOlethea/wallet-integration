@@ -1,8 +1,6 @@
 "use client";
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
 import { useWallet } from "@/hooks/useWallet";
-import { useQuery } from "@tanstack/react-query";
-import { useGovernanceApi } from "@/hooks/useGovernanceApi";
 import { useState } from "react";
 import { ProposalStatus } from "@/helpers/stringModifiers";
 import toast from "react-hot-toast";
@@ -11,11 +9,9 @@ import StatusTab from "./_components/StatusTab";
 import LoadingProposalTable from "./_components/loading/LoadingProposalTable";
 import NoDataFound from "@/components/NoDataFound";
 import ProposalListTable from "./_components/ProposalListTable";
+import { useProposalsList } from "@/hooks/useReactQuery";
 
 function Proposals() {
-  // get proposals list
-  const { getProposalsList } = useGovernanceApi();
-
   // conditions
   const paginationLimit = 10;
   const [paginationOffset, setPaginationOffset] = useState(0);
@@ -29,21 +25,12 @@ function Proposals() {
     setProposalStatus(status);
   };
 
-  // fetch
-  const { chainId, userAddress } = useWallet();
-  const { data, isLoading, error } = useQuery({
-    queryKey: [
-      "proposalsList",
-      proposalStatus,
-      paginationOffset,
-      paginationLimit,
-      chainId,
-      userAddress,
-    ],
-    queryFn: () =>
-      getProposalsList(proposalStatus, paginationOffset, paginationLimit),
-    enabled: !!chainId && !!userAddress,
-  });
+  // fetch data
+  const { data, error, isLoading } = useProposalsList(
+    paginationOffset,
+    paginationLimit,
+    proposalStatus,
+  );
 
   const proposals = data && data.proposals;
 

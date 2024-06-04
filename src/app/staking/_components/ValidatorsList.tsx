@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import { useStakingApi } from "@/hooks/useStakingApi";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useWallet } from "@/hooks/useWallet";
@@ -23,22 +21,21 @@ import { Card } from "@/components/ui/card";
 import BottomPagination from "@/components/BottomPagination";
 import LoadingValidatorsListTable from "./loading/LoadingValidatorsListTable";
 import NoDataFound from "@/components/NoDataFound";
+import { useValidatorsList } from "@/hooks/useReactQuery";
 
 function ValidatorsList() {
   // get denom
-  const { chainId, userAddress } = useWallet();
+  const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // query
   const [paginationOffset, setPaginationOffset] = useState(0);
   const paginationLimit = 10;
 
-  const { getValidatorsList } = useStakingApi();
-  const { data, isLoading, error } = useQuery({
-    queryFn: () => getValidatorsList(paginationOffset, paginationLimit),
-    queryKey: ["validatorsList", paginationOffset, chainId, userAddress],
-    enabled: !!chainId && !!userAddress,
-  });
+  const { data, isLoading, error } = useValidatorsList(
+    paginationOffset,
+    paginationLimit,
+  );
 
   const validators = data && data.validators;
 

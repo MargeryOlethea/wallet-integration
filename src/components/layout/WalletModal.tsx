@@ -27,7 +27,6 @@ function WalletModal() {
     localStorage.removeItem("wallet");
     localStorage.removeItem("userAddress");
     localStorage.removeItem("chainId");
-    window.location.reload();
     setShowConnectToWallet(true);
   };
 

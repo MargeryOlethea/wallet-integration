@@ -12,12 +12,7 @@ import { ValidatorItem } from "@/types/validator.types";
 import { Reward } from "@/types/reward.types";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
-import { useStakingApi } from "@/hooks/useStakingApi";
-import {
-  useMutation,
-  UseMutationResult,
-  useQuery,
-} from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -27,6 +22,7 @@ import ModalCloseButton from "@/components/ModalCloseButton";
 import ScrollableValidatorsTable from "./redelegateModal/ScrollableValidatorsTable";
 import RedelegateFromCard from "./redelegateModal/RedelegateFromCard";
 import InputAmountCard from "./redelegateModal/InputAmountCard";
+import { useValidatorsList } from "@/hooks/useReactQuery";
 
 interface RedelegateModalProps {
   userDelegationData: UserDelegationData;
@@ -59,17 +55,11 @@ export default function RedelegateModal({
   };
 
   // get denom
-  const { chainId, userAddress } = useWallet();
+  const { chainId } = useWallet();
   const denom = chainId && chainInfoMap[chainId].currencies[0].coinDenom;
 
   // get validators list
-  const { getValidatorsList } = useStakingApi();
-  const { data, isLoading, error } = useQuery({
-    queryFn: () => getValidatorsList(),
-    queryKey: ["validatorsList", chainId, userAddress],
-    enabled: !!chainId && !!userAddress,
-  });
-
+  const { data, isLoading, error } = useValidatorsList();
   const validators = data && data.validators;
 
   // handle search

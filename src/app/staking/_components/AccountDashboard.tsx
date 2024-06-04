@@ -1,21 +1,20 @@
-import { useCosmjs } from "@/hooks/useCosmjs";
 import AccountBalanceCard from "./accountDashboard/AccountBalanceCard";
 import AvailableBalanceCard from "./accountDashboard/AvailableBalanceCard";
 import RewardBalanceCard from "./accountDashboard/RewardBalanceCard";
 import StakeBalanceCard from "./accountDashboard/StakeBalanceCard";
-import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { microCoinConverter } from "@/helpers/integerModifiers";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useMemo } from "react";
-import { useDistributionApi } from "@/hooks/useDistributionApi";
+import {
+  useAvailableBalance,
+  useRewardBalance,
+  useStakeBalance,
+} from "@/hooks/useReactQuery";
 
 function AccountDashboard() {
-  //  get functions for fetching data
-  const { getStakeBalance, getAvailableBalance } = useCosmjs();
-  const { getRewardsByDelegator } = useDistributionApi();
-  const { chainId, userAddress } = useWallet();
+  const { chainId } = useWallet();
 
   // setup denom
   const coinDenom =
@@ -26,33 +25,21 @@ function AccountDashboard() {
     data: availableBalance,
     error: availableError,
     isLoading: availableLoading,
-  } = useQuery({
-    queryKey: ["availableBalance", userAddress, chainId],
-    queryFn: getAvailableBalance,
-    enabled: !!userAddress && !!chainId,
-  });
+  } = useAvailableBalance();
 
   // fetching stake balance
   const {
     data: stakeBalance,
     error: stakeError,
     isLoading: stakeLoading,
-  } = useQuery({
-    queryKey: ["stakeBalance", userAddress, chainId],
-    queryFn: getStakeBalance,
-    enabled: !!userAddress && !!chainId,
-  });
+  } = useStakeBalance();
 
   // fetching rewards balance
   const {
     data: rewardsBalance,
     isLoading: rewardsLoading,
     error: rewardsError,
-  } = useQuery({
-    queryFn: getRewardsByDelegator,
-    queryKey: ["rewardsBalance", userAddress, chainId],
-    enabled: !!userAddress && !!chainId,
-  });
+  } = useRewardBalance();
   const rewardsAmount = rewardsBalance?.total[0]?.amount ?? 0;
 
   // calculating total balance
