@@ -17,17 +17,10 @@ declare global {
 function WalletModal() {
   const { isWalletModalOpen, setWalletModalOpen } = useModal();
 
-  const handleBackgroundClick = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    if (e.target === e.currentTarget) {
-      setWalletModalOpen(false);
-    }
-  };
-
   // disconnect wallet
   const { setWallet, setUserAddress, userAddress } = useWallet();
   const disconnectWallet = () => {
+    setWalletModalOpen(false);
     setWallet(null);
     setUserAddress(null);
     localStorage.removeItem("wallet");
