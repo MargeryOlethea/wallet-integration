@@ -31,7 +31,7 @@ function TallyCountCard({
   const abstainPercentage = (abstainVote / totalVotes || 0) * 100;
 
   // handle voting
-  const votingMutation = useVoteProposal();
+  const votingMutation = useVoteProposal(proposalId!);
 
   if (loading) {
     return <LoadingTallyCountCard />;
