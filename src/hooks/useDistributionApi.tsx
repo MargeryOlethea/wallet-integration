@@ -7,6 +7,9 @@ export const useDistributionApi = () => {
   const baseUrl = (chainId && chainInfoMap[chainId].rest) || "";
 
   const getRewardsByDelegator = async () => {
+    if (!userAddress) {
+      return null;
+    }
     const path =
       "/cosmos/distribution/v1beta1/delegators/" + userAddress + "/rewards";
     const response = await fetch(baseUrl + path);

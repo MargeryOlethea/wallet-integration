@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "proxy": "https://froopyland-public.rpc.silknodes.io"
+    "lint": "next lint"
   },
   "dependencies": {
     "@cosmjs/cosmwasm-stargate": "^0.32.3",

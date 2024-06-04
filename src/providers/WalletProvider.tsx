@@ -62,11 +62,11 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         chainId == "froopyland_100-1"
       ) {
         await window.leap.experimentalSuggestChain(network);
-        offlineSigner = window.leap!.getOfflineSigner!("froopyland-100-1");
+        offlineSigner = window.leap.getOfflineSigner!("froopyland-100-1");
         setWallet("leap");
-      } else {
+      } else if (walletType === "leap" && window.leap) {
         await window.leap.experimentalSuggestChain(network);
-        offlineSigner = window.leap!.getOfflineSigner!(chainId);
+        offlineSigner = window.leap.getOfflineSigner!(chainId!);
         setWallet("leap");
       }
 
