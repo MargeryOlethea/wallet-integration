@@ -1,10 +1,10 @@
 "use client";
 
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
-import AccountDashboard from "@/components/stakingPage/AccountDashboard";
-import MyValidators from "@/components/stakingPage/MyValidators";
-import ValidatorsList from "@/components/stakingPage/ValidatorsList";
 import { useWallet } from "@/hooks/useWallet";
+import AccountDashboard from "./_components/AccountDashboard";
+import MyValidators from "./_components/MyValidators";
+import ValidatorsList from "./_components/ValidatorsList";
 
 function Staking() {
   const { wallet, userAddress } = useWallet();

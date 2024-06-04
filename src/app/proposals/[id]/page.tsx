@@ -1,14 +1,15 @@
 "use client";
 import NoConnectedWalletHeader from "@/components/NoConnectedWalletHeader";
-import BackToProposalPage from "@/components/proposalIdPage/BackToProposalPage";
-import ProposalSummaryCard from "@/components/proposalIdPage/ProposalSummaryCard";
-import ProposalTimelineCard from "@/components/proposalIdPage/ProposalTimelineCard";
-import TallyCountCard from "@/components/proposalIdPage/TallyCountCard";
+
 import { useGovernanceApi } from "@/hooks/useGovernanceApi";
 import { useWallet } from "@/hooks/useWallet";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
+import BackToProposalPage from "./_components/BackToProposalPage";
+import ProposalSummaryCard from "./_components/ProposalSummaryCard";
+import ProposalTimelineCard from "./_components/ProposalTimelineCard";
+import TallyCountCard from "./_components/TallyCountCard";
 
 function ProposalPage() {
   const { id } = useParams();

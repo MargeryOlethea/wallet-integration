@@ -56,16 +56,11 @@ export const useCosmjs = () => {
   };
 
   const delegateToken = async (validatorAddress: string, amount: string) => {
-    console.log({ validatorAddress, amount });
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
       offlineSigner,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
-    console.log({
-      SigningClientChainId: await signingClient.getChainId(),
-      chainId: chainId,
-    });
 
     const fee = "auto";
     const memo = "";
@@ -78,7 +73,23 @@ export const useCosmjs = () => {
       memo,
     );
 
-    console.log(result);
+    // const message = [
+    //   {
+    //     typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+    //     value: {
+    //       delegatorAddress: userAddress!,
+    //       validatorAddress: validatorAddress,
+    //       amount: { amount: amount, denom: denom! },
+    //     },
+    //   },
+    // ];
+    // console.log({ message });
+    // const result = await signingClient.signAndBroadcast(
+    //   userAddress!,
+    //   message,
+    //   fee,
+    //   memo,
+    // );
 
     return result;
   };

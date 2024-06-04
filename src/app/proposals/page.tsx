@@ -7,10 +7,10 @@ import { useState } from "react";
 import { ProposalStatus } from "@/helpers/stringModifiers";
 import toast from "react-hot-toast";
 import BottomPagination from "@/components/BottomPagination";
-import StatusTab from "@/components/proposalsPage/StatusTab";
+import StatusTab from "./_components/StatusTab";
+import LoadingProposalTable from "./_components/loading/LoadingProposalTable";
 import NoDataFound from "@/components/NoDataFound";
-import ProposalListTable from "@/components/proposalsPage/ProposalListTable";
-import LoadingProposalTable from "@/components/proposalsPage/loading/LoadingProposalTable";
+import ProposalListTable from "./_components/ProposalListTable";
 
 function Proposals() {
   const { wallet, userAddress } = useWallet();
