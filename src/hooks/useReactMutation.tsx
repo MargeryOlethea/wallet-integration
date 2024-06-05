@@ -28,28 +28,24 @@ export const useDelegateToken = (validatorAddress: string, amount: string) => {
   const { refetch: refetchAvailableBalance } = useAvailableBalance();
   const { refetch: refetchStakeBalance } = useStakeBalance();
   const { setDelegateModalOpen } = useModal();
-  const delegateMutation: UseMutationResult<
-    DeliverTxResponse | Uint8Array | undefined,
-    Error,
-    void,
-    unknown
-  > = useMutation({
-    mutationFn: () => delegateToken(validatorAddress, amount),
-    onSuccess: (data) => {
-      toast.success(`Staking successful!`);
-      refetchDelegationList();
-      refetchRewardsList();
-      refetchValidatorsList();
-      refetchAvailableBalance();
-      refetchStakeBalance();
-      setDelegateModalOpen(false);
-      scrollToTop();
-    },
-    onError: (error) => {
-      toast.error(`Failed to delegate token: ${error.message}`);
-      console.error(error.message);
-    },
-  });
+  const delegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
+    useMutation({
+      mutationFn: () => delegateToken(validatorAddress, amount),
+      onSuccess: (data) => {
+        toast.success(`Staking successful!`);
+        refetchDelegationList();
+        refetchRewardsList();
+        refetchValidatorsList();
+        refetchAvailableBalance();
+        refetchStakeBalance();
+        setDelegateModalOpen(false);
+        scrollToTop();
+      },
+      onError: (error) => {
+        toast.error(`Failed to delegate token: ${error.message}`);
+        console.error(error.message);
+      },
+    });
 
   return delegateMutation;
 };
@@ -67,7 +63,9 @@ export const useClaimRewards = (validatorAddress: string) => {
     useMutation({
       mutationFn: () => withdrawStakedReward(validatorAddress),
       onSuccess: (data) => {
-        toast.success(`Rewards claimed successfully!`);
+        toast.success(
+          `Rewards claimed successfully! TxHash: ${data?.transactionHash}`,
+        );
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
@@ -102,13 +100,15 @@ export const useRedelegateToken = (
       mutationFn: () =>
         redelegateToken(sourceValidator, destinationValidator, amount),
       onSuccess: (data) => {
-        toast.success(`Redelegate successful!`);
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
         refetchAvailableBalance();
         setRedelegateModalOpen(false);
         scrollToTop();
+        toast.success(
+          `Redelegate successful! TxHash: ${data?.transactionHash}`,
+        );
       },
       onError: (error) => {
         toast.error(`Failed to redelegate token: ${error.message}`);
@@ -133,7 +133,6 @@ export const useUndelegateToken = (validatorAddres: string, amount: string) => {
     useMutation({
       mutationFn: () => undelegateToken(validatorAddres, amount),
       onSuccess: (data) => {
-        toast.success(`Undelegate successful!`);
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
@@ -142,6 +141,9 @@ export const useUndelegateToken = (validatorAddres: string, amount: string) => {
         refetchRewardsBalance();
         setManageModalOpen(false);
         scrollToTop();
+        toast.success(
+          `Undelegate successful! TxHash: ${data?.transactionHash}`,
+        );
       },
       onError: (error) => {
         toast.error(`Failed to undelegate token: ${error.message}`);
@@ -165,9 +167,9 @@ export const useVoteProposal = (proposalId: string) => {
       return voteProposal(proposalId!, option);
     },
     onSuccess: () => {
-      toast.success("Voting successful!");
       refetch();
       scrollToTop();
+      toast.success("Voting successful! TxHash: ${data?.transactionHash}");
     },
     onError: (error) => {
       toast.error(`Failed to vote proposal: ${error.message}`);

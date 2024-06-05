@@ -73,7 +73,7 @@ function NoConnectedWalletHeader() {
           <div className="bg-white p-5 rounded-xl max-w-xs mx-auto shadow-md flex flex-col items-center">
             <SelectNetwork />
             <div className="flex mt-5 gap-5">
-              <div
+              <button
                 className=" w-[7em] rounded-xl flex flex-col items-center justify-center group"
                 onClick={() => {
                   connectToWallet("keplr");
@@ -89,25 +89,26 @@ function NoConnectedWalletHeader() {
                 <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
                   Keplr
                 </p>
-              </div>
+              </button>
 
-              <div
-                className=" w-[7em] rounded-xl flex-col flex items-center justify-center group"
+              <button
+                className=" w-[7em] rounded-xl flex-col flex items-center justify-center group disabled:opacity-50 disabled:pointer-events-none"
                 onClick={() => {
                   connectToWallet("leap");
                 }}
+                disabled={chainId === "froopyland_100-1"}
               >
                 <Image
                   src="/leap_icon.png"
                   alt="Leap"
                   width={150}
                   height={150}
-                  className="group-hover:shadow-md rounded-3xl group-hover:scale-105"
+                  className="group-hover:shadow-md rounded-3xl group-hover:scale-105 disabled:group-hover:shadow-none disabled:group-hover:scale-100"
                 />
-                <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110">
+                <p className="text-xs text-center font-bold group-hover:text-primary-foreground/9 group-hover:scale-110 disabled:group-hover:text-primary-foreground/100 disabled:group-hover:scale-100">
                   Leap
                 </p>
-              </div>
+              </button>
             </div>
           </div>
         </CardContent>

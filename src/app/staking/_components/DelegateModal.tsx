@@ -96,7 +96,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   // handle submit
   const realAmount =
     denom == "DYM"
-      ? (+delegateAmount * 1_000_000_000_000_000_000).toString()
+      ? (+delegateAmount * 1_000_000_000_000_000).toString()
       : (+delegateAmount * 1_000_000).toString();
 
   const delegateMutation = useDelegateToken(
