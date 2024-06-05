@@ -20,10 +20,6 @@ export const useCosmjs = () => {
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
   const denom =
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
-  let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
-    wallet && wallet === "keplr"
-      ? window.getOfflineSigner!(chainId!)
-      : window.leap.getOfflineSigner!(chainId!);
 
   const getAvailableBalance = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
@@ -40,6 +36,11 @@ export const useCosmjs = () => {
   };
 
   const withdrawStakedReward = async (validatorAddress: string) => {
+    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+      wallet && wallet === "keplr"
+        ? window.getOfflineSigner!(chainId!)
+        : window.leap.getOfflineSigner!(chainId!);
+
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
       offlineSigner!,
@@ -60,6 +61,11 @@ export const useCosmjs = () => {
   };
 
   const delegateToken = async (validatorAddress: string, amount: string) => {
+    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+      wallet && wallet === "keplr"
+        ? window.getOfflineSigner!(chainId!)
+        : window.leap.getOfflineSigner!(chainId!);
+
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
       offlineSigner!,
@@ -102,6 +108,11 @@ export const useCosmjs = () => {
   };
 
   const undelegateToken = async (validatorAddress: string, amount: string) => {
+    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+      wallet && wallet === "keplr"
+        ? window.getOfflineSigner!(chainId!)
+        : window.leap.getOfflineSigner!(chainId!);
+
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
       offlineSigner!,
@@ -127,6 +138,11 @@ export const useCosmjs = () => {
     validatorDestinationAddress: string,
     amount: string,
   ) => {
+    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+      wallet && wallet === "keplr"
+        ? window.getOfflineSigner!(chainId!)
+        : window.leap.getOfflineSigner!(chainId!);
+
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
       offlineSigner!,
@@ -157,6 +173,11 @@ export const useCosmjs = () => {
   };
 
   const voteProposal = async (proposalId: string, option: VoteOption) => {
+    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+      wallet && wallet === "keplr"
+        ? window.getOfflineSigner!(chainId!)
+        : window.leap.getOfflineSigner!(chainId!);
+
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
       offlineSigner!,
