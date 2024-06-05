@@ -1,3 +1,4 @@
+import { Window as KeplrWindow } from "@keplr-wallet/types";
 import {
   Coin,
   GasPrice,
@@ -12,6 +13,13 @@ export enum VoteOption {
   VOTE_OPTION_ABSTAIN = 2,
   VOTE_OPTION_NO = 3,
   VOTE_OPTION_NO_WITH_VETO = 4,
+}
+
+declare global {
+  interface Window extends KeplrWindow {
+    //TODO : leap type correction
+    leap: any;
+  }
 }
 
 export const useCosmjs = () => {
