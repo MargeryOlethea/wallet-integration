@@ -38,7 +38,7 @@ function RewardsCard({ userDelegationData, denom }: RewardsCardProps) {
             disabled={
               withdrawMutation.isPending ||
               !userDelegationData?.reward?.amount ||
-              +userDelegationData.reward.amount <= 100
+              +userDelegationData.reward.amount < 10
             }
           >
             {withdrawMutation.isPending ? "Processing..." : "Claim Rewards"}

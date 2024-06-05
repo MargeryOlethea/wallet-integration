@@ -17,27 +17,16 @@ export enum VoteOption {
 export const useCosmjs = () => {
   const { chainId, userAddress, wallet } = useWallet();
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
-  let offlineSigner: any;
-
-  if (typeof window !== "undefined") {
-    offlineSigner =
-      wallet && wallet === "keplr"
-        ? window.getOfflineSigner!(chainId!)
-        : window.leap.getOfflineSigner!(chainId!);
-  }
-  // let offlineSigner: any;
-  // if (wallet == "keplr") {
-  //   offlineSigner = window.getOfflineSigner!(chainId!);
-  // }
-  // if (wallet == "leap") {
-  //   offlineSigner = window.leap.getOfflineSigner!(chainId!);
-  // }
-  // if (wallet == "leap" && chainId == "froopyland_100-1") {
-  //   offlineSigner = window.leap.getOfflineSigner!("froopyland-100-1");
-  // }
-
   const denom =
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
+  const offlineSigner = window.getOfflineSigner!(chainId!);
+
+  // if (typeof window !== "undefined") {
+  //   offlineSigner =
+  //     wallet && wallet === "keplr"
+  //       ? window.getOfflineSigner!(chainId!)
+  //       : window.leap.getOfflineSigner!(chainId!);
+  // }
 
   const getAvailableBalance = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
@@ -80,6 +69,7 @@ export const useCosmjs = () => {
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
 
+    console.log(await offlineSigner.getAccounts());
     console.log({ offlineSigner, signingClient, userAddress });
 
     const fee = "auto";
