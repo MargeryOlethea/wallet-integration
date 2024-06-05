@@ -1,4 +1,3 @@
-import { Window as KeplrWindow } from "@keplr-wallet/types";
 import {
   Coin,
   GasPrice,
@@ -15,26 +14,15 @@ export enum VoteOption {
   VOTE_OPTION_NO_WITH_VETO = 4,
 }
 
-declare global {
-  interface Window extends KeplrWindow {
-    //TODO : leap type correction
-    leap: any;
-  }
-}
-
 export const useCosmjs = () => {
   const { chainId, userAddress, wallet } = useWallet();
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
   const denom =
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
-  const offlineSigner = window.getOfflineSigner!(chainId!);
-
-  // if (typeof window !== "undefined") {
-  //   offlineSigner =
-  //     wallet && wallet === "keplr"
-  //       ? window.getOfflineSigner!(chainId!)
-  //       : window.leap.getOfflineSigner!(chainId!);
-  // }
+  let offlineSigner =
+    wallet && wallet === "keplr"
+      ? window.getOfflineSigner!(chainId!)
+      : window.leap.getOfflineSigner!(chainId!);
 
   const getAvailableBalance = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
