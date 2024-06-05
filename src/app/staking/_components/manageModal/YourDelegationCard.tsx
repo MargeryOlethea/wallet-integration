@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import { microCoinToCoin } from "@/helpers/integerModifiers";
 import { UserDelegationData } from "../ManageModal";
 
 interface YourDelegationCardProps {
@@ -19,7 +19,7 @@ function YourDelegationCard({
           <p className="text-xs">Your Delegation:</p>
           <div className="flex items-center gap-2">
             <p className="font-semibold text-lg">
-              {microCoinConverter(
+              {microCoinToCoin(
                 +userDelegationData?.delegation?.balance?.amount || 0,
                 denom!,
               )}

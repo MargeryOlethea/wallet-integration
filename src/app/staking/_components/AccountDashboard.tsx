@@ -3,7 +3,7 @@ import AvailableBalanceCard from "./accountDashboard/AvailableBalanceCard";
 import RewardBalanceCard from "./accountDashboard/RewardBalanceCard";
 import StakeBalanceCard from "./accountDashboard/StakeBalanceCard";
 import toast from "react-hot-toast";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import { microCoinToCoin } from "@/helpers/integerModifiers";
 import { useWallet } from "@/hooks/useWallet";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useMemo } from "react";
@@ -70,15 +70,12 @@ function AccountDashboard() {
     <>
       <div className="grid grid-cols-4 gap-5">
         <AccountBalanceCard
-          amount={microCoinConverter(
-            Number(totalBalance?.amount || 0),
-            coinDenom,
-          )}
+          amount={microCoinToCoin(Number(totalBalance?.amount || 0), coinDenom)}
           denom={coinDenom}
           loading={availableLoading || stakeLoading || rewardsLoading}
         />
         <AvailableBalanceCard
-          amount={microCoinConverter(
+          amount={microCoinToCoin(
             Number(availableBalance?.amount || 0),
             coinDenom,
           )}
@@ -86,15 +83,12 @@ function AccountDashboard() {
           loading={availableLoading}
         />
         <StakeBalanceCard
-          amount={microCoinConverter(
-            Number(stakeBalance?.amount || 0),
-            coinDenom,
-          )}
+          amount={microCoinToCoin(Number(stakeBalance?.amount || 0), coinDenom)}
           denom={coinDenom}
           loading={stakeLoading}
         />
         <RewardBalanceCard
-          amount={microCoinConverter(+rewardsAmount, coinDenom)}
+          amount={microCoinToCoin(+rewardsAmount, coinDenom)}
           denom={coinDenom}
           loading={rewardsLoading}
         />

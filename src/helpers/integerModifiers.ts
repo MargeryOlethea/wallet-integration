@@ -1,27 +1,34 @@
-export const microCoinConverter = (amount: number, denom: string) => {
+export const microCoinToCoin = (amount: number, denom: string) => {
   let convertedAmount;
 
   // Convert the amount based on the denomination
   if (denom === "DYM") {
-    convertedAmount = amount / 1_000_000_000_000_000;
+    convertedAmount = amount / 1_000_000_000_000_000_000; // 18 decimals
   } else {
-    convertedAmount = amount / 1_000_000;
+    convertedAmount = amount / 1_000_000; // 12 decimals
   }
 
   // Format the number to always have 4 decimal places
-  let formattedAmount;
-
-  if (denom === "DYM") {
-    formattedAmount = convertedAmount.toFixed(2);
-  } else {
-    formattedAmount = convertedAmount.toFixed(4);
-  }
+  const formattedAmount = convertedAmount.toFixed(4);
 
   // Add commas as thousand separators
   const parts = formattedAmount.split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   return parts.join(",");
+};
+
+export const coinToMicroCoin = (amount: number, denom: string) => {
+  let convertedAmount;
+
+  // Convert the amount based on the denomination
+  if (denom === "DYM") {
+    convertedAmount = amount * 1_000_000_000_000_000_000; // 18 decimals
+  } else {
+    convertedAmount = amount * 1_000_000; // 12 decimals
+  }
+
+  return convertedAmount;
 };
 
 export const numberFormatter = (num: number, denom: string): string => {

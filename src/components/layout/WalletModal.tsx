@@ -18,12 +18,18 @@ function WalletModal() {
   const { isWalletModalOpen, setWalletModalOpen } = useModal();
 
   // disconnect wallet
-  const { setWallet, setUserAddress, userAddress, setShowConnectToWallet } =
-    useWallet();
+  const {
+    setWallet,
+    setUserAddress,
+    userAddress,
+    setShowConnectToWallet,
+    setChainId,
+  } = useWallet();
   const disconnectWallet = () => {
     setWalletModalOpen(false);
     setWallet(null);
     setUserAddress(null);
+    setChainId(null);
     localStorage.removeItem("wallet");
     localStorage.removeItem("userAddress");
     localStorage.removeItem("chainId");

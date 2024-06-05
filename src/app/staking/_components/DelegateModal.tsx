@@ -21,6 +21,7 @@ import ModalCloseButton from "@/components/ModalCloseButton";
 import { Button } from "@/components/ui/button";
 import { useAvailableBalance } from "@/hooks/useReactQuery";
 import { useDelegateToken } from "@/hooks/useReactMutation";
+import { coinToMicroCoin } from "@/helpers/integerModifiers";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -94,10 +95,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   };
 
   // handle submit
-  const realAmount =
-    denom == "DYM"
-      ? (+delegateAmount * 1_000_000_000_000_000).toString()
-      : (+delegateAmount * 1_000_000).toString();
+  const realAmount = coinToMicroCoin(+delegateAmount, denom!).toString();
 
   const delegateMutation = useDelegateToken(
     validator?.operator_address,

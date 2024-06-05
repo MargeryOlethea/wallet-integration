@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import { microCoinToCoin } from "@/helpers/integerModifiers";
 import { UserDelegationData } from "../ManageModal";
 import { useClaimRewards } from "@/hooks/useReactMutation";
 
@@ -24,7 +24,7 @@ function RewardsCard({ userDelegationData, denom }: RewardsCardProps) {
             <p className="text-xs">Your Rewards:</p>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-lg">
-                {microCoinConverter(
+                {microCoinToCoin(
                   +userDelegationData?.reward?.amount || 0,
                   denom!,
                 )}

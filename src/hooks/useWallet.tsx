@@ -7,7 +7,7 @@ interface WalletContextType {
   userAddress: string | null;
   setUserAddress: Dispatch<SetStateAction<null | string>>;
   chainId: string | null;
-  setChainId: (chainId: string) => void;
+  setChainId: Dispatch<SetStateAction<null | string>>;
   setShowConnectToWallet: Dispatch<SetStateAction<boolean>>;
   showConnectToWallet: boolean;
   denom: string | null;

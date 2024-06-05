@@ -21,6 +21,7 @@ import RedelegateFromCard from "./redelegateModal/RedelegateFromCard";
 import InputAmountCard from "./redelegateModal/InputAmountCard";
 import { useValidatorsList } from "@/hooks/useReactQuery";
 import { useRedelegateToken } from "@/hooks/useReactMutation";
+import { coinToMicroCoin } from "@/helpers/integerModifiers";
 
 interface RedelegateModalProps {
   userDelegationData: UserDelegationData;
@@ -90,10 +91,7 @@ export default function RedelegateModal({
   };
 
   // handle redelegate
-  const realAmount =
-    denom == "DYM"
-      ? (+redelegateAmount * 1_000_000_000_000_000).toString()
-      : (+redelegateAmount * 1_000_000).toString();
+  const realAmount = coinToMicroCoin(+redelegateAmount, denom!).toString();
 
   const sourceValidator =
     userDelegationData && userDelegationData.validator.operator_address;

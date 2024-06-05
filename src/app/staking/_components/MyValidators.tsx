@@ -7,9 +7,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useWallet } from "@/hooks/useWallet";
-import { chainInfoMap } from "@/constants/chainInfoMap";
 import toast from "react-hot-toast";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import { microCoinToCoin } from "@/helpers/integerModifiers";
 import { useState } from "react";
 import { ValidatorItem } from "@/types/validator.types";
 import { DelegationResponse } from "@/types/delegations.types";
@@ -109,11 +108,11 @@ function MyValidators() {
                         </p>
                       </TableCell>
                       <TableCell className="font-semibold">
-                        {microCoinConverter(+delegation.balance.amount, denom!)}{" "}
+                        {microCoinToCoin(+delegation.balance.amount, denom!)}{" "}
                         <Badge className="ml-2">{denom}</Badge>
                       </TableCell>
                       <TableCell className="font-semibold">
-                        {microCoinConverter(
+                        {microCoinToCoin(
                           (rewards &&
                             rewards[idx] &&
                             +rewards[idx]?.reward[0]?.amount) ||

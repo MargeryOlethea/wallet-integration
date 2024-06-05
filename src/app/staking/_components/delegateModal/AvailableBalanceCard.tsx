@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import { microCoinToCoin } from "@/helpers/integerModifiers";
 
 interface AvailableBalanceCardProps {
   availableAmount: number | string | undefined;
@@ -24,7 +24,7 @@ function AvailableBalanceCard({
               <Skeleton className="h-3 w-1/4" />
             ) : (
               <span className="font-semibold text-lg">
-                {microCoinConverter(+availableAmount!, denom!)}
+                {microCoinToCoin(+availableAmount!, denom!)}
               </span>
             )}
           </p>

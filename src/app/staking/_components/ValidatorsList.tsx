@@ -12,8 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useWallet } from "@/hooks/useWallet";
-import { chainInfoMap } from "@/constants/chainInfoMap";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import { microCoinToCoin } from "@/helpers/integerModifiers";
 import { ValidatorItem } from "@/types/validator.types";
 import DelegateModal from "./DelegateModal";
 import { useModal } from "@/hooks/useModal";
@@ -92,10 +91,7 @@ function ValidatorsList() {
                     </TableCell>
                     <TableCell>
                       <div className="text-right pr-10 w-2/3 font-semibold">
-                        {microCoinConverter(
-                          +validator.delegator_shares,
-                          denom!,
-                        )}{" "}
+                        {microCoinToCoin(+validator.delegator_shares, denom!)}{" "}
                         <Badge className="ml-2">{denom}</Badge>
                       </div>
                     </TableCell>

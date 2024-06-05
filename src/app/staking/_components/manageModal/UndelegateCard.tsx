@@ -5,6 +5,7 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { TbAlertCircleFilled } from "react-icons/tb";
 import { UserDelegationData } from "../ManageModal";
 import { useUndelegateToken } from "@/hooks/useReactMutation";
+import { coinToMicroCoin } from "@/helpers/integerModifiers";
 
 interface UndelegateCardProps {
   userDelegationData: UserDelegationData;
@@ -21,10 +22,7 @@ function UndelegateCard({
   handleInput,
   showAlert,
 }: UndelegateCardProps) {
-  const realAmount =
-    denom == "DYM"
-      ? (+undelegateAmount * 1_000_000_000_000_000).toString()
-      : (+undelegateAmount * 1_000_000).toString();
+  const realAmount = coinToMicroCoin(+undelegateAmount, denom!).toString();
 
   const undelegateMutation = useUndelegateToken(
     userDelegationData?.validator?.operator_address || "",

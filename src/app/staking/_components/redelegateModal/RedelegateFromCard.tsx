@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { microCoinConverter } from "@/helpers/integerModifiers";
+import { microCoinToCoin } from "@/helpers/integerModifiers";
 import { UserDelegationData } from "../RedelegateModal";
 
 interface RedelegateFromCardProps {
@@ -31,7 +31,7 @@ function RedelegateFromCard({
             <p className="text-sm">
               Staked Balances:{" "}
               <span className="font-semibold text-lg">
-                {microCoinConverter(
+                {microCoinToCoin(
                   +userDelegationData.delegation.balance.amount,
                   denom!,
                 )}
