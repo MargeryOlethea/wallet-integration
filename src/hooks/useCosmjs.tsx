@@ -6,6 +6,7 @@ import {
 } from "@cosmjs/stargate";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
+import { OfflineAminoSigner, OfflineDirectSigner } from "@keplr-wallet/types";
 
 export enum VoteOption {
   VOTE_OPTION_YES = 1,
@@ -19,10 +20,12 @@ export const useCosmjs = () => {
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
   const denom =
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
-  let offlineSigner =
+  let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null = null;
+  if (typeof window !== undefined) {
     wallet && wallet === "keplr"
       ? window.getOfflineSigner!(chainId!)
       : window.leap.getOfflineSigner!(chainId!);
+  }
 
   const getAvailableBalance = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
@@ -41,7 +44,7 @@ export const useCosmjs = () => {
   const withdrawStakedReward = async (validatorAddress: string) => {
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      offlineSigner,
+      offlineSigner!,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
 
@@ -61,11 +64,11 @@ export const useCosmjs = () => {
   const delegateToken = async (validatorAddress: string, amount: string) => {
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      offlineSigner,
+      offlineSigner!,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
 
-    console.log(await offlineSigner.getAccounts());
+    console.log(await offlineSigner!.getAccounts());
     console.log({ offlineSigner, signingClient, userAddress });
 
     const fee = "auto";
@@ -103,7 +106,7 @@ export const useCosmjs = () => {
   const undelegateToken = async (validatorAddress: string, amount: string) => {
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      offlineSigner,
+      offlineSigner!,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
 
@@ -128,7 +131,7 @@ export const useCosmjs = () => {
   ) => {
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      offlineSigner,
+      offlineSigner!,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
 
@@ -158,7 +161,7 @@ export const useCosmjs = () => {
   const voteProposal = async (proposalId: string, option: VoteOption) => {
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      offlineSigner,
+      offlineSigner!,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
 
