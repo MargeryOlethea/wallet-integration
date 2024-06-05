@@ -6,7 +6,7 @@ import {
 } from "@cosmjs/stargate";
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
-import { signDymWithKeplr } from "@/utils/signDymWithKeplr";
+import { signEvmWithKeplr } from "@/utils/signEvmWithKeplr";
 
 export enum VoteOption {
   VOTE_OPTION_YES = 1,
@@ -18,6 +18,7 @@ export enum VoteOption {
 export const useCosmjs = () => {
   const { chainId, userAddress, wallet } = useWallet();
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
+  const restUrl = (chainId && chainInfoMap[chainId].rest) || "";
   const denom =
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
 
@@ -62,10 +63,11 @@ export const useCosmjs = () => {
 
     // dymension testnet chain handling
     if (chainId === "froopyland_100-1") {
-      const txBytes = await signDymWithKeplr({
+      const txBytes = await signEvmWithKeplr({
         client: signingClient,
         signer: offlineSigner,
         chainId: chainId!,
+        restUrl: restUrl!,
         signerAddress: userAddress!,
         messages,
         fee: {
@@ -118,10 +120,11 @@ export const useCosmjs = () => {
 
     // dymension testnet chain handling
     if (chainId === "froopyland_100-1") {
-      const txBytes = await signDymWithKeplr({
+      const txBytes = await signEvmWithKeplr({
         client: signingClient,
         signer: offlineSigner,
         chainId: chainId!,
+        restUrl: restUrl!,
         signerAddress: userAddress!,
         messages,
         fee: {
@@ -174,10 +177,11 @@ export const useCosmjs = () => {
 
     // dymension testnet chain handling
     if (chainId === "froopyland_100-1") {
-      const txBytes = await signDymWithKeplr({
+      const txBytes = await signEvmWithKeplr({
         client: signingClient,
         signer: offlineSigner,
         chainId: chainId!,
+        restUrl: restUrl!,
         signerAddress: userAddress!,
         messages,
         fee: {
@@ -235,10 +239,11 @@ export const useCosmjs = () => {
 
     // dymension testnet chain handling
     if (chainId === "froopyland_100-1") {
-      const txBytes = await signDymWithKeplr({
+      const txBytes = await signEvmWithKeplr({
         client: signingClient,
         signer: offlineSigner,
         chainId: chainId!,
+        restUrl: restUrl!,
         signerAddress: userAddress!,
         messages,
         fee: {
@@ -292,10 +297,11 @@ export const useCosmjs = () => {
 
     // dymension testnet chain handling
     if (chainId === "froopyland_100-1") {
-      const txBytes = await signDymWithKeplr({
+      const txBytes = await signEvmWithKeplr({
         client: signingClient,
         signer: offlineSigner,
         chainId: chainId!,
+        restUrl: restUrl!,
         signerAddress: userAddress!,
         messages,
         fee: {

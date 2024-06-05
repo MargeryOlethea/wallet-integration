@@ -1,5 +1,5 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
-import { fromBase64, toBase64 } from "@cosmjs/encoding";
+import { fromBase64 } from "@cosmjs/encoding";
 import { makeAuthInfoBytes, makeSignDoc } from "@cosmjs/proto-signing";
 import { Int53 } from "@cosmjs/math";
 import { Any } from "cosmjs-types/google/protobuf/any";
@@ -8,7 +8,6 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { OfflineDirectSigner } from "@cosmjs/proto-signing/build/signer";
 import { StdFee } from "@cosmjs/amino";
 import { EncodeObject } from "@cosmjs/proto-signing/build/registry";
-import { Chain } from "@chain-registry/types";
 
 export const evmChainIds = [
   "dymension_1100-1",
@@ -22,18 +21,10 @@ interface ISignProps {
   client: SigningStargateClient;
   signer: OfflineDirectSigner;
   chainId: string;
+  restUrl: string;
   signerAddress: string;
   messages: EncodeObject[];
   fee: StdFee;
-  memo: string;
-}
-
-interface ISimulateProps {
-  client: SigningStargateClient;
-  signer: OfflineDirectSigner;
-  chain: Chain;
-  signerAddress: string;
-  messages: EncodeObject[];
   memo: string;
 }
 
@@ -68,10 +59,11 @@ interface IEthAccount {
 
 const isDev = true;
 
-export async function signDymWithKeplr({
+export async function signEvmWithKeplr({
   client, // SigningStargateClient
   signer, // keplr OfflineSigner
   chainId,
+  restUrl,
   signerAddress,
   messages,
   fee,
@@ -79,9 +71,9 @@ export async function signDymWithKeplr({
 }: ISignProps) {
   try {
     // Query account info, because cosmjs doesn't support Evmos account
-    const baseDymTestnetUrl = "https://froopyland-public.api.silknodes.io";
+
     const accountRes = await fetch(
-      baseDymTestnetUrl + "/cosmos/auth/v1beta1/accounts/" + signerAddress,
+      restUrl + "/cosmos/auth/v1beta1/accounts/" + signerAddress,
     );
     isDev && console.log("signDymWithKeplr accountRes", accountRes);
     if (!accountRes.ok) {

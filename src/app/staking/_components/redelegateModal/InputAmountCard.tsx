@@ -1,5 +1,6 @@
 import { AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -30,7 +31,7 @@ function InputAmountCard({
         <CardHeader>
           <CardDescription className="text-xs">Redelegate to:</CardDescription>
           <CardTitle className="text-lg">{selectedValidator}</CardTitle>
-          <div className="flex flex-row justify-between gap-5">
+          <div className="flex flex-row justify-between gap-5 items-center">
             <input
               type="number"
               placeholder="your redelegate amount"
@@ -38,7 +39,9 @@ function InputAmountCard({
               value={redelegateAmount}
               onChange={(e) => handleInput(e.target.value)}
             />
-            <Badge variant="secondary">{denom}</Badge>
+            <Badge variant="secondary" className="max-h-6">
+              {denom}
+            </Badge>
           </div>
           {showAlert && (
             <AlertTitle className="flex gap-1 items-center text-xs text-red-700">
