@@ -30,17 +30,13 @@ function NoConnectedWalletHeader() {
 
       let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
         null;
-      if (
-        typeof window !== undefined &&
-        walletType === "keplr" &&
-        window.keplr
-      ) {
+      if (walletType === "keplr" && window.keplr) {
         await window.keplr!.experimentalSuggestChain(network);
         offlineSigner = window.getOfflineSigner!(chainId!);
         setWallet("keplr");
       }
 
-      if (typeof window !== undefined && walletType === "leap" && window.leap) {
+      if (walletType === "leap" && window.leap) {
         await window.leap.experimentalSuggestChain(network);
         offlineSigner = window.leap.getOfflineSigner!(chainId!);
         setWallet("leap");

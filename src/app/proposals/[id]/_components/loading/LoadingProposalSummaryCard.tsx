@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function LoadingProposalSummaryCard() {
@@ -17,9 +11,7 @@ function LoadingProposalSummaryCard() {
 
             <Skeleton className="h-8 w-20 rounded-full" />
           </CardTitle>
-          <CardDescription>
-            <Skeleton className="h-5 w-20" />
-          </CardDescription>
+          <Skeleton className="h-5 w-20" />
         </CardHeader>
         <CardContent>
           <Skeleton className="h-8 w-24" />

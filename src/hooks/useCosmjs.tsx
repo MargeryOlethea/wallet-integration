@@ -20,12 +20,10 @@ export const useCosmjs = () => {
   const rpcUrl = (chainId && chainInfoMap[chainId].rpc) || "";
   const denom =
     chainId && chainInfoMap[chainId].stakeCurrency?.coinMinimalDenom;
-  let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null = null;
-  if (typeof window !== undefined) {
+  let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
     wallet && wallet === "keplr"
       ? window.getOfflineSigner!(chainId!)
       : window.leap.getOfflineSigner!(chainId!);
-  }
 
   const getAvailableBalance = async () => {
     const client: StargateClient = await StargateClient.connect(rpcUrl);
@@ -162,10 +160,13 @@ export const useCosmjs = () => {
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
       offlineSigner!,
-      { gasPrice: GasPrice.fromString("0.025uatom") },
+      { gasPrice: GasPrice.fromString("0.050uatom") },
     );
 
-    const fee = "auto";
+    const fee = {
+      gas: "500000",
+      amount: [],
+    };
     const memo = "";
     const message = [
       {

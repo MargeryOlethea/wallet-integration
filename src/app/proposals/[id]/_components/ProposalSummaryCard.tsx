@@ -29,8 +29,7 @@ function ProposalSummaryCard({ proposal, loading }: ProposalSummaryCardProps) {
           <CardHeader>
             <CardTitle className="flex justify-between">
               <p>
-                {" "}
-                <span>#{proposal?.id}</span> {proposal?.title}
+                #{proposal?.id} <span>{proposal?.title}</span>
               </p>
 
               <Badge className="text-sm">

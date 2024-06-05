@@ -3,9 +3,12 @@ import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { useCosmjs, VoteOption } from "./useCosmjs";
 import toast from "react-hot-toast";
 import {
+  useAvailableBalance,
   useDelegationListByDelegator,
   useProposalDetails,
+  useRewardBalance,
   useRewardsListByDelegator,
+  useStakeBalance,
   useValidatorsListByDelegator,
 } from "./useReactQuery";
 import { useModal } from "./useModal";
@@ -22,6 +25,8 @@ export const useDelegateToken = (validatorAddress: string, amount: string) => {
   const { refetch: refetchDelegationList } = useDelegationListByDelegator();
   const { refetch: refetchValidatorsList } = useValidatorsListByDelegator();
   const { refetch: refetchRewardsList } = useRewardsListByDelegator();
+  const { refetch: refetchAvailableBalance } = useAvailableBalance();
+  const { refetch: refetchStakeBalance } = useStakeBalance();
   const { setDelegateModalOpen } = useModal();
   const delegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
     useMutation({
@@ -31,6 +36,8 @@ export const useDelegateToken = (validatorAddress: string, amount: string) => {
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
+        refetchAvailableBalance();
+        refetchStakeBalance();
         setDelegateModalOpen(false);
         scrollToTop();
       },
@@ -48,6 +55,9 @@ export const useClaimRewards = (validatorAddress: string) => {
   const { refetch: refetchDelegationList } = useDelegationListByDelegator();
   const { refetch: refetchValidatorsList } = useValidatorsListByDelegator();
   const { refetch: refetchRewardsList } = useRewardsListByDelegator();
+  const { refetch: refetchAvailableBalance } = useAvailableBalance();
+  const { refetch: refetchStakeBalance } = useStakeBalance();
+  const { refetch: refetchRewardsBalance } = useRewardBalance();
   const { setManageModalOpen } = useModal();
   const withdrawMutation: UseMutationResult<DeliverTxResponse, Error, void> =
     useMutation({
@@ -57,6 +67,9 @@ export const useClaimRewards = (validatorAddress: string) => {
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
+        refetchAvailableBalance();
+        refetchStakeBalance();
+        refetchRewardsBalance();
         setManageModalOpen(false);
         scrollToTop();
       },
@@ -78,6 +91,7 @@ export const useRedelegateToken = (
   const { refetch: refetchDelegationList } = useDelegationListByDelegator();
   const { refetch: refetchValidatorsList } = useValidatorsListByDelegator();
   const { refetch: refetchRewardsList } = useRewardsListByDelegator();
+  const { refetch: refetchAvailableBalance } = useAvailableBalance();
   const { setRedelegateModalOpen } = useModal();
   const redelegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
     useMutation({
@@ -88,6 +102,7 @@ export const useRedelegateToken = (
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
+        refetchAvailableBalance();
         setRedelegateModalOpen(false);
         scrollToTop();
       },
@@ -105,6 +120,9 @@ export const useUndelegateToken = (validatorAddres: string, amount: string) => {
   const { refetch: refetchDelegationList } = useDelegationListByDelegator();
   const { refetch: refetchValidatorsList } = useValidatorsListByDelegator();
   const { refetch: refetchRewardsList } = useRewardsListByDelegator();
+  const { refetch: refetchAvailableBalance } = useAvailableBalance();
+  const { refetch: refetchStakeBalance } = useStakeBalance();
+  const { refetch: refetchRewardsBalance } = useRewardBalance();
   const { setManageModalOpen } = useModal();
 
   const undelegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
@@ -115,6 +133,9 @@ export const useUndelegateToken = (validatorAddres: string, amount: string) => {
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
+        refetchAvailableBalance();
+        refetchStakeBalance();
+        refetchRewardsBalance();
         setManageModalOpen(false);
         scrollToTop();
       },
