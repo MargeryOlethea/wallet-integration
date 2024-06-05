@@ -7,6 +7,7 @@ import {
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
 import { OfflineAminoSigner, OfflineDirectSigner } from "@keplr-wallet/types";
+import { signEvmWithKeplrEdited } from "@/utils/signEvmWithKeplrEdited";
 
 export enum VoteOption {
   VOTE_OPTION_YES = 1,
@@ -36,7 +37,7 @@ export const useCosmjs = () => {
   };
 
   const withdrawStakedReward = async (validatorAddress: string) => {
-    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+    const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
         : window.leap.getOfflineSigner!(chainId!);
@@ -60,55 +61,109 @@ export const useCosmjs = () => {
     return result;
   };
 
+  // const delegateToken = async (validatorAddress: string, amount: string) => {
+  //   const offlineSigner =
+  //     wallet && wallet === "keplr"
+  //       ? window.getOfflineSigner!(chainId!)
+  //       : window.leap.getOfflineSigner!(chainId!);
+
+  //   const signingClient = await SigningStargateClient.connectWithSigner(
+  //     rpcUrl,
+  //     offlineSigner!,
+  //     { gasPrice: GasPrice.fromString("0.025uatom") },
+  //   );
+
+  //   const fee = "auto";
+  //   const memo = "";
+
+  //   const result = await signingClient.delegateTokens(
+  //     userAddress!,
+  //     validatorAddress,
+  //     { amount: amount, denom: denom! },
+  //     fee,
+  //     memo,
+  //   );
+
+  //   // const message = [
+  //   //   {
+  //   //     typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+  //   //     value: {
+  //   //       delegatorAddress: userAddress!,
+  //   //       validatorAddress: validatorAddress,
+  //   //       amount: { amount: amount, denom: denom! },
+  //   //     },
+  //   //   },
+  //   // ];
+  //   // const result = await signingClient.signAndBroadcast(
+  //   //   userAddress!,
+  //   //   message,
+  //   //   fee,
+  //   //   memo,
+  //   // );
+
+  //   return result;
+  // };
+
   const delegateToken = async (validatorAddress: string, amount: string) => {
-    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+    let result;
+
+    const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
         : window.leap.getOfflineSigner!(chainId!);
 
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      offlineSigner!,
+      offlineSigner,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
-
-    console.log(await offlineSigner!.getAccounts());
-    console.log({ offlineSigner, signingClient, userAddress });
 
     const fee = "auto";
     const memo = "";
 
-    const result = await signingClient.delegateTokens(
-      userAddress!,
-      validatorAddress,
-      { amount: amount, denom: denom! },
-      fee,
-      memo,
-    );
+    if (chainId === "froopyland_100-1") {
+      // Handle Dymension chain using EVM signing
+      const messages = [
+        {
+          typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+          value: {
+            delegatorAddress: userAddress!,
+            validatorAddress: validatorAddress,
+            amount: { amount: amount, denom: denom! },
+          },
+        },
+      ];
 
-    // const message = [
-    //   {
-    //     typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
-    //     value: {
-    //       delegatorAddress: userAddress!,
-    //       validatorAddress: validatorAddress,
-    //       amount: { amount: amount, denom: denom! },
-    //     },
-    //   },
-    // ];
-    // console.log({ message });
-    // const result = await signingClient.signAndBroadcast(
-    //   userAddress!,
-    //   message,
-    //   fee,
-    //   memo,
-    // );
+      result = await signEvmWithKeplrEdited({
+        client: signingClient,
+        signer: offlineSigner,
+        chainId: chainId!,
+        signerAddress: userAddress!,
+        messages,
+        fee: {
+          amount: [{ denom: denom!, amount: "0" }],
+          gas: "200000",
+        },
+        memo,
+      });
+
+      console.log(result, "ini resultnya");
+    } else {
+      // Handle other chains (osmosis, cosmos, etc.)
+      result = await signingClient.delegateTokens(
+        userAddress!,
+        validatorAddress,
+        { amount: amount, denom: denom! },
+        fee,
+        memo,
+      );
+    }
 
     return result;
   };
 
   const undelegateToken = async (validatorAddress: string, amount: string) => {
-    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+    const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
         : window.leap.getOfflineSigner!(chainId!);
@@ -138,7 +193,7 @@ export const useCosmjs = () => {
     validatorDestinationAddress: string,
     amount: string,
   ) => {
-    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+    const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
         : window.leap.getOfflineSigner!(chainId!);
@@ -173,7 +228,7 @@ export const useCosmjs = () => {
   };
 
   const voteProposal = async (proposalId: string, option: VoteOption) => {
-    const offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+    const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
         : window.leap.getOfflineSigner!(chainId!);

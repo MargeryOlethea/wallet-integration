@@ -28,24 +28,28 @@ export const useDelegateToken = (validatorAddress: string, amount: string) => {
   const { refetch: refetchAvailableBalance } = useAvailableBalance();
   const { refetch: refetchStakeBalance } = useStakeBalance();
   const { setDelegateModalOpen } = useModal();
-  const delegateMutation: UseMutationResult<DeliverTxResponse, Error, void> =
-    useMutation({
-      mutationFn: () => delegateToken(validatorAddress, amount),
-      onSuccess: (data) => {
-        toast.success(`Staking successful!`);
-        refetchDelegationList();
-        refetchRewardsList();
-        refetchValidatorsList();
-        refetchAvailableBalance();
-        refetchStakeBalance();
-        setDelegateModalOpen(false);
-        scrollToTop();
-      },
-      onError: (error) => {
-        toast.error(`Failed to delegate token: ${error.message}`);
-        console.error(error.message);
-      },
-    });
+  const delegateMutation: UseMutationResult<
+    DeliverTxResponse | Uint8Array | undefined,
+    Error,
+    void,
+    unknown
+  > = useMutation({
+    mutationFn: () => delegateToken(validatorAddress, amount),
+    onSuccess: (data) => {
+      toast.success(`Staking successful!`);
+      refetchDelegationList();
+      refetchRewardsList();
+      refetchValidatorsList();
+      refetchAvailableBalance();
+      refetchStakeBalance();
+      setDelegateModalOpen(false);
+      scrollToTop();
+    },
+    onError: (error) => {
+      toast.error(`Failed to delegate token: ${error.message}`);
+      console.error(error.message);
+    },
+  });
 
   return delegateMutation;
 };

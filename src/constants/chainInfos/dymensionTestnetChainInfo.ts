@@ -1,5 +1,7 @@
 import { ChainInfo } from "@keplr-wallet/types";
 
+//TODO : udym to adym
+
 export const dymensionTestnetChainInfo: ChainInfo = {
   chainId: "froopyland_100-1",
   chainName: "Dymension Testnet",
