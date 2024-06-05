@@ -8,7 +8,7 @@ interface WalletContextType {
   setUserAddress: Dispatch<SetStateAction<null | string>>;
   chainId: string | null;
   setChainId: (chainId: string) => void;
-  connectToWallet: (walletType: "keplr" | "leap") => void;
+  // connectToWallet: (walletType: "keplr" | "leap") => void;
   setShowConnectToWallet: Dispatch<SetStateAction<boolean>>;
   showConnectToWallet: boolean;
   denom: string | null;

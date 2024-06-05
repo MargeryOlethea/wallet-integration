@@ -42,45 +42,45 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   }, []);
 
   // connect to wallet
-  const connectToWallet = async (walletType: "keplr" | "leap") => {
-    try {
-      if (!chainId) {
-        throw new Error("Please select network");
-      }
+  // const connectToWallet = async (walletType: "keplr" | "leap") => {
+  //   try {
+  //     if (!chainId) {
+  //       throw new Error("Please select network");
+  //     }
 
-      if (!window.keplr && !window.leap) {
-        throw new Error("Please install Keplr or Leap wallet");
-      }
+  //     if (!window.keplr && !window.leap) {
+  //       throw new Error("Please install Keplr or Leap wallet");
+  //     }
 
-      let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
-        null;
-      if (walletType === "keplr" && window.keplr) {
-        await window.keplr!.experimentalSuggestChain(network);
-        offlineSigner = window.getOfflineSigner!(chainId!);
-        setWallet("keplr");
-      }
+  //     let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+  //       null;
+  //     if (walletType === "keplr" && window.keplr) {
+  //       await window.keplr!.experimentalSuggestChain(network);
+  //       offlineSigner = window.getOfflineSigner!(chainId!);
+  //       setWallet("keplr");
+  //     }
 
-      if (walletType === "leap" && window.leap) {
-        await window.leap.experimentalSuggestChain(network);
-        offlineSigner = window.leap.getOfflineSigner!(chainId!);
-        setWallet("leap");
-      }
+  //     if (walletType === "leap" && window.leap) {
+  //       await window.leap.experimentalSuggestChain(network);
+  //       offlineSigner = window.leap.getOfflineSigner!(chainId!);
+  //       setWallet("leap");
+  //     }
 
-      if (offlineSigner) {
-        const account: AccountData = (await offlineSigner.getAccounts())[0];
-        setUserAddress(account.address);
-        localStorage.setItem("wallet", walletType);
-        localStorage.setItem("userAddress", account.address);
-        localStorage.setItem("chainId", chainId);
-      }
+  //     if (offlineSigner) {
+  //       const account: AccountData = (await offlineSigner.getAccounts())[0];
+  //       setUserAddress(account.address);
+  //       localStorage.setItem("wallet", walletType);
+  //       localStorage.setItem("userAddress", account.address);
+  //       localStorage.setItem("chainId", chainId);
+  //     }
 
-      setShowConnectToWallet(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
+  //     setShowConnectToWallet(false);
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       toast.error(error.message);
+  //     }
+  //   }
+  // };
 
   const value = {
     wallet,
@@ -89,7 +89,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     setUserAddress,
     chainId,
     setChainId,
-    connectToWallet,
+    // connectToWallet,
     showConnectToWallet,
     setShowConnectToWallet,
     denom,

@@ -9,9 +9,55 @@ import {
 import SelectNetwork from "./layout/SelectNetwork";
 import Image from "next/image";
 import { useWallet } from "@/hooks/useWallet";
+import { AccountData } from "@cosmjs/proto-signing";
+import toast from "react-hot-toast";
+import { chainInfoMap } from "@/constants/chainInfoMap";
+import { OfflineAminoSigner, OfflineDirectSigner } from "@keplr-wallet/types";
 
 function NoConnectedWalletHeader() {
-  const { connectToWallet } = useWallet();
+  const { chainId, setWallet, setUserAddress, setShowConnectToWallet } =
+    useWallet();
+  const network = chainInfoMap[chainId!] || {};
+  const connectToWallet = async (walletType: "keplr" | "leap") => {
+    try {
+      if (!chainId) {
+        throw new Error("Please select network");
+      }
+
+      if (!window.keplr && !window.leap) {
+        throw new Error("Please install Keplr or Leap wallet");
+      }
+
+      let offlineSigner: (OfflineAminoSigner & OfflineDirectSigner) | null =
+        null;
+      if (walletType === "keplr" && window.keplr) {
+        await window.keplr!.experimentalSuggestChain(network);
+        offlineSigner = window.getOfflineSigner!(chainId!);
+        setWallet("keplr");
+      }
+
+      if (walletType === "leap" && window.leap) {
+        await window.leap.experimentalSuggestChain(network);
+        offlineSigner = window.leap.getOfflineSigner!(chainId!);
+        setWallet("leap");
+      }
+
+      if (offlineSigner) {
+        const account: AccountData = (await offlineSigner.getAccounts())[0];
+        setUserAddress(account.address);
+        localStorage.setItem("wallet", walletType);
+        localStorage.setItem("userAddress", account.address);
+        localStorage.setItem("chainId", chainId);
+      }
+
+      setShowConnectToWallet(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
   return (
     <header>
       <Card className="bg-gradient-to-r from-blue-100">
