@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 import { ValidatorItem } from "@/types/validator.types";
 import { useWallet } from "@/hooks/useWallet";
-import { chainInfoMap } from "@/constants/chainInfoMap";
 import { DelegationResponse } from "@/types/delegations.types";
 import { Reward } from "@/types/reward.types";
 import { useState } from "react";
@@ -63,21 +62,8 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
   //  handle undelegate amount
   const [undelegateAmount, setUndelegateAmount] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const handleInput = (value: string) => {
-    const delegationBalance =
-      denom == "DYM"
-        ? +userDelegationData?.delegation?.balance?.amount /
-          1_000_000_000_000_000_000
-        : +userDelegationData?.delegation?.balance?.amount / 1_000_000;
 
-    if (+value > delegationBalance) {
-      setShowAlert(true);
-      setUndelegateAmount(value);
-    } else {
-      setShowAlert(false);
-      setUndelegateAmount(value);
-    }
-  };
+  const delegationBalance = +userDelegationData?.delegation?.balance?.amount;
 
   if (!isManageModalOpen) {
     return null;
@@ -123,8 +109,10 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
                 userDelegationData={userDelegationData}
                 denom={denom}
                 undelegateAmount={undelegateAmount}
-                handleInput={handleInput}
+                setUndelegateAmount={setUndelegateAmount}
+                delegationBalance={delegationBalance}
                 showAlert={showAlert}
+                setShowAlert={setShowAlert}
               />
             </>
           )}

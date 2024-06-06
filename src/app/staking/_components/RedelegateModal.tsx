@@ -75,20 +75,8 @@ export default function RedelegateModal({
   // handle redelegate amount
   const [redelegateAmount, setRedelegateAmount] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const handleInput = (value: string) => {
-    const delegationBalance =
-      denom == "DYM"
-        ? +userDelegationData?.delegation?.balance?.amount /
-          1_000_000_000_000_000
-        : +userDelegationData?.delegation?.balance?.amount / 1_000_000;
-    if (+value > delegationBalance) {
-      setShowAlert(true);
-      setRedelegateAmount(value);
-    } else {
-      setShowAlert(false);
-      setRedelegateAmount(value);
-    }
-  };
+
+  const delegationBalance = +userDelegationData?.delegation?.balance?.amount;
 
   // handle redelegate
   const realAmount = coinToMicroCoin(+redelegateAmount, denom!).toString();
@@ -160,9 +148,11 @@ export default function RedelegateModal({
             <InputAmountCard
               selectedValidator={selectedValidator}
               redelegateAmount={redelegateAmount}
-              handleInput={handleInput}
+              setRedelegateAmount={setRedelegateAmount}
               showAlert={showAlert}
+              setShowAlert={setShowAlert}
               denom={denom}
+              delegationBalance={delegationBalance}
             />
           </div>
         </CardContent>

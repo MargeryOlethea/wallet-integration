@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { ValidatorItem } from "@/types/validator.types";
 import { useWallet } from "@/hooks/useWallet";
-import { chainInfoMap } from "@/constants/chainInfoMap";
 import toast from "react-hot-toast";
 import { useModal } from "@/hooks/useModal";
 import StakingAlert from "./delegateModal/StakingAlert";
@@ -21,7 +20,7 @@ import ModalCloseButton from "@/components/ModalCloseButton";
 import { Button } from "@/components/ui/button";
 import { useAvailableBalance } from "@/hooks/useReactQuery";
 import { useDelegateToken } from "@/hooks/useReactMutation";
-import { coinToMicroCoin, microCoinToCoin } from "@/helpers/integerModifiers";
+import { coinToMicroCoin } from "@/helpers/integerModifiers";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -59,20 +58,6 @@ export default function DelegateModal({ validator }: AllModalProps) {
   // handle amount
   const [delegateAmount, setDelegateAmount] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const handleInput = (value: string) => {
-    const balance =
-      denom == "DYM"
-        ? +availableAmount / 1_000_000_000_000_000_000
-        : +availableAmount / 1_000_000;
-
-    if (+value > balance) {
-      setShowAlert(true);
-      setDelegateAmount(value);
-    } else {
-      setShowAlert(false);
-      setDelegateAmount(value);
-    }
-  };
 
   const handleAmountButton = (amount: "1/3" | "1/2" | "MAX") => {
     const coin =
@@ -142,8 +127,10 @@ export default function DelegateModal({ validator }: AllModalProps) {
           {/* amount to delegate */}
           <DelegateAmountCard
             delegateAmount={delegateAmount}
-            handleInput={handleInput}
             denom={denom}
+            setShowAlert={setShowAlert}
+            setDelegateAmount={setDelegateAmount}
+            balanceAmount={availableAmount}
           />
 
           {/* amount buttons */}

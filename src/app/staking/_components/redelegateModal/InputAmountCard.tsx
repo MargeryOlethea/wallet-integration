@@ -1,28 +1,33 @@
 import { AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { handleInput } from "@/utils/handleInput";
+import { Dispatch, SetStateAction } from "react";
 import { TbAlertCircleFilled } from "react-icons/tb";
 
 interface InputAmountCardProps {
   selectedValidator: string;
   redelegateAmount: string;
-  handleInput: (value: string) => void;
-  showAlert: boolean;
+  delegationBalance: string | number;
   denom: string | null;
+  setRedelegateAmount: Dispatch<SetStateAction<string>>;
+  showAlert: boolean;
+  setShowAlert: Dispatch<SetStateAction<boolean>>;
 }
 
 function InputAmountCard({
   selectedValidator,
   redelegateAmount,
-  handleInput,
-  showAlert,
+  delegationBalance,
   denom,
+  setRedelegateAmount,
+  showAlert,
+  setShowAlert,
 }: InputAmountCardProps) {
   return (
     <>
@@ -37,7 +42,15 @@ function InputAmountCard({
               placeholder="your redelegate amount"
               className="focus:border-transparent focus:outline-none active:outline-none active:border-none bg-transparent w-full font-semibold text-lg placeholder:font-light placeholder:text-sm"
               value={redelegateAmount}
-              onChange={(e) => handleInput(e.target.value)}
+              onChange={(e) =>
+                handleInput({
+                  value: e.target.value,
+                  denom: denom!,
+                  balanceAmount: delegationBalance,
+                  setShowAlert: setShowAlert,
+                  setAmount: setRedelegateAmount,
+                })
+              }
             />
             <Badge variant="secondary" className="max-h-6">
               {denom}
