@@ -1,4 +1,8 @@
-export const microCoinToCoin = (amount: number, denom: string) => {
+export const microCoinToCoin = (
+  amount: number,
+  denom: string,
+  toFixed?: number,
+) => {
   let convertedAmount;
 
   // Convert the amount based on the denomination
@@ -9,7 +13,7 @@ export const microCoinToCoin = (amount: number, denom: string) => {
   }
 
   // Format the number to always have 4 decimal places
-  const formattedAmount = convertedAmount.toFixed(4);
+  const formattedAmount = convertedAmount.toFixed(toFixed || 4);
 
   // Add commas as thousand separators
   const parts = formattedAmount.split(".");

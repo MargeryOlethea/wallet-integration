@@ -12,6 +12,7 @@ import {
   useRewardBalance,
   useStakeBalance,
 } from "@/hooks/useReactQuery";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function AccountDashboard() {
   const { chainId } = useWallet();
@@ -66,29 +67,42 @@ function AccountDashboard() {
     );
   }
 
+  const { isMobile } = useMediaQuery();
+  const totalAmount = isMobile
+    ? microCoinToCoin(Number(totalBalance?.amount || 0), coinDenom, 2)
+    : microCoinToCoin(Number(totalBalance?.amount || 0), coinDenom);
+
+  const availableAmount = isMobile
+    ? microCoinToCoin(Number(availableBalance?.amount || 0), coinDenom, 2)
+    : microCoinToCoin(Number(availableBalance?.amount || 0), coinDenom);
+
+  const rewardAmount = isMobile
+    ? microCoinToCoin(+rewardsAmount, coinDenom, 2)
+    : microCoinToCoin(+rewardsAmount, coinDenom);
+
+  const stakeAmount = isMobile
+    ? microCoinToCoin(Number(stakeBalance?.amount || 0), coinDenom, 2)
+    : microCoinToCoin(Number(stakeBalance?.amount || 0), coinDenom);
   return (
     <>
       <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-2">
         <AccountBalanceCard
-          amount={microCoinToCoin(Number(totalBalance?.amount || 0), coinDenom)}
+          amount={totalAmount}
           denom={coinDenom}
           loading={availableLoading || stakeLoading || rewardsLoading}
         />
         <AvailableBalanceCard
-          amount={microCoinToCoin(
-            Number(availableBalance?.amount || 0),
-            coinDenom,
-          )}
+          amount={availableAmount}
           denom={coinDenom}
           loading={availableLoading}
         />
         <StakeBalanceCard
-          amount={microCoinToCoin(Number(stakeBalance?.amount || 0), coinDenom)}
+          amount={stakeAmount}
           denom={coinDenom}
           loading={stakeLoading}
         />
         <RewardBalanceCard
-          amount={microCoinToCoin(+rewardsAmount, coinDenom)}
+          amount={rewardAmount}
           denom={coinDenom}
           loading={rewardsLoading}
         />

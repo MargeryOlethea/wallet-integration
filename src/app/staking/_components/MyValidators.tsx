@@ -26,6 +26,7 @@ import {
   useRewardsListByDelegator,
   useValidatorsListByDelegator,
 } from "@/hooks/useReactQuery";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function MyValidators() {
   // get denom
@@ -69,6 +70,10 @@ function MyValidators() {
     setManageModalOpen(true);
   };
 
+  // media query
+  const { isMobile } = useMediaQuery();
+
+  // loading & error
   const loading = delegationLoading || rewardsLoading || validatorsLoading;
   const error = delegationError || rewardsError || validatorsError;
 
@@ -108,18 +113,36 @@ function MyValidators() {
                         </p>
                       </TableCell>
                       <TableCell className="font-semibold">
-                        {microCoinToCoin(+delegation.balance.amount, denom!)}{" "}
-                        <Badge className="ml-2">{denom}</Badge>
+                        {isMobile
+                          ? microCoinToCoin(
+                              +delegation.balance.amount,
+                              denom!,
+                              2,
+                            )
+                          : microCoinToCoin(
+                              +delegation.balance.amount,
+                              denom!,
+                            )}{" "}
+                        <Badge className="ml-2 max-md:hidden">{denom}</Badge>
                       </TableCell>
                       <TableCell className="font-semibold">
-                        {microCoinToCoin(
-                          (rewards &&
-                            rewards[idx] &&
-                            +rewards[idx]?.reward[0]?.amount) ||
-                            0,
-                          denom!,
-                        )}{" "}
-                        <Badge className="ml-2">{denom}</Badge>
+                        {isMobile
+                          ? microCoinToCoin(
+                              (rewards &&
+                                rewards[idx] &&
+                                +rewards[idx]?.reward[0]?.amount) ||
+                                0,
+                              denom!,
+                              2,
+                            )
+                          : microCoinToCoin(
+                              (rewards &&
+                                rewards[idx] &&
+                                +rewards[idx]?.reward[0]?.amount) ||
+                                0,
+                              denom!,
+                            )}{" "}
+                        <Badge className="ml-2 max-md:hidden">{denom}</Badge>
                       </TableCell>
 
                       <TableCell>

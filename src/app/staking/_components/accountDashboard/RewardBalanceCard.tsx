@@ -19,7 +19,7 @@ function RewardBalanceCard({ amount, denom, loading }: RewardBalanceCardProps) {
       <Card className="bg-gradient-to-r from-blue-100 flex items-center justify-even pr-6">
         <CardHeader>
           <CardDescription className="max-md:text-xs">
-            Rewarded Balance
+            Reward Balance
           </CardDescription>
           {loading ? (
             <div className="flex items-center gap-2">

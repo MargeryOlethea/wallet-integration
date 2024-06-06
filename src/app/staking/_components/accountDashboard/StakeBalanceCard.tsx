@@ -17,7 +17,9 @@ function StakeBalanceCard({ amount, denom, loading }: StakeBalanceCardProps) {
     <>
       <Card>
         <CardHeader>
-          <CardDescription className="max-md:text-xs">Staked Balance</CardDescription>
+          <CardDescription className="max-md:text-xs">
+            Staked Balance
+          </CardDescription>
           {loading ? (
             <div className="flex items-center gap-2">
               <Skeleton className="h-8 w-20" />{" "}
