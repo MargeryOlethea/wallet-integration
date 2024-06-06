@@ -21,7 +21,7 @@ import ModalCloseButton from "@/components/ModalCloseButton";
 import { Button } from "@/components/ui/button";
 import { useAvailableBalance } from "@/hooks/useReactQuery";
 import { useDelegateToken } from "@/hooks/useReactMutation";
-import { coinToMicroCoin } from "@/helpers/integerModifiers";
+import { coinToMicroCoin, microCoinToCoin } from "@/helpers/integerModifiers";
 
 interface AllModalProps {
   validator: ValidatorItem;
@@ -62,8 +62,9 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const handleInput = (value: string) => {
     const balance =
       denom == "DYM"
-        ? +availableAmount / 1_000_000_000_000_000
+        ? +availableAmount / 1_000_000_000_000_000_000
         : +availableAmount / 1_000_000;
+
     if (+value > balance) {
       setShowAlert(true);
       setDelegateAmount(value);
@@ -76,7 +77,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const handleAmountButton = (amount: "1/3" | "1/2" | "MAX") => {
     const coin =
       denom == "DYM"
-        ? +availableAmount / 1_000_000_000_000_000
+        ? +availableAmount / 1_000_000_000_000_000_000
         : +availableAmount / 1_000_000;
     switch (amount) {
       case "1/3":

@@ -33,7 +33,16 @@ export const coinToMicroCoin = (amount: number, denom: string) => {
 
 export const numberFormatter = (num: number, denom: string): string => {
   const suffixes: string[] = ["", "K", "M", "B", "T"];
-  const amount = denom == "DYM" ? num / 1_000_000_000_000_000 : num / 1_000_000;
+  let amount;
+
+  // Convert the amount based on the denomination
+  if (denom === "DYM") {
+    amount = num * 1_000_000_000_000_000_000; // 18 decimals
+  } else {
+    amount = num * 1_000_000; // 12 decimals
+  }
+
+  // to fix
   if (amount < 1000) {
     return amount.toFixed(1);
   } else {

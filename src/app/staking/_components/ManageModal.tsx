@@ -67,8 +67,9 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
     const delegationBalance =
       denom == "DYM"
         ? +userDelegationData?.delegation?.balance?.amount /
-          1_000_000_000_000_000
+          1_000_000_000_000_000_000
         : +userDelegationData?.delegation?.balance?.amount / 1_000_000;
+
     if (+value > delegationBalance) {
       setShowAlert(true);
       setUndelegateAmount(value);

@@ -7,6 +7,7 @@ import {
 import { chainInfoMap } from "@/constants/chainInfoMap";
 import { useWallet } from "./useWallet";
 import { signEvmWithKeplr } from "@/utils/signEvmWithKeplr";
+import { signAndBroadcastTransaction } from "@/utils/signAndBroadcastTransaction";
 
 export enum VoteOption {
   VOTE_OPTION_YES = 1,
@@ -37,7 +38,6 @@ export const useCosmjs = () => {
   };
 
   const withdrawStakedReward = async (validatorAddress: string) => {
-    let result;
     const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
@@ -61,39 +61,20 @@ export const useCosmjs = () => {
       },
     ];
 
-    // dymension testnet chain handling
-    if (chainId === "froopyland_100-1") {
-      const txBytes = await signEvmWithKeplr({
-        client: signingClient,
-        signer: offlineSigner,
-        chainId: chainId!,
-        restUrl: restUrl!,
-        signerAddress: userAddress!,
-        messages,
-        fee: {
-          amount: [{ denom: denom!, amount: "0" }],
-          gas: "200000",
-        },
-        memo,
-      });
-
-      result = await signingClient.broadcastTx(txBytes!);
-    } else {
-      // osmosis testnet & cosmos testnet chain handling
-      result = await signingClient.withdrawRewards(
-        userAddress!,
-        validatorAddress,
-        fee,
-        memo,
-      );
-    }
-
-    return result;
+    return await signAndBroadcastTransaction({
+      signingClient,
+      offlineSigner,
+      chainId,
+      restUrl,
+      userAddress,
+      messages,
+      fee,
+      memo,
+      denom,
+    });
   };
 
   const delegateToken = async (validatorAddress: string, amount: string) => {
-    let result;
-
     const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
@@ -101,7 +82,7 @@ export const useCosmjs = () => {
 
     const signingClient = await SigningStargateClient.connectWithSigner(
       rpcUrl,
-      offlineSigner,
+      offlineSigner!,
       { gasPrice: GasPrice.fromString("0.025uatom") },
     );
 
@@ -118,39 +99,20 @@ export const useCosmjs = () => {
       },
     ];
 
-    // dymension testnet chain handling
-    if (chainId === "froopyland_100-1") {
-      const txBytes = await signEvmWithKeplr({
-        client: signingClient,
-        signer: offlineSigner,
-        chainId: chainId!,
-        restUrl: restUrl!,
-        signerAddress: userAddress!,
-        messages,
-        fee: {
-          amount: [{ denom: denom!, amount: "0" }],
-          gas: "200000",
-        },
-        memo,
-      });
-
-      result = await signingClient.broadcastTx(txBytes!);
-    } else {
-      // osmosis testnet & cosmos testnet chain handling
-      result = await signingClient.delegateTokens(
-        userAddress!,
-        validatorAddress,
-        { amount: amount, denom: denom! },
-        fee,
-        memo,
-      );
-    }
-
-    return result;
+    return await signAndBroadcastTransaction({
+      signingClient,
+      offlineSigner,
+      chainId,
+      restUrl,
+      userAddress,
+      messages,
+      fee,
+      memo,
+      denom,
+    });
   };
 
   const undelegateToken = async (validatorAddress: string, amount: string) => {
-    let result;
     const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
@@ -175,35 +137,17 @@ export const useCosmjs = () => {
       },
     ];
 
-    // dymension testnet chain handling
-    if (chainId === "froopyland_100-1") {
-      const txBytes = await signEvmWithKeplr({
-        client: signingClient,
-        signer: offlineSigner,
-        chainId: chainId!,
-        restUrl: restUrl!,
-        signerAddress: userAddress!,
-        messages,
-        fee: {
-          amount: [{ denom: denom!, amount: "0" }],
-          gas: "200000",
-        },
-        memo,
-      });
-
-      result = await signingClient.broadcastTx(txBytes!);
-    } else {
-      // osmosis testnet & cosmos testnet chain handling
-      result = await signingClient.undelegateTokens(
-        userAddress!,
-        validatorAddress,
-        { amount: amount, denom: denom! },
-        fee,
-        memo,
-      );
-    }
-
-    return result;
+    return await signAndBroadcastTransaction({
+      signingClient,
+      offlineSigner,
+      chainId,
+      restUrl,
+      userAddress,
+      messages,
+      fee,
+      memo,
+      denom,
+    });
   };
 
   const redelegateToken = async (
@@ -211,7 +155,6 @@ export const useCosmjs = () => {
     validatorDestinationAddress: string,
     amount: string,
   ) => {
-    let result;
     const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
@@ -237,37 +180,20 @@ export const useCosmjs = () => {
       },
     ];
 
-    // dymension testnet chain handling
-    if (chainId === "froopyland_100-1") {
-      const txBytes = await signEvmWithKeplr({
-        client: signingClient,
-        signer: offlineSigner,
-        chainId: chainId!,
-        restUrl: restUrl!,
-        signerAddress: userAddress!,
-        messages,
-        fee: {
-          amount: [{ denom: denom!, amount: "0" }],
-          gas: "300000",
-        },
-        memo,
-      });
-
-      result = await signingClient.broadcastTx(txBytes!);
-    } else {
-      // osmosis testnet & cosmos testnet chain handling
-      result = await signingClient.signAndBroadcast(
-        userAddress!,
-        messages,
-        fee,
-        memo,
-      );
-    }
-    return result;
+    return await signAndBroadcastTransaction({
+      signingClient,
+      offlineSigner,
+      chainId,
+      restUrl,
+      userAddress,
+      messages,
+      fee,
+      memo,
+      denom,
+    });
   };
 
   const voteProposal = async (proposalId: string, option: VoteOption) => {
-    let result;
     const offlineSigner =
       wallet && wallet === "keplr"
         ? window.getOfflineSigner!(chainId!)
@@ -295,33 +221,17 @@ export const useCosmjs = () => {
       },
     ];
 
-    // dymension testnet chain handling
-    if (chainId === "froopyland_100-1") {
-      const txBytes = await signEvmWithKeplr({
-        client: signingClient,
-        signer: offlineSigner,
-        chainId: chainId!,
-        restUrl: restUrl!,
-        signerAddress: userAddress!,
-        messages,
-        fee: {
-          amount: [{ denom: denom!, amount: "0" }],
-          gas: "200000",
-        },
-        memo,
-      });
-
-      result = await signingClient.broadcastTx(txBytes!);
-    } else {
-      // osmosis testnet & cosmos testnet chain handling
-      result = await signingClient.signAndBroadcast(
-        userAddress!,
-        messages,
-        fee,
-        memo,
-      );
-    }
-    return result;
+    return await signAndBroadcastTransaction({
+      signingClient,
+      offlineSigner,
+      chainId,
+      restUrl,
+      userAddress,
+      messages,
+      fee,
+      memo,
+      denom,
+    });
   };
 
   return {
