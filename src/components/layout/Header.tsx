@@ -8,6 +8,16 @@ import Image from "next/image";
 import { truncateString } from "@/helpers/stringModifiers";
 import { useWallet } from "@/hooks/useWallet";
 import { useModal } from "@/hooks/useModal";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { IoMenu } from "react-icons/io5";
 
 function Header() {
   // navigations
@@ -15,6 +25,8 @@ function Header() {
     { name: "Staking", href: "/staking" },
     { name: "Proposals", href: "/proposals" },
   ];
+
+  const { isDesktop, isMobile, isTablet } = useMediaQuery();
 
   const pathname = usePathname();
 
@@ -39,26 +51,60 @@ function Header() {
     <>
       <nav className="flex justify-between items-center">
         {/* logo */}
-        <Link href="/" className="hover:text-primary/90">
-          <h1 className="text-2xl">Wallet App</h1>
-        </Link>
+        <div className="flex gap-2 items-center">
+          {/* dropdown */}
+          {(isMobile || isTablet) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <IoMenu size="25" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="ml-10 py-2">
+                {navigations.map((navigation, idx) => (
+                  <DropdownMenuItem key={idx}>
+                    <Link
+                      href={navigation.href}
+                      className="hover:font-semibold hover:text-primary/90"
+                    >
+                      <p
+                        className={`${
+                          pathname === navigation.href && "font-semibold"
+                        }`}
+                      >
+                        {navigation.name}
+                      </p>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+
+          {/* link */}
+          <Link href="/" className="hover:text-primary/90">
+            <h1 className="text-2xl max-lg:text-xl">Wallet App</h1>
+          </Link>
+        </div>
 
         {/* navigation */}
-        <div className="flex gap-8">
-          {navigations.map((navigation, idx) => (
-            <Link
-              key={idx}
-              href={navigation.href}
-              className="hover:font-semibold hover:text-primary/90"
-            >
-              <p
-                className={`${pathname === navigation.href && "font-semibold"}`}
+        {isDesktop && (
+          <div className="flex gap-8">
+            {navigations.map((navigation, idx) => (
+              <Link
+                key={idx}
+                href={navigation.href}
+                className="hover:font-semibold hover:text-primary/90"
               >
-                {navigation.name}
-              </p>
-            </Link>
-          ))}
-        </div>
+                <p
+                  className={`${
+                    pathname === navigation.href && "font-semibold"
+                  }`}
+                >
+                  {navigation.name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* wallet connect */}
         <div className="relative">

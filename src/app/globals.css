@@ -84,6 +84,10 @@ nav {
   @apply max-w-6xl mx-auto my-12;
 }
 
+main {
+  @apply px-10;
+}
+
 p {
   @apply mt-2;
 }
