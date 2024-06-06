@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useWallet } from "@/hooks/useWallet";
-import { microCoinToCoin } from "@/helpers/integerModifiers";
+import { microCoinToCoin, numberFormatter } from "@/helpers/integerModifiers";
 import { ValidatorItem } from "@/types/validator.types";
 import DelegateModal from "./DelegateModal";
 import { useModal } from "@/hooks/useModal";
@@ -21,6 +21,7 @@ import BottomPagination from "@/components/BottomPagination";
 import LoadingValidatorsListTable from "./loading/LoadingValidatorsListTable";
 import NoDataFound from "@/components/NoDataFound";
 import { useValidatorsList } from "@/hooks/useReactQuery";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function ValidatorsList() {
   // get denom
@@ -53,6 +54,9 @@ function ValidatorsList() {
     toast.error(error.message);
   }
 
+  // media query
+  const { isMobile, isTablet, isDesktop } = useMediaQuery();
+
   return (
     <>
       <section className="my-10">
@@ -80,19 +84,26 @@ function ValidatorsList() {
                       <p className="font-semibold text-md">
                         {validator.description.moniker}
                       </p>
-                      <a
-                        className="font-semilight text-xs hover:text-blue-500"
-                        href={validator.description.website}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {validator.description.website}
-                      </a>
+                      {isDesktop && (
+                        <a
+                          className="font-semilight text-xs hover:text-blue-500"
+                          href={validator.description.website}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {validator.description.website}
+                        </a>
+                      )}
                     </TableCell>
                     <TableCell>
-                      <div className="text-right pr-10 w-2/3 font-semibold">
-                        {microCoinToCoin(+validator.delegator_shares, denom!)}{" "}
-                        <Badge className="ml-2">{denom}</Badge>
+                      <div className="text-right pr-10 max-lg:w-full w-2/3 font-semibold whitespace-nowrap">
+                        {isMobile || isTablet
+                          ? numberFormatter(+validator.delegator_shares, denom!)
+                          : microCoinToCoin(
+                              +validator.delegator_shares,
+                              denom!,
+                            )}{" "}
+                        <Badge className="ml-2 max-md:hidden">{denom}</Badge>
                       </div>
                     </TableCell>
                     <TableCell>
