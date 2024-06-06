@@ -39,7 +39,7 @@ function UndelegateCard({
       <Card className="my-2">
         <CardHeader>
           <p className="text-xs">Undelegate Tokens:</p>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center max-sm:flex-col max-sm:gap-3">
             <div className="flex gap-5 items-center">
               <input
                 value={undelegateAmount}
@@ -54,7 +54,7 @@ function UndelegateCard({
                 }
                 type="number"
                 placeholder="your amount"
-                className="focus:border-transparent focus:outline-none active:outline-none active:border-none bg-transparent w-1/2 font-semibold text-lg placeholder:font-light placeholder:text-sm"
+                className="focus:border-transparent focus:outline-none active:outline-none active:border-none bg-transparent w-2/3 font-semibold text-lg placeholder:font-light placeholder:text-sm"
               />
               <Badge variant="secondary" className="max-h-6">
                 {denom}
@@ -63,6 +63,7 @@ function UndelegateCard({
             <Button
               disabled={showAlert || undelegateMutation.isPending}
               onClick={() => undelegateMutation.mutate()}
+              className="max-sm:w-full"
             >
               {undelegateMutation.isPending ? "Processing..." : "Undelegate"}
             </Button>

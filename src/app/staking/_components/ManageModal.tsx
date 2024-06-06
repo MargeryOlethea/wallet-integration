@@ -73,7 +73,7 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
       className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={handleBackgroundClick}
     >
-      <Card className="relative p-5 flex flex-col justify-between w-1/3">
+      <Card className="relative p-5 flex flex-col justify-between w-1/3 max-xl:w-2/3 max-sm:w-5/6">
         {/* close button */}
         <ModalCloseButton handleCloseModal={handleCloseModal} />
 
@@ -117,16 +117,17 @@ export default function ManageModal({ userDelegationData }: MyModalProps) {
             </>
           )}
         </CardContent>
-        <CardFooter className="justify-between gap-3">
-          <Button className="w-full" onClick={openRedelegateModal}>
-            Redelegate
-          </Button>
+
+        <CardFooter className="justify-between gap-3 max-sm:flex-col">
           <Button
             className="w-full"
             onClick={() => setShowUndelegate(!showUndelegate)}
             variant={showUndelegate ? "secondary" : "default"}
           >
             {showUndelegate ? "Cancel Undelegate" : "Undelegate"}
+          </Button>
+          <Button className="w-full" onClick={openRedelegateModal}>
+            Redelegate
           </Button>
         </CardFooter>
       </Card>

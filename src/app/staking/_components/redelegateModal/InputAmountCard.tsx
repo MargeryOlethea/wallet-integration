@@ -31,7 +31,7 @@ function InputAmountCard({
 }: InputAmountCardProps) {
   return (
     <>
-      <Card className="my-2 w-1/2">
+      <Card className="my-2 w-1/2 max-md:w-full">
         {" "}
         <CardHeader>
           <CardDescription className="text-xs">Redelegate to:</CardDescription>

@@ -19,7 +19,7 @@ function RewardsCard({ userDelegationData, denom }: RewardsCardProps) {
   return (
     <>
       <Card className="my-2 bg-gradient-to-r from-blue-100">
-        <CardHeader className="flex-row justify-between">
+        <CardHeader className="flex-row justify-between max-sm:flex-col max-sm:gap-3">
           <div>
             <p className="text-xs">Your Rewards:</p>
             <div className="flex items-center gap-2">

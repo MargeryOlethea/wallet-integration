@@ -35,8 +35,8 @@ function ScrollableValidatorsTable({
             <TableHeader>
               <TableRow>
                 <TableHead>Validator</TableHead>
-                <TableHead>Voting Power</TableHead>
-                <TableHead>Comission</TableHead>
+                <TableHead className="max-md:hidden">Voting Power</TableHead>
+                <TableHead className="max-sm:hidden">Comission</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
@@ -44,25 +44,34 @@ function ScrollableValidatorsTable({
               {filteredValidators?.map((validator) => (
                 <TableRow key={validator.operator_address}>
                   <TableCell>
-                    <p className="font-semibold text-md">
+                    <p className="font-semibold text-md max-sm:text-lg">
                       {validator.description.moniker}
                     </p>
                     <a
-                      className="font-semilight text-xs hover:text-blue-500"
+                      className="font-semilight text-xs hover:text-blue-500 max-lg:hidden"
                       href={validator.description.website}
                       target="_blank"
                       rel="noreferrer"
                     >
                       {validator.description.website}
                     </a>
+                    <Button
+                      onClick={() =>
+                        setSelectedValidator(validator.description.moniker)
+                      }
+                      className="lg:hidden my-2 w-full"
+                      size="sm"
+                    >
+                      Select
+                    </Button>
                   </TableCell>
-                  <TableCell>
-                    <div className="text-right pr-10 w-4/5 font-semibold">
+                  <TableCell className="max-md:hidden">
+                    <div className="text-right pr-10 w-4/5 font-semibold whitespace-nowrap">
                       {numberFormatter(+validator.delegator_shares, denom!)}{" "}
-                      <Badge className="ml-2">{denom}</Badge>
+                      <Badge className="ml-2 max-lg:hidden">{denom}</Badge>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="max-sm:hidden">
                     <div className="text-right pr-10 w-2/3 font-semibold">
                       {Math.floor(
                         +validator.commission.commission_rates.rate * 100,
@@ -71,7 +80,7 @@ function ScrollableValidatorsTable({
                     </div>
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell className="max-sm:hidden">
                     <Button
                       onClick={() =>
                         setSelectedValidator(validator.description.moniker)

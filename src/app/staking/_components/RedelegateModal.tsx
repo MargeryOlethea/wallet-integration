@@ -109,7 +109,7 @@ export default function RedelegateModal({
       className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={handleBackgroundClick}
     >
-      <Card className="relative w-2/3 p-5 flex flex-col justify-between">
+      <Card className="relative w-2/3 max-sm:w-5/6 max-xl:w-4/5 p-5 flex flex-col justify-between">
         {/* close button */}
         <ModalCloseButton handleCloseModal={handleCloseModal} />
 
@@ -137,7 +137,7 @@ export default function RedelegateModal({
           />
 
           {/* bottom section */}
-          <div className="flex gap-5">
+          <div className="flex gap-5 max-md:flex-col max-md:gap-0">
             {/* delegate */}
             <RedelegateFromCard
               userDelegationData={userDelegationData}
