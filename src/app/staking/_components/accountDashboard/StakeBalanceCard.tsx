@@ -17,15 +17,18 @@ function StakeBalanceCard({ amount, denom, loading }: StakeBalanceCardProps) {
     <>
       <Card>
         <CardHeader>
-          <CardDescription>Staked Balance</CardDescription>
+          <CardDescription className="max-md:text-xs">Staked Balance</CardDescription>
           {loading ? (
             <div className="flex items-center gap-2">
               <Skeleton className="h-8 w-20" />{" "}
               <Skeleton className="rounded-full h-5 w-14" />
             </div>
           ) : (
-            <CardTitle className="flex items-center gap-2">
-              {amount} <Badge variant="secondary">{denom}</Badge>
+            <CardTitle className="flex items-center gap-2 max-md:text-[20px]">
+              {amount}{" "}
+              <Badge variant="secondary" className="max-md:text-[10px]">
+                {denom}
+              </Badge>
             </CardTitle>
           )}
         </CardHeader>

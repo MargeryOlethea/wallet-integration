@@ -68,7 +68,7 @@ function AccountDashboard() {
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-2">
         <AccountBalanceCard
           amount={microCoinToCoin(Number(totalBalance?.amount || 0), coinDenom)}
           denom={coinDenom}
