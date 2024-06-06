@@ -22,6 +22,7 @@ export const useMediaQuery = (): DeviceType => {
         setDeviceType({ isTablet: false, isMobile: false, isDesktop: true });
       }
     };
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

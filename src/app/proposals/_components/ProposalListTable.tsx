@@ -24,9 +24,9 @@ function ProposalListTable({
         <Table className="my-2">
           <TableHeader>
             <TableRow>
-              <TableHead>#ID</TableHead>
+              <TableHead className="max-sm:hidden">#ID</TableHead>
               <TableHead>Proposal</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead className="max-md:hidden">Status</TableHead>
               <TableHead>End Time</TableHead>
             </TableRow>
           </TableHeader>

@@ -18,11 +18,13 @@ function ProposalTableRows({
   return (
     <>
       <TableRow>
-        <TableCell className="font-semibold text-lg">#{proposal.id}</TableCell>
+        <TableCell className="font-semibold text-lg max-sm:hidden">
+          #{proposal.id}
+        </TableCell>
         <TableCell className="max-w-xs font-semibold">
           {proposal?.title || proposal?.messages[0]?.content?.title}
         </TableCell>
-        <TableCell className="font-semibold">
+        <TableCell className="font-semibold max-md:hidden">
           {getProposalStatusLabel(proposalStatus)}
         </TableCell>
         <TableCell className="font-semibold">

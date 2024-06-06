@@ -45,7 +45,7 @@ function TallyCountCard({
             <CardTitle>Tally</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-4 gap-8">
+            <div className="grid grid-cols-4 gap-8 max-md:grid-cols-2 max-md:gap-4">
               {/* yes */}
               <Button
                 onClick={() =>
@@ -125,7 +125,7 @@ function TallyCountCard({
             </div>
 
             {/* Percentage */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-4 my-5">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-4 my-5 max-md:gap-4">
               {/* yes */}
               <div>
                 <p className="text-md font-medium text-slate-500">Yes</p>

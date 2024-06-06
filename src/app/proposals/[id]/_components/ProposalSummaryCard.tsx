@@ -32,7 +32,7 @@ function ProposalSummaryCard({ proposal, loading }: ProposalSummaryCardProps) {
                 #{proposal?.id} <span>{proposal?.title}</span>
               </p>
 
-              <Badge className="text-sm">
+              <Badge className="text-sm max-h-10 max-md:hidden">
                 {proposal &&
                   getProposalStatusLabel(proposal.status as ProposalStatus)}
               </Badge>

@@ -22,7 +22,7 @@ function ProposalTimelineCard({
             <CardTitle>Timeline</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
               {/* submit time */}
               <div>
                 <p className="text-md font-medium text-slate-500">
@@ -36,19 +36,6 @@ function ProposalTimelineCard({
                 </p>
               </div>
 
-              {/* voting start time */}
-              <div>
-                <p className="text-md font-medium text-slate-500">
-                  Voting Start Time
-                </p>
-                <p className="font-semibold">
-                  {timeFormatter(proposal.voting_start_time)}{" "}
-                  <span className="font-normal text-slate-500 text-sm">
-                    ({dayDifferenceCounter(proposal.voting_start_time)})
-                  </span>
-                </p>
-              </div>
-
               {/* deposit end time */}
               <div>
                 <p className="text-md font-medium text-slate-500">
@@ -58,6 +45,19 @@ function ProposalTimelineCard({
                   {timeFormatter(proposal.deposit_end_time)}{" "}
                   <span className="font-normal text-slate-500 text-sm">
                     ({dayDifferenceCounter(proposal.deposit_end_time)})
+                  </span>
+                </p>
+              </div>
+
+              {/* voting start time */}
+              <div>
+                <p className="text-md font-medium text-slate-500">
+                  Voting Start Time
+                </p>
+                <p className="font-semibold">
+                  {timeFormatter(proposal.voting_start_time)}{" "}
+                  <span className="font-normal text-slate-500 text-sm">
+                    ({dayDifferenceCounter(proposal.voting_start_time)})
                   </span>
                 </p>
               </div>
