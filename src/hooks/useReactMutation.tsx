@@ -58,11 +58,8 @@ export const useDelegateToken = (
 
 export const useClaimRewards = (validatorAddress: string) => {
   const { withdrawStakedReward } = useCosmjs();
-  const { refetch: refetchDelegationList } = useDelegationListByDelegator();
-  const { refetch: refetchValidatorsList } = useValidatorsListByDelegator();
   const { refetch: refetchRewardsList } = useRewardsListByDelegator();
   const { refetch: refetchAvailableBalance } = useAvailableBalance();
-  const { refetch: refetchStakeBalance } = useStakeBalance();
   const { refetch: refetchRewardsBalance } = useRewardBalance();
   const { setManageModalOpen } = useModal();
   const withdrawMutation: UseMutationResult<DeliverTxResponse, Error, void> =
@@ -70,11 +67,8 @@ export const useClaimRewards = (validatorAddress: string) => {
       mutationFn: () => withdrawStakedReward(validatorAddress),
       onSuccess: (data) => {
         toast.success(`Success! TxHash: ${data?.transactionHash}`);
-        refetchDelegationList();
         refetchRewardsList();
-        refetchValidatorsList();
         refetchAvailableBalance();
-        refetchStakeBalance();
         refetchRewardsBalance();
         setManageModalOpen(false);
         scrollToTop();
