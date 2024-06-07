@@ -151,7 +151,7 @@ export const useValidatorsListByDelegator = () => {
   const { getValidatorsInfoByDelegator } = useStakingApi();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["validatorsList", chainId, userAddress],
+    queryKey: ["myValidatorsList", chainId, userAddress],
     queryFn: () => getValidatorsInfoByDelegator(),
     enabled: !!chainId && !!userAddress,
   });
