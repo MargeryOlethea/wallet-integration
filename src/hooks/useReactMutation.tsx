@@ -12,6 +12,7 @@ import {
   useValidatorsListByDelegator,
 } from "./useReactQuery";
 import { useModal } from "./useModal";
+import { Dispatch, SetStateAction } from "react";
 
 export const scrollToTop = () => {
   window.scrollTo({
@@ -20,7 +21,11 @@ export const scrollToTop = () => {
   });
 };
 
-export const useDelegateToken = (validatorAddress: string, amount: string) => {
+export const useDelegateToken = (
+  validatorAddress: string,
+  amount: string,
+  setAmount: Dispatch<SetStateAction<string>>,
+) => {
   const { delegateToken } = useCosmjs();
   const { refetch: refetchDelegationList } = useDelegationListByDelegator();
   const { refetch: refetchValidatorsList } = useValidatorsListByDelegator();
@@ -32,7 +37,7 @@ export const useDelegateToken = (validatorAddress: string, amount: string) => {
     useMutation({
       mutationFn: () => delegateToken(validatorAddress, amount),
       onSuccess: (data) => {
-        toast.success(`Staking successful!`);
+        toast.success(`Success! TxHash: ${data?.transactionHash}`);
         refetchDelegationList();
         refetchRewardsList();
         refetchValidatorsList();
@@ -40,6 +45,7 @@ export const useDelegateToken = (validatorAddress: string, amount: string) => {
         refetchStakeBalance();
         setDelegateModalOpen(false);
         scrollToTop();
+        setAmount("0");
       },
       onError: (error) => {
         toast.error(`Failed to delegate token: ${error.message}`);
@@ -86,6 +92,7 @@ export const useRedelegateToken = (
   sourceValidator: string,
   destinationValidator: string,
   amount: string,
+  setAmount: Dispatch<SetStateAction<string>>,
 ) => {
   const { redelegateToken } = useCosmjs();
   const { refetch: refetchDelegationList } = useDelegationListByDelegator();
@@ -105,6 +112,7 @@ export const useRedelegateToken = (
         setRedelegateModalOpen(false);
         scrollToTop();
         toast.success(`Success! TxHash: ${data?.transactionHash}`);
+        setAmount("0");
       },
       onError: (error) => {
         toast.error(`Failed to redelegate token: ${error.message}`);
@@ -115,7 +123,11 @@ export const useRedelegateToken = (
   return redelegateMutation;
 };
 
-export const useUndelegateToken = (validatorAddres: string, amount: string) => {
+export const useUndelegateToken = (
+  validatorAddres: string,
+  amount: string,
+  setAmount: Dispatch<SetStateAction<string>>,
+) => {
   const { undelegateToken } = useCosmjs();
   const { refetch: refetchDelegationList } = useDelegationListByDelegator();
   const { refetch: refetchValidatorsList } = useValidatorsListByDelegator();
@@ -137,6 +149,7 @@ export const useUndelegateToken = (validatorAddres: string, amount: string) => {
         refetchRewardsBalance();
         setManageModalOpen(false);
         scrollToTop();
+        setAmount("0");
         toast.success(`Success! TxHash: ${data?.transactionHash}`);
       },
       onError: (error) => {

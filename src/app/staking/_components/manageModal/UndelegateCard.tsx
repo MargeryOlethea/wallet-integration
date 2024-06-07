@@ -8,6 +8,7 @@ import { useUndelegateToken } from "@/hooks/useReactMutation";
 import { coinToMicroCoin } from "@/helpers/integerModifiers";
 import { Dispatch, SetStateAction } from "react";
 import { handleInput } from "@/utils/handleInput";
+import toast from "react-hot-toast";
 
 interface UndelegateCardProps {
   userDelegationData: UserDelegationData;
@@ -33,6 +34,7 @@ function UndelegateCard({
   const undelegateMutation = useUndelegateToken(
     userDelegationData?.validator?.operator_address || "",
     realAmount,
+    setUndelegateAmount,
   );
   return (
     <>

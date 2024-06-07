@@ -94,6 +94,7 @@ export default function RedelegateModal({
     sourceValidator,
     destinationValidator!,
     realAmount,
+    setRedelegateAmount,
   );
 
   if (!isRedelegateModalOpen) {

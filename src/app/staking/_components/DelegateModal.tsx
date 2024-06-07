@@ -86,6 +86,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
   const delegateMutation = useDelegateToken(
     validator?.operator_address,
     realAmount,
+    setDelegateAmount,
   );
 
   if (availableError) {
