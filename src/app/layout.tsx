@@ -21,7 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main>
-          <Toaster position="bottom-center" />
+          <Toaster
+            position="bottom-center"
+            toastOptions={{ className: "break-all" }}
+          />
           <Providers>
             <Header />
             {children}

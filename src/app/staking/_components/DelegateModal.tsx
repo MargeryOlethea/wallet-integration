@@ -100,7 +100,7 @@ export default function DelegateModal({ validator }: AllModalProps) {
       className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={handleBackgroundClick}
     >
-      <Card className="relative w-1/3 max-lg:w-2/3 p-5 flex flex-col justify-between">
+      <Card className="relative w-1/3 max-lg:w-2/3 max-sm:w-11/12 p-5 flex flex-col justify-between">
         {/* close button */}
         <ModalCloseButton handleCloseModal={handleCloseModal} />
 

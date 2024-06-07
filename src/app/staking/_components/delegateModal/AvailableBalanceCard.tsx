@@ -29,7 +29,9 @@ function AvailableBalanceCard({
             )}
           </p>
 
-          <Badge variant="secondary">{denom}</Badge>
+          <Badge variant="secondary" className="max-h-6">
+            {denom}
+          </Badge>
         </CardHeader>
       </Card>
     </>
