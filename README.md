@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Wallet Integration App
 
-## Getting Started
+## Description
 
-First, run the development server:
+This project is a frontend application designed to enable users to integrate their wallets with Cosmos-based networks in a testnet environment. The app provides functionalities such as staking and voting, offering a seamless experience for users to manage their blockchain activities.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Access the app here: [**wallet-integration-two.vercel.app**](https://wallet-integration-two.vercel.app)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Connect to Wallet:** Easily connect your Leap or Keplr wallet to the Cosmoshub Testnet, Osmosis Testnet, or Dymension Testnet networks.
+- **View Balances:** Check your account balance, including staked and rewards balances, in real-time.
+- **Staking:** Browse through a list of validators and delegate your coins with ease. You can also redelegate, unstake, and withdraw your rewards effortlessly.
+- **Voting:** Access and review proposals across different networks and cast your votes accordingly.
+- **Responsive Design:** Enjoy a consistent and user-friendly interface across various devices, optimized to fit any screen size.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Technologies Used
 
-## Learn More
+- [Next.js](https://nextjs.org/): A React framework for building server-side rendered applications
+- [TypeScript](https://www.typescriptlang.org/): A superset of JavaScript that adds static typing
+- [Cosmjs](https://github.com/cosmos/cosmjs): A library for interacting with Cosmos SDK-based blockchains
+- [Tanstack React Query](https://tanstack.com/query/v4): A library for fetching, caching, and synchronizing server data in React
+- [Shadcn](https://shadcn.dev/): A design system for building consistent, beautiful user interfaces
 
-To learn more about Next.js, take a look at the following resources:
+## Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository: `git clone https://github.com/MargeryOlethea/wallet-integration.git`
+2. Navigate to the project directory: `cd wallet-integration`
+3. Install dependencies: `npm install` (or `yarn install` if using Yarn)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Usage
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Start the development server: `npm run dev`
+2. The application will be accessible at `http://localhost:3000` (default port, might vary)
