@@ -58,8 +58,6 @@ npm run lint
 npm run build
 ```
 
-GitHub Actions runs both checks for pull requests and pushes to `main`.
-
 ## Project status
 
 I built this project on my own to learn the Cosmos wallet and transaction stack end to end. It is not a hosted wallet, custody service, or audited financial product. Wallet extensions retain responsibility for key management and require the user to approve every transaction.
