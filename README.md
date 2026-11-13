@@ -7,7 +7,7 @@ A testnet dashboard for connecting a Keplr or Leap wallet to Cosmos-based networ
 > [!IMPORTANT]
 > This project is configured for testnets. Do not send mainnet assets to addresses or transactions shown by the application.
 
-## What it demonstrates
+## What I built
 
 - Wallet discovery and connection with Keplr and Leap
 - Network switching across Cosmos Hub, Osmosis, and Dymension testnets
@@ -62,4 +62,4 @@ GitHub Actions runs both checks for pull requests and pushes to `main`.
 
 ## Project status
 
-This is a portfolio and learning project. It is not a hosted wallet, custody service, or audited financial product. Wallet extensions retain responsibility for key management and require the user to approve every transaction.
+I built this project on my own to learn the Cosmos wallet and transaction stack end to end. It is not a hosted wallet, custody service, or audited financial product. Wallet extensions retain responsibility for key management and require the user to approve every transaction.
