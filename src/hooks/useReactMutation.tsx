@@ -167,10 +167,10 @@ export const useVoteProposal = (proposalId: string) => {
     mutationFn: (option: VoteOption) => {
       return voteProposal(proposalId!, option);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       refetch();
       scrollToTop();
-      toast.success("Success! TxHash: ${data?.transactionHash}");
+      toast.success(`Success! TxHash: ${data?.transactionHash}`);
     },
     onError: (error) => {
       toast.error(`Failed to vote proposal: ${error.message}`);

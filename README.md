@@ -1,34 +1,65 @@
-# Wallet Integration App
+# Cosmos Wallet Integration
 
-## Description
+A testnet dashboard for connecting a Keplr or Leap wallet to Cosmos-based networks, inspecting balances, managing delegations, claiming rewards, and voting on governance proposals.
 
-This project is a frontend application designed to enable users to integrate their wallets with Cosmos-based networks in a testnet environment. The app provides functionalities such as staking and voting, offering a seamless experience for users to manage their blockchain activities.
+**Live demo:** [wallet-integration-two.vercel.app](https://wallet-integration-two.vercel.app)
 
-Access the app here: [**wallet-integration-two.vercel.app**](https://wallet-integration-two.vercel.app)
+> [!IMPORTANT]
+> This project is configured for testnets. Do not send mainnet assets to addresses or transactions shown by the application.
 
-## Features
+## What it demonstrates
 
-- **Connect to Wallet:** Easily connect your Leap or Keplr wallet to the Cosmoshub Testnet, Osmosis Testnet, or Dymension Testnet networks.
-- **View Balances:** Check your account balance, including staked and rewards balances, in real-time.
-- **Staking:** Browse through a list of validators and delegate your coins with ease. You can also redelegate, unstake, and withdraw your rewards effortlessly.
-- **Voting:** Access and review proposals across different networks and cast your votes accordingly.
-- **Responsive Design:** Enjoy a consistent and user-friendly interface across various devices, optimized to fit any screen size.
+- Wallet discovery and connection with Keplr and Leap
+- Network switching across Cosmos Hub, Osmosis, and Dymension testnets
+- Available, delegated, and reward balance queries
+- Delegate, redelegate, undelegate, and reward-withdrawal transactions
+- Governance proposal browsing and voting
+- Transaction feedback and targeted React Query cache refreshes
+- Responsive interfaces built with Next.js, TypeScript, Tailwind CSS, and Radix UI
 
-## Technologies Used
+## Technical approach
 
-- [Next.js](https://nextjs.org/): A React framework for building server-side rendered applications
-- [TypeScript](https://www.typescriptlang.org/): A superset of JavaScript that adds static typing
-- [Cosmjs](https://github.com/cosmos/cosmjs): A library for interacting with Cosmos SDK-based blockchains
-- [Tanstack React Query](https://tanstack.com/query/v4): A library for fetching, caching, and synchronizing server data in React
-- [Shadcn](https://shadcn.dev/): A design system for building consistent, beautiful user interfaces
+The application keeps chain metadata in `src/constants/chainInfos`, wallet state in `WalletProvider`, and Cosmos clients behind `useCosmjs`. Query hooks load account, staking, reward, validator, and governance data. Mutation hooks submit signed transactions and refresh only the affected queries after confirmation.
 
-## Installation
+Dymension uses a separate EVM-compatible signing path; Cosmos Hub and Osmosis use CosmJS `signAndBroadcast`.
 
-1. Clone the repository: `git clone https://github.com/MargeryOlethea/wallet-integration.git`
-2. Navigate to the project directory: `cd wallet-integration`
-3. Install dependencies: `npm install` (or `yarn install` if using Yarn)
+## Supported testnets
 
-## Usage
+| Network | Chain ID |
+| --- | --- |
+| Cosmos Hub testnet | `theta-testnet-001` |
+| Osmosis testnet | `osmo-test-5` |
+| Dymension testnet | `froopyland_100-1` |
 
-1. Start the development server: `npm run dev`
-2. The application will be accessible at `http://localhost:3000` (default port, might vary)
+Public RPC or REST endpoints can change or be rate-limited. A failed request does not necessarily mean the wallet or account is invalid.
+
+## Run locally
+
+Requirements:
+
+- Node.js 20+
+- npm
+- Keplr or Leap browser extension
+- Testnet tokens for transaction flows
+
+```sh
+git clone https://github.com/MargeryOlethea/wallet-integration.git
+cd wallet-integration
+npm ci
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Quality checks
+
+```sh
+npm run lint
+npm run build
+```
+
+GitHub Actions runs both checks for pull requests and pushes to `main`.
+
+## Project status
+
+This is a portfolio and learning project. It is not a hosted wallet, custody service, or audited financial product. Wallet extensions retain responsibility for key management and require the user to approve every transaction.
